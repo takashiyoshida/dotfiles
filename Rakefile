@@ -26,3 +26,21 @@ def install_file(source, destination)
     puts "Skipped installation of #{source}"
   end
 end
+
+
+desc "Install zsh configurations"
+task :zsh do
+  install_dir = get_install_dir
+  install_file("zshrc.zsh", File.join(install_dir, ".zshrc"))
+
+  dotfiles = File.join(install_dir, ".dotfiles")
+  if not Dir.exist? dotfiles
+    Dir.mkdir(dotfiles, 0755)
+  end
+  Dir.foreach("scripts") do | item |
+    if item == "." or item == ".."
+      next
+    end
+    install_file(File.join("scripts", item), File.join(dotfiles, item))
+  end
+end
