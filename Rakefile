@@ -51,3 +51,20 @@ task :tmux do
   install_dir = get_install_dir
   install_file("tmux.conf", File.join(install_dir, ".tmux.conf"))
 end
+
+
+desc "Install Hammerspoon configurations"
+task :hammerspoon do
+  install_dir = get_install_dir
+
+  hammerspoon = File.join(install_dir, ".hammerspoon")
+  if not Dir.exist? hammerspoon
+    Dir.mkdir(hammerspoon, 0755)
+  end
+  Dir.foreach("hammerspoon") do | item |
+    if item == "." or item == ".."
+      next
+    end
+    install_file(File.join("hammerspoon", item), File.join(hammerspoon, item))
+  end
+end
