@@ -44,3 +44,10 @@ task :zsh do
     install_file(File.join("scripts", item), File.join(dotfiles, item))
   end
 end
+
+
+desc "Install tmux.conf"
+task :tmux do
+  install_dir = get_install_dir
+  install_file("tmux.conf", File.join(install_dir, ".tmux.conf"))
+end
