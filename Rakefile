@@ -68,3 +68,18 @@ task :hammerspoon do
     install_file(File.join("hammerspoon", item), File.join(hammerspoon, item))
   end
 end
+
+
+desc "Install gitconfig"
+task :git do
+  install_dir = get_install_dir
+  install_file("gitconfig", File.join(install_dir, ".gitconfig"))
+
+  print "What is your GitHub/GitLab name? "
+  git_name = STDIN.gets.chomp
+  print "What is your GitHub/GitLab email? "
+  git_email = STDIN.gets.chomp
+
+  %x{sed -e "s/GIT_USERNAME/#{git_name}/g" -i '' #{File.join(install_dir, ".gitconfig")}}
+  %x{sed -e "s/GIT_EMAILADDR/#{git_email}/g" -i '' #{File.join(install_dir, ".gitconfig")}}
+end
