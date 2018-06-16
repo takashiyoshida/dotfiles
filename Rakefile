@@ -83,3 +83,10 @@ task :git do
   %x{sed -e "s/GIT_USERNAME/#{git_name}/g" -i '' #{File.join(install_dir, ".gitconfig")}}
   %x{sed -e "s/GIT_EMAILADDR/#{git_email}/g" -i '' #{File.join(install_dir, ".gitconfig")}}
 end
+
+
+desc "Install peco-related configurations"
+task :peco do
+  install_dir = get_install_dir
+  install_file("peco", File.join(install_dir, ".peco"))
+end
