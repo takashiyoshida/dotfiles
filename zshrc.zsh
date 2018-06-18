@@ -68,3 +68,4 @@ alias rake="noglob rake"
 
 source "${DOTFILES}/aliases.zsh"
 source "${DOTFILES}/peco.zsh"
+source "${DOTFILES}/pet.zsh"
