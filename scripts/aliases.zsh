@@ -31,3 +31,13 @@ function d2h
 {
     echo "obase=16; $@" | bc
 }
+
+function dirsize
+{
+    if [ -z "$@" ]; then
+        MY_DIR=""
+    else
+        MY_DIR="$@"
+    fi
+    du -h -d 1 ${MY_DIR} | sort -h -r
+}
