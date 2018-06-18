@@ -2,7 +2,7 @@
 export GOPATH="${HOME}/Projects"
 
 # PATH
-PATH="/usr/local/bin"
+PATH="/usr/local/bin:/usr/local/sbin"
 PATH="${PATH}:/usr/bin:/usr/sbin"
 PATH="${PATH}:/bin:/sbin"
 # Installed by MacTex
