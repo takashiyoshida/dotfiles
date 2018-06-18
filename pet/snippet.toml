@@ -1,0 +1,29 @@
+[[snippets]]
+  description = "Spoof MAC address for Thunderbolt to Ethernet interface"
+  command = "ifconfig en6 ether 24:be:05:20:bf:db"
+  tag = ["spoof", "network", "MAC"]
+  output = ""
+
+[[snippets]]
+  description = "Clone a Git repo and its submodules"
+  command = "git clone --recurse-submodules"
+  tag = ["git"]
+  output = ""
+
+[[snippets]]
+  description = "Fix Git commit message"
+  command = "git commit --amend"
+  tag = ["git", "message"]
+  output = ""
+
+[[snippets]]
+  description = "Undo last Git commit (1)"
+  command = "git reset HEAD~"
+  tag = ["git", "undo"]
+  output = ""
+
+[[snippets]]
+  description = "Commit changes reusing the old commit message (2)"
+  command = "git commit -c ORIG_HEAD"
+  tag = ["git", "undo"]
+  output = ""

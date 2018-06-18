@@ -92,3 +92,16 @@ task :peco do
   install_dir = get_install_dir
   install_file("peco", File.join(install_dir, ".peco"))
 end
+
+
+desc "Install pet-related configurations"
+task :pet do
+  install_dir = get_install_dir
+  # Check if ${HOME}/.config exists
+  config = File.join(install_dir, ".config")
+  puts config
+  if not Dir.exist? config
+    Dir.mkdir(config, 0755)
+  end
+  install_file("pet", File.join(config, "pet"))
+end
