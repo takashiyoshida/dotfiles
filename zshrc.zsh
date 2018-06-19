@@ -1,5 +1,5 @@
 # Path to your oh-my-zsh configuration.
-ZSH=$HOME/Projects/dotfiles/zsh
+ZSH="${HOME}/Projects/dotfiles/zsh"
 
 # Set name of the theme to load.
 # Look in ~/.oh-my-zsh/themes/
@@ -38,7 +38,7 @@ ZSH_THEME="takashiyoshida"
 # DISABLE_UNTRACKED_FILES_DIRTY="true"
 
 # FIXME This is specific to my OS X environment
-DOTFILES="${HOME}/.dotfiles"
+DOTFILES="${HOME}/Projects/dotfiles/scripts"
 # PATH, EDITOR, CVSEDITOR, GITEDITOR, SVNEDITOR
 # FIXME This is specific to my OS X environment
 source "${DOTFILES}/variables.zsh"
