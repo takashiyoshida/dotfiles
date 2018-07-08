@@ -6,7 +6,7 @@ PATH="/usr/local/bin:/usr/local/sbin"
 PATH="${PATH}:/usr/bin:/usr/sbin"
 PATH="${PATH}:/bin:/sbin"
 # Installed by MacTex
-PATH="${PATH}:/usr/local/texlive/2017/bin/x86_64-darwin"
+PATH="${PATH}:/usr/local/texlive/2018/bin/x86_64-darwin"
 PATH="${PATH}:/usr/local/go/bin"
 PATH="${PATH}:${GOPATH}/bin"
 PATH="${PATH}:${HOME}/bin"
