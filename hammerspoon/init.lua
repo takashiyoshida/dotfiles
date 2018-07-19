@@ -82,14 +82,21 @@ local appWatcher = hs.application.watcher.new(applicationWatcher)
 appWatcher:start()
 
 -- Move the current window to the center of the screen
-function center_windows()
-    local app = hs.application.frontmostApplication()
-    local windows = app:allWindows()
-    for i, win in ipairs(windows) do
-        win:centerOnScreen()
-    end
+function center_window()
+    local window = hs.window.focusedWindow()
+    window:centerOnScreen()
 end
-hs.hotkey.bind({'cmd', 'alt', 'ctrl'}, 'c', center_windows)
+hs.hotkey.bind({'cmd', 'alt', 'ctrl'}, 'c', center_window)
+
+-- Gather all windows from the frontmost application at the center of the screen
+function gather_windows()
+	local app = hs.application.frontmostApplication()
+	local windows = app:allWindows()
+	for i, win in ipairs(windows) do
+		win:centerOnScreen()
+	end
+end
+hs.hotkey.bind({'cmd', 'alt', 'ctrl'}, 'g', gather_windows)
 
 -- Extend the height of the current window to the bottom of the screen
 function extend_window_vertically()
