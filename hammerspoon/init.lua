@@ -124,3 +124,35 @@ function cascade_windows()
     end
 end
 hs.hotkey.bind({'cmd', 'alt', 'ctrl'}, 'space', cascade_windows)
+
+function resize_browser_window_for_google()
+	if (hs.application.frontmostApplication():name() == "Safari") or
+		(hs.application.frontmostApplication():name() == "Google Chrome") then
+		local win = hs.application.frontmostApplication():mainWindow()
+		local frame = win:frame()
+		print('frame: ' .. frame.x, frame.y, frame.w, frame.h)
+		if (frame.w < 1200) then
+			local screen = hs.screen.mainScreen():fullFrame()
+			if ((frame.x + 1200) > screen.w) then
+				-- Move the window to the left
+				frame.x = screen.w - 1200
+			end
+		end
+		frame.w = 1200
+		win:move(frame)
+	end
+end
+hs.hotkey.bind({'cmd', 'alt', 'ctrl'}, 'g', resize_browser_window_for_google)
+
+function resize_browser_window_for_iterm()
+	if (hs.application.frontmostApplication():name() == "Safari") or
+		(hs.application.frontmostApplication():name() == "Google Chrome") then
+		moveWindowToTopLeft()
+		local win = hs.application.frontmostApplication():mainWindow()
+		local frame = win:frame()
+		print('frame: ' .. frame.x, frame.y, frame.w, frame.h)
+		frame.w = 1064
+		win:move(frame)
+	end
+end
+hs.hotkey.bind({'cmd', 'alt', 'ctrl'}, 't', resize_browser_window_for_iterm)
