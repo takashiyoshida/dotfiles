@@ -8,6 +8,7 @@ fi
 # in tmux session
 alias emacs="TERM=xterm-256color emacs -nw"
 alias tailf="tail -f"
+alias history="history -i"
 
 alias svndiff="svn diff --diff-cmd /usr/bin/diff -x -w"
 alias vless="/usr/local/share/vim/vim80/macros/less.sh"
