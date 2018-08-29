@@ -5,8 +5,10 @@ export GOPATH="${HOME}/Projects"
 PATH="/usr/local/bin:/usr/local/sbin"
 PATH="${PATH}:/usr/bin:/usr/sbin"
 PATH="${PATH}:/bin:/sbin"
-# Installed by MacTex
-PATH="${PATH}:/usr/local/texlive/2018/bin/x86_64-darwin"
+if [[ "${OSTYPE}" =~ darwin* ]]; then
+    # Installed by MacTex
+    PATH="${PATH}:/usr/local/texlive/2018/bin/x86_64-darwin"
+fi
 PATH="${PATH}:/usr/local/go/bin"
 PATH="${PATH}:${GOPATH}/bin"
 PATH="${PATH}:${HOME}/bin"
@@ -16,14 +18,12 @@ export PATH
 if which pyenv > /dev/null; then
     eval "$(pyenv init -)"
 fi
-if which pyenv-virtualenv-init > /dev/null; then
-    eval "$(pyenv virtualenv-init -)"
+
+if [[ "${OSTYPE}" =~ darwin* ]]; then
+    eval "$(rbenv init -)"
+    export PATH="${HOME}/.nodenv/bin:${PATH}"
+    eval "$(nodenv init -)"
 fi
-
-eval "$(rbenv init -)"
-
-export PATH="${HOME}/.nodenv/bin:${PATH}"
-eval "$(nodenv init -)"
 
 export LC_ALL="en_US.UTF-8"
 export LC_CTYPE="UTF-8"
