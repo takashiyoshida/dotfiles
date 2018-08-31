@@ -42,7 +42,7 @@ function ppgrep() {
     else
         PECO="peco --query $1"
     fi
-    ps aux | eval ${PECO} | awk '{ print $2 }'
+    ps xc -o user -o pid -o %cpu -o vsz -o rss -o start -o time -o comm | eval ${PECO} | awk '{ print $2 }'
 }
 
 
