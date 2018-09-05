@@ -15,6 +15,8 @@ alias vless="/usr/local/share/vim/vim80/macros/less.sh"
 
 alias cdpr="cd ${HOME}/Projects"
 
+alias lh="ls -lh"
+
 # OS X specifc functions
 function ql
 {
