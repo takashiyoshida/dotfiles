@@ -17,6 +17,12 @@ alias cdpr="cd ${HOME}/Projects"
 
 alias lh="ls -lh"
 
+# Create a new standup notes with today's date
+alias standup="emacs `date +%F-standup.md`"
+
+# Ignore unversioned files from svn status
+alias svnst="svn status -q"
+
 # OS X specifc functions
 function ql
 {
