@@ -37,18 +37,18 @@ ZSH_THEME="takashiyoshida"
 # much faster.
 # DISABLE_UNTRACKED_FILES_DIRTY="true"
 
-# FIXME This is specific to my OS X environment
-DOTFILES="${HOME}/Projects/dotfiles/scripts"
+export DOTFILES="${HOME}/Projects/dotfiles/scripts"
 # PATH, EDITOR, CVSEDITOR, GITEDITOR, SVNEDITOR
-# FIXME This is specific to my OS X environment
 source "${DOTFILES}/variables.zsh"
 
 # Which plugins would you like to load? (plugins can be found in ~/.oh-my-zsh/plugins/*)
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 if [[ "${OSTYPE}" =~ darwin* ]]; then
+    # for macOS
     plugins=(colored-man docker gem go hub osx python rake ruby svn tmux vagrant)
 else
+    # and everything else here, but mainly Linux
     plugins=(colored-man docker gem go hub python rake ruby svn tmux vagrant)
 fi
 
