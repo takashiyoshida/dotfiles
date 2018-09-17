@@ -57,7 +57,7 @@ source $ZSH/oh-my-zsh.sh
 # Customize to your needs...
 
 # Minimum set of aliases
-alias ls="ls --color=auto -CFG"
+alias ls="ls -CFG"
 alias mv="mv -i"
 alias cp="cp -i"
 alias rm="rm -i"
