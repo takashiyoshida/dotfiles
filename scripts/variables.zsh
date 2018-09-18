@@ -5,22 +5,28 @@ export GOPATH="${HOME}/Projects"
 PATH="/usr/local/bin:/usr/local/sbin"
 PATH="${PATH}:/usr/bin:/usr/sbin"
 PATH="${PATH}:/bin:/sbin"
+
+# Not sure about /usr/local/go/bin in non-macOS environment
+PATH="${PATH}:/usr/local/go/bin"
+PATH="${PATH}:${GOPATH}/bin"
+
 if [[ "${OSTYPE}" =~ darwin* ]]; then
     # Installed by MacTex
     PATH="${PATH}:/usr/local/texlive/2018/bin/x86_64-darwin"
 fi
-PATH="${PATH}:/usr/local/go/bin"
-PATH="${PATH}:${GOPATH}/bin"
+
 PATH="${PATH}:${HOME}/bin"
 export PATH
 
-# Configure pyenv
 if which pyenv > /dev/null; then
     eval "$(pyenv init -)"
 fi
 
-if [[ "${OSTYPE}" =~ darwin* ]]; then
+if which rbenv > /dev/null; then
     eval "$(rbenv init -)"
+fi
+
+if which nodenv > /dev/null; then
     export PATH="${HOME}/.nodenv/bin:${PATH}"
     eval "$(nodenv init -)"
 fi
