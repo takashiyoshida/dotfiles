@@ -43,7 +43,7 @@ export HOMEBREW_GITHUB_API_TOKEN=""
 # CVS_EDITOR
 # GIT_EDITOR
 # SVN_EDITOR
-export EDITOR=emacs
-export CVS_EDITOR=emacs
-export GIT_EDITOR=emacs
-export SVN_EDITOR=emacs
+export EDITOR="TERM=xterm-256color emacs -nw"
+export CVS_EDITOR="TERM=xterm-256color emacs -nw"
+export GIT_EDITOR="TERM=xterm-256color emacs -nw"
+export SVN_EDITOR="TERM=xterm-256color emacs -nw"
