@@ -7,7 +7,7 @@
   <string>org.takashiyoshida.BackupLaunchBar</string>
   <key>ProgramArguments</key>
   <array>
-    <string>/Users/takashi/Projects/bin/backup-launchbar.sh</string>
+    <string>/Users/takashi/Projects/dotfiles/bin/backup-launchbar-config.sh</string>
   </array>
   <key>StartCalendarInterval</key>
   <dict>
