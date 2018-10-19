@@ -8,14 +8,10 @@
 # `cp org.takashiyoshida.BackupLaunchBar.agent.plist ~/Library/LaunchAgents/`
 # `launchctl load org.takashiyoshida.BackupLaunchBar.agent.plist`
 
-RSYNC=/usr/bin/rsync
-RSYNC_OPT="-avz"
+LAUNCHBAR_DIR="${HOME}/Library/Application Support/LaunchBar"
+DESTINATION_DIR="${HOME}/Dropbox/Apps"
 
-LAUNCHBAR_PATH="${HOME}/Library/Application Support/LaunchBar/"
-DESTINATION_PATH="${HOME}/Dropbox/Documents/LaunchBar"
-
-BACKUP_DATE=`date "+%Y-%m-%d %H:%M:%S"`
-
+BACKUP_DATE=`date "+%Y-%m-%d %H:%M"`
 echo
 echo "${BACKUP_DATE}: Backing up LaunchBar data..."
-${RSYNC} ${RSYNC_OPT} "${LAUNCHBAR_PATH}" "${DESTINATION_PATH}"
+/usr/bin/rsync -avzh "${LAUNCHBAR_DIR}" "${DESTINATION_DIR}"

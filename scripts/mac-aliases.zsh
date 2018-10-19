@@ -1,6 +1,6 @@
 alias top="top -ocpu -R -F -s 2"
 alias hub=git
-alias vless="/usr/local/share/vim/vim80/macros/less.sh"
+alias vless="/usr/local/share/vim/vim81/macros/less.sh"
 
 function ql
 {

@@ -27,3 +27,8 @@
   command = "git commit -c ORIG_HEAD"
   tag = ["git", "undo"]
   output = ""
+
+[[snippets]]
+  description = "(SVN) Remove untracked files in the current directory"
+  command = "svn clean . --remove-unversioned"
+  output = ""
