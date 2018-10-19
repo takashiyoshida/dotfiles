@@ -1,10 +1,3 @@
-# OS X specific aliases
-if [[ "${OSTYPE}" =~ darwin* ]]; then
-    source "${DOTFILES}/macos-aliases.zsh"
-else
-    source "${DOTFILES}/linux-aliases.zsh"
-fi
-
 # Set TERM to xterm-256color to avoid incorrect color from being used
 # in tmux session
 alias emacs="TERM=xterm-256color emacs -nw"
@@ -21,6 +14,13 @@ alias standup="emacs `date +%F-standup.md`"
 # Ignore unversioned files from svn status
 alias svnst="svn status -q"
 alias env="env | sort"
+
+# OS X specific aliases
+if [[ "${OSTYPE}" =~ darwin* ]]; then
+    source "${DOTFILES}/macos-aliases.zsh"
+else
+    source "${DOTFILES}/linux-aliases.zsh"
+fi
 
 # Useful functions to convert a hexadecimal number to a decimal number and vice versa
 # http://www.cyberciti.biz/faq/linux-unix-convert-hex-to-decimal-number/

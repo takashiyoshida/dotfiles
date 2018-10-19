@@ -48,7 +48,7 @@ if [[ "${OSTYPE}" =~ darwin* ]]; then
     # for macOS
     plugins=(colored-man docker gem go hub osx python rake ruby svn tmux vagrant)
 else
-    # and everything else here, but mainly Linux
+    # and everything else here (but only tested on Linux)
     plugins=(colored-man docker gem go hub python rake ruby svn tmux vagrant)
 fi
 
