@@ -1,0 +1,12 @@
+#!/bin/bash
+
+declare -a SVN_REPOS=("${HOME}/Documents/c755a"
+                      "${HOME}/Documents/c755b"
+                      "${HOME}/Documents/rturep"
+                      "${HOME}/Projects/NELdev/src"
+                      )
+
+# There's a possibility that keychain password needs to be entered
+for repo in "${SVN_REPOS[@]}"; do
+    svn up "${repo}"
+done
