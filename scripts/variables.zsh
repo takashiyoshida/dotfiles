@@ -16,6 +16,7 @@ if [[ "${OSTYPE}" =~ darwin* ]]; then
 fi
 
 PATH="${PATH}:${HOME}/bin"
+PATH="${PATH}:${HOME}/Projects/dotfiles/bin"
 export PATH
 
 if which pyenv > /dev/null; then
