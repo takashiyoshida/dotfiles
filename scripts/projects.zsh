@@ -1,2 +1,4 @@
 # Add project-related configurations or secrets here
-# i.e. Jenkins username, password
+# i.e. JIRA username, password
+export JIRA_USER=""
+export JIRA_PASS=""
