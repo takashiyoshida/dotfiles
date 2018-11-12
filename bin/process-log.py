@@ -7,23 +7,23 @@ import re
 
 # 2018-11-10 02:41:34.254 err: nelrtuapp_lan[1948]: cse_erserver.c(1332):2:Unknown error -5519
 # Regex patterns
-YEAR = '[0-9]{4}'
-MONTH = '[0-1][0-9]'
-DAY = '[0-3][0-9]'
-HOUR = '[0-2][0-9]'
-MINUTE = '[0-5][0-9]'
-SECOND = '[0-5][0-9]'
+YEAR = '\d{4}'
+MONTH = '[01]\d'
+DAY = '[0-3]\d'
+HOUR = '[0-2]\d'
+MINUTE = '[0-5]\d'
+SECOND = '[0-5]\d'
 
-TIMESTAMP = '%s-%s-%s %s:%s:%s\.[0-9]{3}' % (YEAR, MONTH, DAY, HOUR, MINUTE, SECOND)
+TIMESTAMP = '%s-%s-%s %s:%s:%s\.\d{3}' % (YEAR, MONTH, DAY, HOUR, MINUTE, SECOND)
 LOG_LEVEL = '[a-z]{3,}'
 PROCESS = 'nelrtuapp_[a-z]{3}'
-PROCESS_ID = '[0-9]+'
-FILENAME = '[A-Za-z0-9_]+\.[a-z]{1,3}'
-LINE_NO = '[0-9]+'
+PROCESS_ID = '\d+'
+FILENAME = '\w+\.[a-z]{1,}'
+LINE_NO = '\d+'
 USER = '[a-z]+'
 MESSAGE = '.+'
 
-LOG_PATTERN_1 = '(?P<timestamp>%s) (?P<level>%s): (?P<process>%s)\[(?P<process_id>%s)\]: (?P<filename>%s)\(?(?P<line_no>%s)\)?:?\s*(?P<message>%s)' % (TIMESTAMP, LOG_LEVEL, PROCESS, PROCESS_ID, FILENAME, LINE_NO, MESSAGE)
+LOG_PATTERN_1 = '(?P<timestamp>%s) (?P<level>%s): (?P<process>%s)\[(?P<process_id>%s)\]: (?P<filename>%s):?\(?(?P<line_no>%s)\)?[:\s]?(?P<message>%s)' % (TIMESTAMP, LOG_LEVEL, PROCESS, PROCESS_ID, FILENAME, LINE_NO, MESSAGE)
 
 LOG_PATTERN_2 = '(?P<timestamp>%s) (?P<level>%s): (?P<process>%s)\[(?P<process_id>%s)\]: (?P<message>%s)' % (TIMESTAMP, LOG_LEVEL, PROCESS, PROCESS_ID, MESSAGE)
 
@@ -37,7 +37,6 @@ def main():
     parser.add_argument('--csv', '-c', required=True, help='write logs to a CSV file',
                         dest='csv')
     args = parser.parse_args()
-    print(args)
 
     events = []
     for infile in args.logs:
