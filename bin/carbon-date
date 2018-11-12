@@ -1,0 +1,16 @@
+#!/bin/bash
+
+# Identify which process dumped the core file
+file -b "$@"
+
+filename=$(basename -- "$@")
+timestamp="${filename##*.}"
+filename="${filename%.*}"
+
+# OS X specific aliases
+if [[ "${OSTYPE}" =~ darwin* ]]; then
+    core_timestamp=`date -r ${timestamp}`
+else
+    core_timestamp=`date -d "@${timestamp}"`
+fi
+echo "${filename} was created on ${core_timestamp}"
