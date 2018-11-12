@@ -17,7 +17,7 @@ alias env="env | sort"
 
 # OS X specific aliases
 if [[ "${OSTYPE}" =~ darwin* ]]; then
-    source "${DOTFILES}/macos-aliases.zsh"
+    source "${DOTFILES}/mac-aliases.zsh"
 else
     source "${DOTFILES}/linux-aliases.zsh"
 fi
