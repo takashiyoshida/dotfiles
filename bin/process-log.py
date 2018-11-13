@@ -29,7 +29,6 @@ LOG_PATTERN_2 = '(?P<timestamp>%s) (?P<level>%s): (?P<process>%s)\[(?P<process_i
 
 LOG_PATTERN_3 = '(?P<timestamp>%s) (?P<level>%s): (?P<user>%s): (?P<message>%s)' % (TIMESTAMP, LOG_LEVEL, USER, MESSAGE)
 
-
 def main():
     parser = argparse.ArgumentParser(prog='process-log.py')
     parser.add_argument('--log', '-l', nargs='+', required=True,
@@ -45,7 +44,6 @@ def main():
                 event = {}
                 match = re.match(LOG_PATTERN_1, line)
                 if match:
-                    #print(match.groups())
                     event['timestamp'] = match.group('timestamp')
                     event['level'] = match.group('level')
                     event['process'] = match.group('process')
@@ -56,7 +54,6 @@ def main():
                 else:
                     match = re.match(LOG_PATTERN_2, line)
                     if match:
-                        #print(match.groups())
                         event['timestamp'] = match.group('timestamp')
                         event['level'] = match.group('level')
                         event['process'] = match.group('process')
@@ -67,7 +64,6 @@ def main():
                     else:
                         match = re.match(LOG_PATTERN_3, line)
                         if match:
-                            #print(match.groups())
                             event['timestamp'] = match.group('timestamp')
                             event['level'] = match.group('level')
                             event['process'] = match.group('user')
@@ -78,6 +74,16 @@ def main():
                         else:
                             print('No match')
                             print(line)
+
+                if event['message'] == '[RECEIVE DATA]':
+                    continue
+                if event['message'] == '[SEND DATA]':
+                    continue
+                if event['message'] == 'Protocol data is NULL. Nothing to log':
+                    continue
+                if event['message'][0:2] == '0x':
+                    continue
+                    
                 events.append(event)
 
     with open(args.csv, 'w') as csvfile:
