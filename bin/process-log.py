@@ -35,6 +35,8 @@ def main():
                         help='nelrtu.log', dest='logs')
     parser.add_argument('--csv', '-c', required=True, help='write logs to a CSV file',
                         dest='csv')
+    parser.add_argument('--server', '-s', required=True, help='RTU host',
+                        dest='server')
     args = parser.parse_args()
 
     events = []
@@ -83,13 +85,13 @@ def main():
                     continue
                 if event['message'][0:2] == '0x':
                     continue
-                    
+                event['host'] = args.server
                 events.append(event)
 
     with open(args.csv, 'w') as csvfile:
-        fieldnames = ['timestamp', 'level', 'process', 'process_id', 'filename', 'line_no', 'message']
+        fieldnames = ['timestamp', 'level', 'process', 'process_id', 'filename', 'line_no', 'message', 'host']
         writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
-        writer.writeheader()
+        #writer.writeheader()
         for e in events:
             writer.writerow({'timestamp': e['timestamp'],
                              'level': e['level'],
@@ -97,7 +99,8 @@ def main():
                              'process_id': e['process_id'],
                              'filename': e['filename'],
                              'line_no': e['line_no'],
-                             'message': e['message']})
+                             'message': e['message'],
+                             'host': e['host']})
     
 if __name__ == "__main__":
     main()
