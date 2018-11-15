@@ -1,0 +1,76 @@
+#!/usr/bin/env python
+
+from __future__ import print_function
+
+import argparse
+import base64
+import os
+import sys
+import urllib2
+
+def eprint(*args, **kwargs):
+    '''
+    Print to stderr
+    '''
+    print(*args, file=sys.stderr, **kwargs)
+
+
+def get_basic_auth(username, password):
+    '''
+    Return a basic authorization from a pair of username and password
+    '''
+    return base64.b64encode("%s:%s" % (username, password))
+
+def main():
+    parser = argparse.ArgumentParser(prog='download-jira-issues')
+    parser.add_argument('--user', '-u', required=False, help='JIRA username', dest='username')
+    parser.add_argument('--pass', '-p', required=False, help='JIRA password', dest='password')
+    parser.add_argument('--filter-url', '-f', required=True, help='JIRA issue filter URL', dest='filter')
+    parser.add_argument('--output', '-o', required=False, help='write filter result')
+
+    args = parser.parse_args()
+    if not args.username:
+        if "JIRA_USER" in os.environ:
+            args.username = os.environ['JIRA_USER']
+        else:
+            eprint('Error: Missing JIRA username')
+            eprint('Export JIRA_USER variable or use `--user` parameter to pass your JIRA username')
+            sys.exit(1)
+    if not args.password:
+        if "JIRA_PASS" in os.environ:
+            args.password = os.environ['JIRA_PASS']
+        else:
+            eprint('Error: Missing JIRA password')
+            eprint('Export JIRA_PASS variable or use --user parameter to pass your JIRA password')
+            sys.exit(1)
+
+    basic_auth = get_basic_auth(args.username, args.password)
+
+    headers = {
+        'Content-Type': 'application/x-www-form-urlencoded',
+        'Authorization': 'Basic %s' % (basic_auth),
+        'Cache-Control': 'no-cache',
+        'Postman-Token': 'b81d8dcd-5eed-4fc9-ba4c-c65c1eeb98a6'
+    }
+
+    opener = urllib2.build_opener()
+    req = urllib2.Request(args.filter, data=None, headers=headers)
+
+    try:
+        res = opener.open(req)
+        data = res.read()
+    except urllib2.URLError as e:
+        print(str(e))
+        sys.exit(1)
+    except urllib2.HTTPError as e:
+        print(str(e))
+        sys.exit(1)
+
+    if args.output:
+        with open(args.output, 'w') as htmlFile:
+            htmlFile.write(data)
+    else:
+        print(data)
+
+if __name__ == "__main__":
+    main()
