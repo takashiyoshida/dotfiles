@@ -1,0 +1,45 @@
+#!/usr/bin/env bash
+
+set -e
+
+JIRA_ISSUE_LIST="http://jira.eng.sgp-tsa.sg.thales:8080/sr/jira.issueviews:searchrequest-excel-current-fields/15151/SearchRequest-15151.xls?tempMax=1000"
+
+JIRA_ISSUE_FULL="http://jira.eng.sgp-tsa.sg.thales:8080/sr/jira.issueviews:searchrequest-fullcontent/15151/SearchRequest-15151.html?tempMax=1000"
+
+JIRA_PCR_LIST="http://jira.eng.sgp-tsa.sg.thales:8080/sr/jira.issueviews:searchrequest-excel-current-fields/15142/SearchRequest-15142.xls?tempMax=1000"
+
+JIRA_PCR_LIST_FULL="http://jira.eng.sgp-tsa.sg.thales:8080/sr/jira.issueviews:searchrequest-fullcontent/15142/SearchRequest-15142.html?tempMax=1000"
+
+ALL_DETAILED_ISSUES="marc - all issues details (Thales Solutions Asia)"
+
+# Download issueslist
+download-jira-issues.py -f ${JIRA_ISSUE_LIST} -o `date +%F`-issueslist.xls
+
+# Download PCRlist
+download-jira-issues.py -f ${JIRA_PCR_LIST} -o `date +%F`-PCRlist.xls
+
+# Download PCRlist with full content
+download-jira-issues.py -f ${JIRA_PCR_LIST_FULL} \
+                        -o `date +%F`-PCRlist\(detailed\).html
+
+wkhtmltopdf `date +%F`-PCRlist\(detailed\).html `date +%F`-PCRlist\(detailed\).pdf
+
+# Download issueslist with full content
+download-jira-issues.py -f ${JIRA_ISSUE_LIST_FULL} -o "`date +%F`-marc - all issues details (Thales Solutions Asia).html"
+
+wkhtmltopdf "`date +%F`-${ALL_DETAILED_ISSUES}.html" \
+            "`date +%F`-${ALL_DETAILED_ISSUES}.pdf"
+
+# Convert to Excel .xls format (not .xlsx, because it can't)
+libreoffice --calc --convert-to xls:"MS Excel 97" `date +%F-issueslist.xls`
+libreoffice --calc --convert-to xls:"MS Excel 97" `date +%F-PCRlist.xls`
+
+# Copy these files and commit to the SVN
+cp -f `date +%F-issueslist.xls` "${RTUREP_DOC_SVN}/issueslist.xls"
+cp -f `date +%F-PCRlist.xls` "${RTUREP_DOC_SVN}/PCRlist.xls"
+
+cp -f "`date +%F`-PCRlist(detailed).pdf" "${RTUREP_DOC_SVN}/PCRlist(detailed).pdf"
+cp -f "`date +%F`-${ALL_DETAILED_ISSUES}.pdf" \
+   "${RTUREP_DOC_SVN}/${ALL_DETAILED_ISSUES}.pdf"
+
+cd "${RTUREP_DOC_SVN}"
