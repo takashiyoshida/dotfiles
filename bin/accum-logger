@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+
+set -e
+
+TEMP_FILE=`mktemp`
+for ((i=1 ; i <= $#-1 ; i++)); do
+    cat "$1" >> ${TEMP_FILE}
+    shift
+done
+
+sort -u ${TEMP_FILE}
