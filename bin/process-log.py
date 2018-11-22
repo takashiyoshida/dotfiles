@@ -42,8 +42,11 @@ def main():
     events = []
     for infile in args.logs:
         with open(infile, 'r') as log:
+            line_num = 0
             for line in log:
+                line_num = line_num + 1
                 event = {}
+
                 match = re.match(LOG_PATTERN_1, line)
                 if match:
                     event['timestamp'] = match.group('timestamp')
@@ -77,16 +80,20 @@ def main():
                             print('No match')
                             print(line)
 
-                if event['message'] == '[RECEIVE DATA]':
-                    continue
-                if event['message'] == '[SEND DATA]':
-                    continue
-                if event['message'] == 'Protocol data is NULL. Nothing to log':
-                    continue
-                if event['message'][0:2] == '0x':
-                    continue
-                event['host'] = args.server
-                events.append(event)
+                if event.has_key('message'):
+                    if event['message'] == '[RECEIVE DATA]':
+                        continue
+                    if event['message'] == '[SEND DATA]':
+                        continue
+                    if event['message'] == 'Protocol data is NULL. Nothing to log':
+                        continue
+                    if event['message'][0:2] == '0x':
+                        continue
+                    event['host'] = args.server
+                    events.append(event)
+                else:
+                    print('ERROR: line %d has no `message`' % (line_num))
+                    print(line)
 
     with open(args.csv, 'w') as csvfile:
         fieldnames = ['timestamp', 'level', 'process', 'process_id', 'filename', 'line_no', 'message', 'host']
