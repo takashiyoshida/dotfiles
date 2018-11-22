@@ -16,6 +16,9 @@ alias standup="emacs `date +%F-standup.md`"
 alias svnst="svn status -q"
 alias env="env | sort"
 
+# Remove emacs backup files
+alias rmeb="find . -name \"*~\" -delete"
+
 # OS X specific aliases
 if [[ "${OSTYPE}" =~ darwin* ]]; then
     source "${DOTFILES}/mac-aliases.zsh"
