@@ -3,7 +3,8 @@
 set -e
 
 TEMP_FILE=`mktemp`
-for ((i=1 ; i <= $#-1 ; i++)); do
+
+for ((i=0 ; i <= $# ; i++)); do
     cat "$1" >> ${TEMP_FILE}
     shift
 done
