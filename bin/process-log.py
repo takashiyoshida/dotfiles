@@ -92,7 +92,7 @@ def main():
                     event['host'] = args.server
                     events.append(event)
                 else:
-                    print('ERROR: line %d has no `message`' % (line_num))
+                    print('ERROR: %s - %d has no `message`' % (infile, line_num))
                     print(line)
 
     with open(args.csv, 'w') as csvfile:
