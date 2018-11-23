@@ -5,6 +5,7 @@ alias tailf="tail -f"
 alias history="history -i"
 
 alias svndiff="svn diff --diff-cmd /usr/bin/diff -x -w"
+alias svnldiff="svndiff -r COMMITTED" # Show the last commit
 alias svninfo="svn info --show-item=url"
 alias cdpr="cd ${HOME}/Projects"
 
