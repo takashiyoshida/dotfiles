@@ -48,3 +48,13 @@ function dirsize
     fi
     du -h -d 1 ${MY_DIR} | sort -h -r
 }
+
+function start_tmux
+{
+    cd $1
+    tmux new-session -s `basename "$1"`
+}
+
+alias NELdev="start_tmux ${HOME}/Projects/NELdev"
+alias dotfiles="start_tmux ${HOME}/Projects/dotfiles"
+
