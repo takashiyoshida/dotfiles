@@ -51,10 +51,12 @@ function dirsize
 
 function start_tmux
 {
-    cd $1
+    if [ -d $1 ]; then
+        cd $1
+    fi
     tmux new-session -s `basename "$1"`
 }
 
 alias NELdev="start_tmux ${HOME}/Projects/NELdev"
 alias dotfiles="start_tmux ${HOME}/Projects/dotfiles"
-
+alias rturep="start_tmux ${HOME}/Projects/rturep-elk"
