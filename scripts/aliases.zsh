@@ -49,14 +49,76 @@ function dirsize
     du -h -d 1 ${MY_DIR} | sort -h -r
 }
 
-function start_tmux
+function NELdev
 {
-    if [ -d $1 ]; then
-        cd $1
+    tmux has-session -t NELdev 2>/dev/null
+    if [ $? != 0 ]; then
+        tmux detach # Detach from the current session
+        cd ${HOME}/Projects/NELdev
+        tmux new-session -s NELdev -n servers -d
+        # Split the window in half (two panes side by side)
+        tmux split-window -h -p 50 -t NELdev
+        # Split the left pane in half (two panes, top and bottom)
+        tmux split-window -v -p 50 -t NELdev:1.1
+        # Split the right pane in half (two panes, top and bottom)
+        tmux split-window -v -p 50 -t NELdev:1.3
+        # Make the top left pane active
+        tmux select-pane -t NELdev:1.1
+
+        tmux new-window -n dev -n editor
+        tmux split-window -h -p 50 -t NELdev:2
+        tmux select-pane -t NELdev:2.1
     fi
-    tmux new-session -s `basename "$1"`
+    tmux attach -t NELdev
 }
 
-alias NELdev="start_tmux ${HOME}/Projects/NELdev"
-alias dotfiles="start_tmux ${HOME}/Projects/dotfiles"
-alias rturep="start_tmux ${HOME}/Projects/rturep-elk"
+function dotfiles
+{
+    tmux has-session -t dotfiles 2>/dev/null
+    if [ $? != 0 ]; then
+        tmux detach        
+        cd ${HOME}/Projects/dotfiles
+        tmux new-session -s dotfiles -d
+
+        tmux split-window -h -p 50 -t dotfiles
+        tmux select-pane -t dotfiles:1.1
+    fi
+    tmux attach -t dotfiles
+}
+
+function rturep
+{
+    tmux has-session -t rturep 2>/dev/null
+    if [ $? != 0 ]; then
+        tmux detach
+        cd ${HOME}/Projects/rturep-elk
+        tmux new-session -s rturep -d
+
+        tmux split-window -h -p 50 -t rturep
+        tmux select-pane -t rturep:1.1
+
+        if [[ "${OSTYPE}" =~ darwin* ]]; then
+            tmux send-keys -t rturep:1.1 'docker-compose up' C-m
+        else
+            tmux send-keys -t rturep:1.1 'sudo docker-compose up' C-m
+        fi
+    fi
+    tmux attach -t rturep
+}
+
+function RTUtest
+{
+    tmux has-session -t RTUtest 2>/dev/null
+    if [ $? != 0 ]; then
+        tmux detach
+        cd /var/log
+        tmux new-session -s RTUtest -n RTUtest -d
+        tmux split-window -h -p 50 -t RTUtest
+        tmux split-window -v -p 50 -t RTUtest:1.1
+        tmux split-window -v -p 50 -t RTUtest:1.3
+
+        tmux send-keys -t RTUtest:1.1 'top' C-m
+        tmux select-pane -t RTUtest:1.1
+    fi
+    tmux attach -t RTUtest
+}
