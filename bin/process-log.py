@@ -80,6 +80,10 @@ def main():
                             print('No match')
                             print(line)
 
+                # Ignore debug log
+                if event['level'] == 'debug':
+                    continue
+
                 if event.has_key('message'):
                     if event['message'] == '[RECEIVE DATA]':
                         continue
