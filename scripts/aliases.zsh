@@ -49,27 +49,50 @@ function dirsize
     du -h -d 1 ${MY_DIR} | sort -h -r
 }
 
-function NELdev
+function c755b-dev
 {
-    tmux has-session -t NELdev 2>/dev/null
+    tmux has-session -t c755b 2>/dev/null
     if [ $? != 0 ]; then
         tmux detach # Detach from the current session
-        cd ${HOME}/Projects/NELdev
-        tmux new-session -s NELdev -n servers -d
+        cd ${HOME}/Projects/c755b-dev
+        tmux new-session -s c755b -n servers -d
         # Split the window in half (two panes side by side)
-        tmux split-window -h -p 50 -t NELdev
+        tmux split-window -h -p 50 -t c755b
         # Split the left pane in half (two panes, top and bottom)
-        tmux split-window -v -p 50 -t NELdev:1.1
+        tmux split-window -v -p 50 -t c755b:1.1
         # Split the right pane in half (two panes, top and bottom)
-        tmux split-window -v -p 50 -t NELdev:1.3
+        tmux split-window -v -p 50 -t c755b:1.3
         # Make the top left pane active
-        tmux select-pane -t NELdev:1.1
+        tmux select-pane -t c755b:1.1
 
         tmux new-window -n dev -n editor
-        tmux split-window -h -p 50 -t NELdev:2
-        tmux select-pane -t NELdev:2.1
+        tmux split-window -h -p 50 -t c755b:2
+        tmux select-pane -t c755b:2.1
     fi
-    tmux attach -t NELdev
+    tmux attach -t c755b
+}
+
+function rturep-dev
+{
+    tmux has-session -t rturep 2>/dev/null
+    if [ $? != 0 ]; then
+        tmux detach # Detach from the current session
+        cd ${HOME}/Projects/rturep-dev
+        tmux new-session -s rturep -n servers -d
+        # Split the window in half (two panes side by side)
+        tmux split-window -h -p 50 -t rturep
+        # Split the left pane in half (two panes, top and bottom)
+        tmux split-window -v -p 50 -t rturep:1.1
+        # Split the right pane in half (two panes, top and bottom)
+        tmux split-window -v -p 50 -t rturep:1.3
+        # Make the top left pane active
+        tmux select-pane -t rturep:1.1
+
+        tmux new-window -n dev -n editor
+        tmux split-window -h -p 50 -t rturep:2
+        tmux select-pane -t rturep:2.1
+    fi
+    tmux attach -t rturep
 }
 
 function dotfiles
@@ -86,24 +109,24 @@ function dotfiles
     tmux attach -t dotfiles
 }
 
-function rturep
+function rturep-elk
 {
-    tmux has-session -t rturep 2>/dev/null
+    tmux has-session -t rturep-elk 2>/dev/null
     if [ $? != 0 ]; then
         tmux detach
         cd ${HOME}/Projects/rturep-elk
-        tmux new-session -s rturep -d
+        tmux new-session -s rturep-elk -d
 
-        tmux split-window -h -p 50 -t rturep
-        tmux select-pane -t rturep:1.1
+        tmux split-window -h -p 50 -t rturep-elk
+        tmux select-pane -t rturep-elk:1.1
 
         if [[ "${OSTYPE}" =~ darwin* ]]; then
-            tmux send-keys -t rturep:1.1 'docker-compose up' C-m
+            tmux send-keys -t rturep-elk:1.1 'docker-compose up' C-m
         else
-            tmux send-keys -t rturep:1.1 'sudo docker-compose up' C-m
+            tmux send-keys -t rturep-elk:1.1 'sudo docker-compose up' C-m
         fi
     fi
-    tmux attach -t rturep
+    tmux attach -t rturep-elk
 }
 
 function RTUtest
@@ -121,4 +144,19 @@ function RTUtest
         tmux select-pane -t RTUtest:1.1
     fi
     tmux attach -t RTUtest
+}
+
+function RTUreport
+{
+    tmux has-session -t RTUreport 2>/dev/null
+    if [ $? != 0 ]; then
+        tmux detach
+        cd ${HOME}/Documents/rturep/2\ Project\ Execution\ Data/2.2\ Work\ Products/04_Software/SprintReportsStatistics
+        tmux new-session -s RTUreport -n RTUreport -d
+        tmux split-window -h -p 50 -t RTUreport
+
+        tmux select-pane -t RTUreport:1.1
+        tmux send-keys -t RTUreport:1.1 'cd ${HOME}/Projects/dotfiles/bin' C-m
+    fi
+    tmux attach -t RTUreport
 }
