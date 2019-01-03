@@ -1,0 +1,46 @@
+#!/usr/bin/env bash
+
+set -e
+
+# Download issueslist
+# Export the output to an Excel file, issueslist.xls
+ISSUES_LIST_URL="http://jira.eng.sgp-tsa.sg.thales:8080/sr/jira.issueviews:searchrequest-excel-current-fields/15194/SearchRequest-15194.xls?tempMax=1000"
+ISSUES_LIST=`date +%F`-issueslist.xls
+
+echo "1> Exporting RTUREP JIRA issues list to ${ISSUES_LIST}..."
+download-jira-issues.py -f ${ISSUES_LIST_URL} -o ${ISSUES_LIST}
+echo
+
+# Download PCRlist
+# Export the output to an Excel file, PCRlist.xls
+PCR_LIST_URL="http://jira.eng.sgp-tsa.sg.thales:8080/sr/jira.issueviews:searchrequest-excel-current-fields/15195/SearchRequest-15195.xls?tempMax=1000"
+PCR_LIST=`date +%F`-PCRlist.xls
+
+echo "2> Exporting RTUREP JIRA PCR list to ${PCR_LIST}..."
+download-jira-issues.py -f ${PCR_LIST_URL} -o ${PCR_LIST}
+echo
+
+# Download PCRlist with full content
+# Export the PCRlist with full content
+PCR_DETAILED_LIST_URL="http://jira.eng.sgp-tsa.sg.thales:8080/sr/jira.issueviews:searchrequest-fullcontent/15195/SearchRequest-15195.html?tempMax=1000"
+PCR_DETAILED_LIST_HTML=`date +%F`-PCRlist\(detailed\).html
+PCR_DETAILED_LIST_PDF=`date +%F`-PCRlist\(detailed\).pdf
+
+echo "3> Exporting RTUREP JIRA PCR list (detailed) to ${PCR_DETAILED_LIST_HTML}..."
+download-jira-issues.py -f ${PCR_DETAILED_LIST_URL} -o ${PCR_DETAILED_LIST_HTML}
+
+echo "3> Converting the ${PCR_DETAILED_LIST_HTML} to PDF format..."
+wkhtmltopdf ${PCR_DETAILED_LIST_HTML} ${PCR_DETAILED_LIST_PDF}
+echo
+
+# Export the issuelist again but with full content
+ISSUES_DETAILED_LIST_URL="http://jira.eng.sgp-tsa.sg.thales:8080/sr/jira.issueviews:searchrequest-fullcontent/15194/SearchRequest-15194.html?tempMax=1000"
+ISSUES_DETAILED_LIST_HTML="`date +%F`-marc - all issues details (Thales Solutions Asia).html"
+ISSUES_DETAILED_LIST_PDF="`date +%F`-marc - all issues details (Thales Solutions Asia).pdf"
+
+echo "4> Exporting RTUREP JIRA issues list to ${ISSUES_DETAILED_LIST_HTML}..."
+download-jira-issues.py -f ${ISSUES_DETAILED_LIST_URL} -o "${ISSUES_DETAILED_LIST_HTML}"
+
+echo "4> Converting the ${ISSUES_DETAILED_LIST_HTML} to PDF format..."
+wkhtmltopdf "${ISSUES_DETAILED_LIST_HTML}" "${ISSUES_DETAILED_LIST_PDF}"
+echo
