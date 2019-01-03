@@ -1,5 +1,9 @@
 #!/usr/bin/env bash
 
+# Run this command at the end of a sprint to generate the statistics automatically.
+# This script is based on the instructions at:
+# http://git.asia.services.thales/T0204569/standup/blob/master/handover/rturep/2018-09-18-how-to-prepare-reports-for-technical-meeting.md
+
 set -e
 
 # Download issueslist
