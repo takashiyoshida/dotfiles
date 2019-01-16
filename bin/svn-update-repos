@@ -3,7 +3,8 @@
 declare -a SVN_REPOS=("${HOME}/Documents/c755a"
                       "${HOME}/Documents/c755b"
                       "${HOME}/Documents/rturep"
-                      "${HOME}/Projects/NELdev/src"
+                      "${HOME}/Projects/c755b-dev/src"
+                      "${HOME}/Projects/rturep-dev/src"
                       )
 
 # There's a possibility that keychain password needs to be entered
