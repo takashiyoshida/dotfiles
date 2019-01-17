@@ -1,0 +1,62 @@
+#!/usr/bin/env bash
+
+function halp
+{
+    echo "`basename $0` -f <path to file> -s <servername> -d <date>"
+    echo "    -f <compressed file: *.7z, *.zip>"
+    echo "    -s <servername: i.e. wlhrtu1>"
+    echo "    -d <date: YYYY-MM-DD>"
+    exit 0
+}
+
+while getopts f:s:d:h option
+do
+      case "${option}" in
+          f) COMPFILE=${OPTARG};;
+          s) SERVER=${OPTARG};;
+          d) DATE=${OPTARG};;
+          h) halp;;
+      esac
+done
+
+if [ -z "${COMPFILE}" ]; then
+    halp
+fi
+if [ -z "${SERVER}" ]; then
+    halp
+fi
+if [ -z "${DATE}" ]; then
+    halp
+fi
+
+#echo "COMPFILE = ${COMPFILE}"
+#echo "SERVER   = ${SERVER}"
+#echo "DATE     = ${DATE}"
+
+filename=$(basename -- ${COMPFILE})
+extension="${filename##*.}"
+
+#echo "filename  = ${filename}"
+#echo "extension = ${extension}"
+
+OUTDIR=`mktemp -d`
+#echo "OUTDIR = ${OUTDIR}"
+
+if [ "${extension}" == "7z" ]; then
+    7z e -o${OUTDIR}/out ${COMPFILE}
+elif [ "${extension}" == "zip" ]; then
+    unzip ${COMPFILE} -d ${OUTDIR}/out
+else
+    echo "Unexpected file extension: ${COMPFILE}"
+    echo "Expected a *.7z or *.zip file"
+    rm -rf ${OUTDIR}
+    exit 1
+fi
+
+GZFILES=`find ${OUTDIR}/out -type f -name "*.gz"`
+for f in ${GZFILES}; do
+    gunzip ${f}
+done
+
+process-log.py -l ${OUTDIR}/out/nelrtu.log* -s ${SERVER} -c ${DATE}-${SERVER}.csv
+rm -rf ${OUTDIR}
