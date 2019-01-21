@@ -110,10 +110,14 @@ def parse_log(infile, server='unknown'):
                     event['host'] = match.group('host')
                     line = line[match.end():].strip()
                 else:
+                    # Prior to release 1.0.2, the log does not contain hostname
+                    # so we need to specify the RTU hostname
                     event['host'] = server
 
                 match = re.match(LEVEL, line)
                 if match:
+                    # Under some circumstances, the log level appears as a number,
+                    # instead of log level name (i.e. err, debug)
                     event['level'] = convert_level_num_to_level_name(match.group('level'))
                     line = line[match.end():].strip()
 
@@ -170,9 +174,11 @@ def parse_log(infile, server='unknown'):
                 logging.debug('MESSAGE: %s', event['message'])
                 logging.debug('RAW_MESSAGE: %s', event['raw_message'])
 
+                # We choose not to store debug-level log (there are too many)
                 if event['level'] == 'debug':
                     continue
-                if event['message'][0:2] == '0x':
+                # Also, ignore SWC-log
+                if event['message'][0:2] == '0x': 
                     continue
 
                 events.append(event)
