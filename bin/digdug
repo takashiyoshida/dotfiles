@@ -58,5 +58,7 @@ for f in ${GZFILES}; do
     gunzip ${f}
 done
 
-process-log.py -l ${OUTDIR}/out/nelrtu.log* -s ${SERVER} -c ${DATE}-${SERVER}.csv
-rm -rf ${OUTDIR}
+rturep-loggr.py -l ${OUTDIR}/out/nelrtu.log* -s ${SERVER} -c ${DATE}-${SERVER}.csv
+if [[ $? == 0 ]]; then
+    rm -rf ${OUTDIR}
+fi
