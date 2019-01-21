@@ -20,7 +20,9 @@ TIMESTAMP   = '(?P<timestamp>%s-%s-%s %s:%s:%s\.%s)' \
 HOST        = '(?P<host>[a-z]{3}rtu[12]) '
 LEVEL       = '(?P<level>[a-z0-9]+):'
 PROCESS     = '(?P<process>nelrtuapp_[a-z]{3})\[(?P<process_id>\d+)\]:'
-FILENAME    = '(?P<filename>[\w\-]+\.[a-z]+):?\(?(?P<line>\d+)\)?:?'
+FILENAME1   = '(?P<filename>[\w\-]+\.[a-z]+):?\(?(?P<line>\d+)\)?:?'
+FILENAME2   = '(?P<filename>[\w\-]+\.[a-z]+):.+\((?P<line>\d+)\):'
+FILENAME3   = '.+ - (?P<filename>[\w\-\/]+\.[a-z]+)\((?P<line>\d+)\)'
 USER_ACTION = '(?P<user>[a-z]+):'
 
 
@@ -41,6 +43,7 @@ def init_logger():
 
 def purify_text(line):
     '''
+    Remove non-ASCII characters from the text
     '''
     cleaned = (c for c in line if 0 < ord(c) < 127)
     return ''.join(cleaned)
@@ -115,15 +118,29 @@ def parse_log(infile, server='unknown'):
                         event['process_id'] = match.group('process_id')
                         line = line[match.end():].strip()
 
-                        match = re.match(FILENAME, line)
+                        match = re.match(FILENAME1, line)
                         if match:
                             event['filename'] = match.group('filename')
                             event['line'] = match.group('line')
                             line = line[match.end():].strip()
                             event['message'] = line
                         else:
-                            # This is likely to be a SWC log
-                            event['message'] = line
+                            match = re.match(FILENAME2, line)
+                            if match:
+                                event['filename'] = match.group('filename')
+                                event['line'] = match.group('line')
+                                line = line[match.end():].strip()
+                                event['message'] = line
+                            else:
+                                match = re.match(FILENAME3, line)
+                                if match:
+                                    event['filename'] = match.group('filename')
+                                    event['line'] = match.group('line')
+                                    line = line[match.end():].strip()
+                                    event['message'] = line
+                                else:
+                                    # This is likely to be a SWC log
+                                    event['message'] = line
                     else:
                         match = re.match(USER_ACTION, line)
                         if match:
