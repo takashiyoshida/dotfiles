@@ -20,7 +20,7 @@ TIMESTAMP   = '(?P<timestamp>%s-%s-%s %s:%s:%s\.%s)' \
 HOST        = '(?P<host>[a-z]{3}rtu[12]) '
 LEVEL       = '(?P<level>[a-z0-9]+):'
 PROCESS     = '(?P<process>nelrtuapp_[a-z]{3})\[(?P<process_id>\d+)\]:'
-FILENAME    = '(?P<filename>[\w\-]+\.[a-z]+):?\(?(?P<line>\d+)\)?'
+FILENAME    = '(?P<filename>[\w\-]+\.[a-z]+):?\(?(?P<line>\d+)\)?:?'
 USER_ACTION = '(?P<user>[a-z]+):'
 
 
