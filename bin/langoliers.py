@@ -4,11 +4,13 @@ import argparse
 import csv
 import logging
 import logging.handlers
+import multiprocessing
 import re
 from time import time
 
+
 YEAR  = '\d{4}'
-MONTH = '[0-2]\d'
+MONTH = '[01]\d'
 DAY   = '[0-3]\d'
 
 HOUR    = '[0-2]\d'
@@ -16,12 +18,12 @@ MINUTE  = '[0-5]\d'
 SECOND  = '[0-5]\d'
 MSECOND = '\d{3}'
 
-TIMESTAMP   = '(?P<timestamp>%s-%s-%s %s:%s:%s\.%s)' \
-              % (YEAR, MONTH, DAY, HOUR, MINUTE, SECOND, MSECOND)
-HOST        = '(?P<host>[a-z]{3}rtu[12]) '
-LEVEL       = '(?P<level>[a-z0-9]+):'
-PROCESS     = '(?P<process>nelrtuapp_[a-z]{3})\[(?P<process_id>\d+)\]:'
-
+TIMESTAMP = '(?P<timestamp>%s-%s-%s %s:%s:%s\.%s)' % (YEAR, MONTH, DAY, HOUR, MINUTE,
+                                                      SECOND, MSECOND)
+# Allow both SCS and SIG RTU hostnames
+HOSTNAME = '(?P<host>[a-z]{3}rt[su][12]) '
+LEVEL    = '(?P<level>[a-z0-9]+):'
+PROCESS  = '(?P<process>nelrtuapp_[a-z]{3})\[(?P<process_id>\d+)\]:'
 
 # <filename>:?(?<line number>)?:?
 FILENAME1   = '(?P<filename>[\w\-]+\.[a-z]+):?\(?(?P<line>\d+)\)?:?'
@@ -29,36 +31,43 @@ FILENAME1   = '(?P<filename>[\w\-]+\.[a-z]+):?\(?(?P<line>\d+)\)?:?'
 FILENAME2   = '(?P<filename>[\w\-]+\.[a-z]+):\w+[:\(]?(?P<line>\d+)\)?:?'
 # <function name:ignored> - <filename>(<line number>)
 FILENAME3   = '.+ - (?P<filename>[\w\-\/]+\.[a-z]+)\((?P<line>\d+)\)'
+
 USER_ACTION = '(?P<user>[a-z]+):'
 
 
-def init_logger():
+def init_logging():
     '''
-    Initialize logger
+    Initialize logging
     '''
-    f = logging.Formatter(fmt='%(message)s')
     logger = logging.getLogger()
     logger.setLevel(logging.DEBUG)
 
     console = logging.StreamHandler()
-    console.setFormatter(f)
+    consoleFormatter = logging.Formatter(fmt='%(message)s')
+    console.setFormatter(consoleFormatter)
     console.setLevel(logging.INFO)
+
+    fileHandler = logging.handlers.RotatingFileHandler('langoliers_log', mode='a',
+                                                       maxBytes=1000000, backupCount=10)
+    fileFormatter = logging.Formatter(fmt='%(asctime)s %(levelname)s %(message)s')
+    fileHandler.setFormatter(fileFormatter)
+    fileHandler.setLevel(logging.WARN)
+
     logger.addHandler(console)
+    logger.addHandler(fileHandler)
     return logger
 
 
-def purify_text(line):
+def purify_text(text):
     '''
-    Remove non-ASCII characters from the text
+    Remove non-ASCII characters from text
     '''
-    cleaned = (c for c in line if 0 < ord(c) < 127)
-    return ''.join(cleaned)
+    cleaned = (c for c in text if 0 < ord(c) < 127)
+    return ''.join(cleaned).strip()
 
 
 def convert_level_num_to_level_name(text):
     '''
-    Convert the level number to the level name
-    Note that the level should be logged as string (i.e. 'err') rather than number (3)
     '''
     levels = {0: 'emerg',
               1: 'alert',
@@ -71,29 +80,31 @@ def convert_level_num_to_level_name(text):
     try:
         num = int(text)
         if 0 < num > 7:
-            return 'unknown'
-        return levels[num]
+            text = 'unknown'
+        else:
+            text = levels[num]
     except:
+        # the text is already a level name, not a level number
         pass
     return text
 
 
-def parse_log(infile, server='unknown'):
-    '''
-    '''
+def do_work(infile, hostname='unknown'):
     events = []
 
-    with open(infile, 'r') as logs:
-        count = 0 # line number
-        for line in logs:
+    with open(infile, 'r') as logfile:
+        t0 = time()
+        count = 0
+
+        for line in logfile:
             count = count + 1
             line = purify_text(line)
 
             match = re.match(TIMESTAMP, line)
             if match:
                 event = {'timestamp': '',
-                         'host': '',
-                         'level': 'debug', # default value
+                         'host': hostname, # use default hostname, first
+                         'level': '',
                          'process': '',
                          'process_id': '',
                          'filename': '',
@@ -105,19 +116,13 @@ def parse_log(infile, server='unknown'):
                 event['timestamp'] = match.group('timestamp')
                 line = line[match.end():].strip()
 
-                match = re.match(HOST, line)
+                match = re.match(HOSTNAME, line)
                 if match:
                     event['host'] = match.group('host')
                     line = line[match.end():].strip()
-                else:
-                    # Prior to release 1.0.2, the log does not contain hostname
-                    # so we need to specify the RTU hostname
-                    event['host'] = server
 
                 match = re.match(LEVEL, line)
                 if match:
-                    # Under some circumstances, the log level appears as a number,
-                    # instead of log level name (i.e. err, debug)
                     event['level'] = convert_level_num_to_level_name(match.group('level'))
                     line = line[match.end():].strip()
 
@@ -131,69 +136,67 @@ def parse_log(infile, server='unknown'):
                         if match:
                             event['filename'] = match.group('filename')
                             event['line'] = match.group('line')
-                            line = line[match.end():].strip()
-                            event['message'] = line
+                            event['message'] = line[match.end():].strip()
                         else:
                             match = re.match(FILENAME2, line)
                             if match:
                                 event['filename'] = match.group('filename')
                                 event['line'] = match.group('line')
-                                line = line[match.end():].strip()
-                                event['message'] = line
+                                event['message'] = line[match.end():].strip()
                             else:
                                 match = re.match(FILENAME3, line)
                                 if match:
                                     event['filename'] = match.group('filename')
                                     event['line'] = match.group('line')
-                                    line = line[match.end():].strip()
-                                    event['message'] = line
+                                    event['message'] = line[match.end():].strip()
                                 else:
-                                    # This is likely to be a SWC log
-                                    event['message'] = line
+                                    event['message'] = line.strip()
                     else:
                         match = re.match(USER_ACTION, line)
                         if match:
                             event['user'] = match.group('user')
-                            line = line[match.end():].strip()
-                            event['message'] = line
+                            event['message'] = line[match.end():].strip()
                         else:
-                            logging.error('Unable to match process name and ID in %s at %d', infile, count)
+                            logging.error('Unable to match process name and ID in %s at %d',
+                                          infile, count)
                             logging.error(line)
                 else:
                     logging.error('Unable to match log level in %s at %d', infile, count)
                     logging.error(line)
 
-                logging.debug('TIMESTAMP: %s', event['timestamp'])
-                logging.debug('HOST: %s', event['host'])
-                logging.debug('LEVEL: %s', event['level'])
-                logging.debug('PROCESS: %s', event['process'])
-                logging.debug('PROCESS_ID: %s', event['process_id'])
-                logging.debug('FILENAME: %s', event['filename'])
-                logging.debug('LINE: %s', event['line'])
-                logging.debug('USER: %s', event['user'])
-                logging.debug('MESSAGE: %s', event['message'])
-                logging.debug('RAW_MESSAGE: %s', event['raw_message'])
+                logging.debug('timestamp: %s', event['timestamp'])
+                logging.debug('host: %s', event['host'])
+                logging.debug('level: %s', event['level'])
+                logging.debug('process: %s', event['process'])
+                logging.debug('process id: %s', event['process_id']),
+                logging.debug('filename: %s', event['filename']),
+                logging.debug('line: %s', event['line'])
+                logging.debug('user: %s', event['user'])
+                logging.debug('message: %s', event['message'])
+                logging.debug('raw_message: %s', event['raw_message'])
 
-                # We choose not to store debug-level log (there are too many)
                 if event['level'] == 'debug':
                     continue
-                # Also, ignore SWC-log
-                if event['message'][0:2] == '0x': 
+                if event['message'].find('0x', 0, 2) != -1:
                     continue
 
-                events.append(event)
+                events.append(event)                
             else:
                 logging.error('Unable to match timestamp in %s at %d', infile, count)
                 logging.error(line)
+
+        t1 = time()
+        logging.info('Extracted %d events from %s, took %.3f seconds',
+                     len(events), infile, t1 - t0)
     return events
 
 
-def write_events_to_csvfile(events, csvfile):
+def write_events_to_csv(csvfile, events):
     '''
     '''
     with open(csvfile, 'w') as csvfile:
-        fieldnames = ['timestamp', 'host', 'level', 'process', 'process_id', 'filename',
-                      'line', 'message', 'raw_message']
+        fieldnames = ['timestamp', 'host', 'level', 'process', 'process_id',
+                      'filename', 'line', 'message', 'raw_message']
         writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
         for event in events:
             writer.writerow({'timestamp': event['timestamp'],
@@ -205,36 +208,42 @@ def write_events_to_csvfile(events, csvfile):
                              'line': event['line'],
                              'message': event['message'],
                              'raw_message': event['raw_message']})
-
     
-def main():
-    init_logger()
 
-    parser = argparse.ArgumentParser(prog='rturep-loggr')
+def main():
+    '''
+    main function
+    '''
+    parser = argparse.ArgumentParser(prog='langoliers')
     parser.add_argument('--log', '-l', required=True, nargs='+', dest='logs')
-    parser.add_argument('--server', '-s', required=False, dest='server')
-    parser.add_argument('--csv', '-c', required=True, dest='csvfile')
+    parser.add_argument('--csv', '-c', required=False, dest='csvfile')
+    parser.add_argument('--name', '-n', required=False, default='unknown', dest='name')
+    parser.add_argument('--pool', '-p', required=False, type=int, default=1, dest='pool')
     args = parser.parse_args()
 
-    start = time()
-    history = []
+    init_logging()
 
+    t0 = time()
+    results = []
+
+    pool = multiprocessing.Pool(args.pool)
+    # do something useful here
     for infile in args.logs:
-        t0 = time()
-        events = parse_log(infile, args.server)
-        t1 = time()
-        logging.info('Extracted %d events from %s, took %.3f seconds',
-                     len(events), infile, t1 - t0)
-        history.extend(events)
+        result = pool.apply_async(do_work, [infile, args.name])
+        results.append(result)
+    pool.close()
+    pool.join()
 
-    end = time()
-    logging.info('Extracted %d events, took %.3f seconds',
-                 len(history), end - start)
+    t1 = time()
+    events = []
+    for result in results:
+        events.extend(result.get())
 
-    if len(history):
-        history.sort(key=lambda r: r['timestamp'])
-        write_events_to_csvfile(history, args.csvfile)
-
-
+    logging.info('Extracted %d events, took %.3f seconds', len(events), t1 - t0)
+    if len(events) > 0:
+        events.sort(key=lambda event: event['timestamp'])
+        write_events_to_csv(args.csvfile, events)
+    
+    
 if __name__ == "__main__":
     main()

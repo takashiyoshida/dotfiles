@@ -2,19 +2,20 @@
 
 function halp
 {
-    echo "`basename $0` -f <path to file> -s <servername> -d <date>"
+    echo "`basename $0` -f <path to file> -s <servername> -p <prefix>"
     echo "    -f <compressed file: *.7z, *.zip>"
     echo "    -s <servername: i.e. wlhrtu1>"
-    echo "    -d <date: YYYY-MM-DD>"
+    echo "    -p <prefix>"
+    echo "       output will be saved in <prefix>-<servername>.csv"
     exit 0
 }
 
-while getopts f:s:d:h option
+while getopts f:s:p:h option
 do
       case "${option}" in
           f) COMPFILE=${OPTARG};;
           s) SERVER=${OPTARG};;
-          d) DATE=${OPTARG};;
+          p) PREFIX=${OPTARG};;
           h) halp;;
       esac
 done
@@ -25,7 +26,7 @@ fi
 if [ -z "${SERVER}" ]; then
     halp
 fi
-if [ -z "${DATE}" ]; then
+if [ -z "${PREFIX}" ]; then
     halp
 fi
 
@@ -58,7 +59,7 @@ for f in ${GZFILES}; do
     gunzip ${f}
 done
 
-rturep-loggr.py -l ${OUTDIR}/out/nelrtu.log* -s ${SERVER} -c ${DATE}-${SERVER}.csv
+langoliers.py -l ${OUTDIR}/out/nelrtu.log* -n ${SERVER} -c ${PREFIX}-${SERVER}.csv -p 6
 if [[ $? == 0 ]]; then
     rm -rf ${OUTDIR}
 fi
