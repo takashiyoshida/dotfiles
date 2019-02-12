@@ -219,10 +219,14 @@ def main():
     main function
     '''
     parser = argparse.ArgumentParser(prog='langoliers')
-    parser.add_argument('--log', '-l', required=True, nargs='+', dest='logs')
-    parser.add_argument('--csv', '-c', required=False, dest='csvfile')
-    parser.add_argument('--name', '-n', required=False, default='unknown', dest='name')
-    parser.add_argument('--pool', '-p', required=False, type=int, default=1, dest='pool')
+    parser.add_argument('--log', '-l', required=True, nargs='+', dest='logs',
+                        help='')
+    parser.add_argument('--csv', '-c', required=False, dest='csvfile',
+                        help='')
+    parser.add_argument('--name', '-n', required=False, default='unknown', dest='name',
+                        help='')
+    parser.add_argument('--pool', '-p', required=False, type=int, default=1, dest='pool',
+                        help='')
     args = parser.parse_args()
 
     init_logging()
