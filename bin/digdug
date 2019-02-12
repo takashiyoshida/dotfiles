@@ -59,7 +59,7 @@ for f in ${GZFILES}; do
     gunzip ${f}
 done
 
-langoliers.py -l ${OUTDIR}/out/nelrtu.log* -n ${SERVER} -c ${PREFIX}-${SERVER}.csv -p 6
+langoliers.py -l ${OUTDIR}/out/nelrtu.log* -n ${SERVER} -c ${PREFIX}-${SERVER}.csv -p 4
 if [[ $? == 0 ]]; then
     rm -rf ${OUTDIR}
 fi
