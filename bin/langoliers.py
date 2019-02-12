@@ -191,13 +191,15 @@ def do_work(infile, hostname='unknown'):
     return events
 
 
-def write_events_to_csv(csvfile, events):
+def write_events_to_csv(outfile, events):
     '''
     '''
-    with open(csvfile, 'w') as csvfile:
+    with open(outfile, 'w') as csvfile:
         fieldnames = ['timestamp', 'host', 'level', 'process', 'process_id',
                       'filename', 'line', 'message', 'raw_message']
         writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
+        writer.writeheader()
+
         for event in events:
             writer.writerow({'timestamp': event['timestamp'],
                              'host': event['host'],
@@ -208,6 +210,14 @@ def write_events_to_csv(csvfile, events):
                              'line': event['line'],
                              'message': event['message'],
                              'raw_message': event['raw_message']})
+
+
+def write_events_to_json(outfile, events):
+    '''
+    '''
+    j = json.dumps(events, indent=2)
+    with open(outfile, 'w') as jsonfile:
+        print >> jsonfile, j
     
 
 def main():
@@ -217,6 +227,7 @@ def main():
     parser = argparse.ArgumentParser(prog='langoliers')
     parser.add_argument('--log', '-l', required=True, nargs='+', dest='logs')
     parser.add_argument('--csv', '-c', required=False, dest='csvfile')
+    parser.add_argument('--json', '-j', required=False, dest='jsonfile')
     parser.add_argument('--name', '-n', required=False, default='unknown', dest='name')
     parser.add_argument('--pool', '-p', required=False, type=int, default=1, dest='pool')
     args = parser.parse_args()
@@ -242,8 +253,12 @@ def main():
     logging.info('Extracted %d events, took %.3f seconds', len(events), t1 - t0)
     if len(events) > 0:
         events.sort(key=lambda event: event['timestamp'])
+
+    if args.csvfile:
         write_events_to_csv(args.csvfile, events)
-    
+    if args.jsonfile:
+        write_events_to_json(args.jsonfile, events)
+
     
 if __name__ == "__main__":
     main()
