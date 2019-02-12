@@ -177,6 +177,10 @@ def do_work(infile, hostname='unknown'):
 
                 if event['level'] == 'debug':
                     continue
+                if event['message'].find('[RECEIVE DATA]') != -1:
+                    continue
+                if event['message'].find('[SEND DATA]') != -1:
+                    continue
                 if event['message'].find('0x', 0, 2) != -1:
                     continue
 
