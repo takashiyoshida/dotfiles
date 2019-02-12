@@ -233,7 +233,8 @@ def main():
                         help='')
     parser.add_argument('--csv', '-c', required=False, dest='csvfile',
                         help='')
-    parser.add_argument('--json', '-j', required=False, dest='jsonfile')
+    parser.add_argument('--json', '-j', required=False, dest='jsonfile',
+                        help='')
     parser.add_argument('--name', '-n', required=False, default='unknown', dest='name',
                         help='')
     parser.add_argument('--pool', '-p', required=False, type=int, default=1, dest='pool',
