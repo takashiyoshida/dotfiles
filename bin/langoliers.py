@@ -229,11 +229,16 @@ def main():
     main function
     '''
     parser = argparse.ArgumentParser(prog='langoliers')
-    parser.add_argument('--log', '-l', required=True, nargs='+', dest='logs')
-    parser.add_argument('--csv', '-c', required=False, dest='csvfile')
-    parser.add_argument('--json', '-j', required=False, dest='jsonfile')
-    parser.add_argument('--name', '-n', required=False, default='unknown', dest='name')
-    parser.add_argument('--pool', '-p', required=False, type=int, default=1, dest='pool')
+    parser.add_argument('--log', '-l', required=True, nargs='+', dest='logs',
+                        help='Path to (uncompressed) NELRTU log files')
+    parser.add_argument('--csv', '-c', required=False, dest='csvfile',
+                        help='Export NELRTU log events to CSV file')
+    parser.add_argument('--json', '-j', required=False, dest='jsonfile',
+                        help='Export NELRTU log events to JSON file')
+    parser.add_argument('--name', '-n', required=False, default='unknown', dest='name',
+                        help='Hostname of NELRTU machine')
+    parser.add_argument('--pool', '-p', required=False, type=int, default=1, dest='pool',
+                        help='Number of worker processes to be used')
     args = parser.parse_args()
 
     init_logging()
