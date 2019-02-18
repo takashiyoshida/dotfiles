@@ -47,7 +47,7 @@ for compfile in ${COMPFILES}; do
         # If the length of the filename < 7, we need to construct the hostname
         SERVER="${basedir:0:3}${filename}"
     else
-        SERVER=${filename}
+        SERVER=${filename:0:7} # fix the server name to the first 7 letters
     fi
     SERVER=$(echo ${SERVER} | tr '[:upper:]' '[:lower:]')
     PREFIX=$(date -d "${basedir:4:9}" "+%Y-%m-%d" 2> /dev/null)
