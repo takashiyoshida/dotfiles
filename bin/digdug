@@ -1,0 +1,94 @@
+#!/usr/bin/env bash
+
+function help
+{
+    echo "Usage:"
+    echo "$(basename $0) [-h] -d <path to a NELRTU log directory> -p <pool>"
+    echo
+    echo "Options:"
+    echo " -h    Print this help message"
+    echo " -d    Path to a NELRTU log directory"
+    echo " -p    Number of worker processes"
+    echo
+    echo "$(basename $0) exports NELRTU log events to CSV files."
+    echo
+    echo "$(basename $0) requires Python and langoliers.py to export NELRTU log to a CSV file."
+    echo "Use 'lscpu' (or equivalent) to find the number of CPUs for '-p' option."
+    exit 0
+}
+
+
+while getopts d:p:h option
+do
+    case "${option}" in
+        d) LOGDIR="${OPTARG}";;
+        p) POOL=${OPTARG};;
+        h) help;;
+    esac
+done
+
+if [ -z "${LOGDIR}" ]; then
+    help
+fi
+
+if [ -z "${POOL}" ]; then
+    help
+fi
+
+# Find compressed files (7z or zip files)
+COMPFILES=$(find ${LOGDIR} \( -name "*.7z" -o -name "*.zip" \))
+
+for compfile in ${COMPFILES}; do
+    basedir=$(basename ${compfile%/**})  # path without the filename
+    filename=$(basename -- ${compfile}) # filename
+    filename="${filename%.*}"           # filename without file extension
+
+    if [[ ${#filename} < 7 ]]; then
+        # If the length of the filename < 7, we need to construct the hostname
+        SERVER="${basedir:0:3}${filename}"
+    else
+        SERVER=${filename}
+    fi
+    SERVER=$(echo ${SERVER} | tr '[:upper:]' '[:lower:]')
+    PREFIX=$(date -d "${basedir:4:9}" "+%Y-%m-%d" 2> /dev/null)
+
+    if [[ $? != 0 ]]; then
+        echo "Error: Failed to extract date from ${basedir}..."
+        PREFIX=${basedir}
+    fi
+
+    grep -q "${compfile}" "${LOGDIR}/.digdug"
+    if [[ $? != 0 ]]; then
+        filename=$(basename -- ${compfile})
+        extension="${filename##*.}"
+
+        echo "${filename} ${extension}"
+        OUTDIR=$(mktemp -d)
+
+        if [ "${extension}" == "7z" ]; then
+            7z e -o${OUTDIR}/out ${compfile}
+        elif [ "${extension}" == "zip" ]; then
+            unzip ${compfile} -d ${OUTDIR}/out
+        else
+            echo "Unexpected file extension ${filename}"
+            echo "Expected a 7z or zip file"
+            rm -rf ${OUTDIR}
+            continue
+        fi
+
+        GZFILES=$(find ${OUTDIR}/out -type f -name "*.gz")
+        for gz in ${GZFILES}; do
+            gunzip ${gz}
+        done
+
+        langoliers.py -l ${OUTDIR}/out/nelrtu.log* -n ${SERVER} \
+                      -c ${PREFIX}-${SERVER}.csv -p ${POOL}
+
+        if [[ $? == 0 ]]; then
+            rm -rf ${OUTDIR}
+            echo "${COMPFILE}" >> ${LOGDIR}/.digdug
+        fi
+    else
+        echo "Already processed ${compfile}... skipping"
+    fi
+done
