@@ -17,7 +17,6 @@ function help
     exit 0
 }
 
-
 while getopts d:p:h option
 do
     case "${option}" in
@@ -35,6 +34,10 @@ if [ -z "${POOL}" ]; then
     help
 fi
 
+if [ ! -e "${HOME}/.digdug" ]; then
+    touch "${HOME}/.digdug"
+fi
+
 # Find compressed files (7z, zip or gz files)
 COMPFILES=$(find ${LOGDIR} \( -name "*.7z" -o -name "*.zip" -o -name "*.gz" \))
 
@@ -49,13 +52,19 @@ for compfile in ${COMPFILES}; do
     else
         SERVER=${filename:0:7} # fix the server name to the first 7 letters
     fi
+
     SERVER=$(echo ${SERVER} | tr '[:upper:]' '[:lower:]')
-    PREFIX=$(date -d "${basedir:4:9}" "+%Y-%m-%d" 2> /dev/null)
+
+    if [[ "${OSTYPE}" =~ darwin* ]]; then
+        PREFIX=$(date -j -f "%d%b%Y" "${basedir:4:9}" "+%Y-%m-%d" 2> /dev/null)
+    else
+        PREFIX=$(date -d "${basedir:4:9}" "+%Y-%m-%d" 2> /dev/null)
+    fi
 
     if [[ $? != 0 ]]; then
         echo "Error: Failed to extract date from ${basedir}..."
         PREFIX=${basedir}
-	echo "Setting the prefix to ${PREFIX}"
+	    echo "Setting the prefix to ${PREFIX}"
     fi
 
     grep -q "${compfile}" "${HOME}/.digdug"
@@ -65,14 +74,14 @@ for compfile in ${COMPFILES}; do
 
         OUTDIR=$(mktemp -d)
 
-	echo "Uncompressing %{compfile}..."
+	    echo "Uncompressing ${compfile}..."
         if [ "${extension}" == "7z" ]; then
             7z e -o${OUTDIR}/out ${compfile}
         elif [ "${extension}" == "zip" ]; then
             unzip ${compfile} -d ${OUTDIR}/out
-	elif [ "${extension}" == "gz" ]; then
-	    tar -xzf ${compfile} -C ${OUTDIR}
-	    mv ${OUTDIR}/log ${OUTDIR}/out
+	    elif [ "${extension}" == "gz" ]; then
+	        tar -xzf ${compfile} -C ${OUTDIR}
+	        mv ${OUTDIR}/log ${OUTDIR}/out
         else
             echo "Unexpected file extension ${filename}"
             echo "Expected a 7z, zip or gz file"
@@ -85,7 +94,7 @@ for compfile in ${COMPFILES}; do
             gunzip ${gz}
         done
 
-	echo "Extracting events from NELRTU log files..."
+	    echo "Extracting events from NELRTU log files..."
         langoliers -l ${OUTDIR}/out/nelrtu.log* -n ${SERVER} \
                    -c ${PREFIX}-${SERVER}.csv -p ${POOL}
 
