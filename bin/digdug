@@ -35,12 +35,12 @@ if [ -z "${POOL}" ]; then
     help
 fi
 
-# Find compressed files (7z or zip files)
-COMPFILES=$(find ${LOGDIR} \( -name "*.7z" -o -name "*.zip" \))
+# Find compressed files (7z, zip or gz files)
+COMPFILES=$(find ${LOGDIR} \( -name "*.7z" -o -name "*.zip" -o -name "*.gz" \))
 
 for compfile in ${COMPFILES}; do
-    basedir=$(basename ${compfile%/**})  # path without the filename
-    filename=$(basename -- ${compfile}) # filename
+    basedir="$(basename ${compfile%/**})"  # path without the filename
+    filename="$(basename -- ${compfile})" # filename
     filename="${filename%.*}"           # filename without file extension
 
     if [[ ${#filename} < 7 ]]; then
@@ -55,23 +55,27 @@ for compfile in ${COMPFILES}; do
     if [[ $? != 0 ]]; then
         echo "Error: Failed to extract date from ${basedir}..."
         PREFIX=${basedir}
+	echo "Setting the prefix to ${PREFIX}"
     fi
 
-    grep -q "${compfile}" "${LOGDIR}/.digdug"
+    grep -q "${compfile}" "${HOME}/.digdug"
     if [[ $? != 0 ]]; then
-        filename=$(basename -- ${compfile})
+        filename="$(basename -- ${compfile})"
         extension="${filename##*.}"
 
-        echo "${filename} ${extension}"
         OUTDIR=$(mktemp -d)
 
+	echo "Uncompressing %{compfile}..."
         if [ "${extension}" == "7z" ]; then
             7z e -o${OUTDIR}/out ${compfile}
         elif [ "${extension}" == "zip" ]; then
             unzip ${compfile} -d ${OUTDIR}/out
+	elif [ "${extension}" == "gz" ]; then
+	    tar -xzf ${compfile} -C ${OUTDIR}
+	    mv ${OUTDIR}/log ${OUTDIR}/out
         else
             echo "Unexpected file extension ${filename}"
-            echo "Expected a 7z or zip file"
+            echo "Expected a 7z, zip or gz file"
             rm -rf ${OUTDIR}
             continue
         fi
@@ -81,12 +85,13 @@ for compfile in ${COMPFILES}; do
             gunzip ${gz}
         done
 
-        langoliers.py -l ${OUTDIR}/out/nelrtu.log* -n ${SERVER} \
-                      -c ${PREFIX}-${SERVER}.csv -p ${POOL}
+	echo "Extracting events from NELRTU log files..."
+        langoliers -l ${OUTDIR}/out/nelrtu.log* -n ${SERVER} \
+                   -c ${PREFIX}-${SERVER}.csv -p ${POOL}
 
         if [[ $? == 0 ]]; then
             rm -rf ${OUTDIR}
-            echo "${COMPFILE}" >> ${LOGDIR}/.digdug
+            echo "${compfile}" >> ${HOME}/.digdug
         fi
     else
         echo "Already processed ${compfile}... skipping"
