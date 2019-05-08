@@ -95,7 +95,8 @@ for compfile in ${COMPFILES}; do
         done
 
 	    echo "Extracting events from NELRTU log files..."
-        langoliers -l ${OUTDIR}/out/nelrtu.log* -n ${SERVER} \
+        LOGFILES=$(find ${OUTDIR}/out -name "nelrtu.log*")
+        langoliers -l ${LOGFILES} -n ${SERVER} \
                    -c ${PREFIX}-${SERVER}.csv -p ${POOL}
 
         if [[ $? == 0 ]]; then
