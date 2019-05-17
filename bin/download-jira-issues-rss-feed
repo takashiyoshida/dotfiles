@@ -21,6 +21,8 @@ def main():
     parser.add_argument('--filter-url', '-f', required=True, help='JIRA issue filter URL', dest='filter')
     parser.add_argument('--show-tasks', '-t', required=False, action='store_true',
                         help='A list of JIRA tasks found from a given filter', dest='tasks')
+    parser.add_argument('--quiet', '-q', required=False, action='store_true',
+                        help='Only print the number', dest='quiet')
 
     args = parser.parse_args()
     if not args.username:
@@ -46,7 +48,8 @@ def main():
 
     d = feedparser.parse(rss_feed)
 
-    print(d.feed.title)
+    if not args.quiet:
+        print(d.feed.title)
     print(d.feed.issue['total'])
 
     if args.tasks:
