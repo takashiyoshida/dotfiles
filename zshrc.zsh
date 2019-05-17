@@ -46,10 +46,10 @@ source "${DOTFILES}/variables.zsh"
 # Example format: plugins=(rails git textmate ruby lighthouse)
 if [[ "${OSTYPE}" =~ darwin* ]]; then
     # for macOS
-    plugins=(colored-man-pages docker gem go hub osx python rake ruby svn tmux vagrant)
+    plugins=(colored-man-pages docker gem go osx python rake ruby svn tmux vagrant)
 else
     # and everything else here (but only tested on Linux)
-    plugins=(colored-man-pages docker gem go hub python rake ruby svn tmux vagrant)
+    plugins=(colored-man-pages docker gem go python rake ruby svn tmux vagrant)
 fi
 
 source $ZSH/oh-my-zsh.sh
@@ -57,7 +57,6 @@ source $ZSH/oh-my-zsh.sh
 # Customize to your needs...
 
 # Minimum set of aliases
-alias ls="ls -CFG"
 alias mv="mv -i"
 alias cp="cp -i"
 alias rm="rm -i"
