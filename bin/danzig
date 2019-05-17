@@ -41,6 +41,35 @@ FILENAME3 = r'.+ - (?P<filename>[\w\-\/]+\.[a-z]+)\((?P<line>\d+)\)'
 USER_ACTION = r'(?P<user>[a-z]+):'
 
 
+class CookieJar:
+    def __init__(self):
+        self._cookie_jar_file = '%s/.danzig' % (os.environ['HOME'])
+        self._jar = []
+        self.load_cookies()
+
+    def load_cookies(self):
+        try:
+            with open(self._cookie_jar_file, 'r') as cookie_jar:
+                for cookie in cookie_jar:
+                    self._jar.append(cookie)
+        except:
+            pass
+
+    def is_inside(self, root, file):
+        cookie = '%s/%s' % (root, file)
+        return cookie in self._jar
+
+    def store_cookie(self, root, file):
+        if not self.is_inside(root, file):
+            cookie = '%s/%s' % (root, file)
+            self._jar.append(cookie)
+            with open(self._cookie_jar_file, 'w+') as cookie_jar:
+                cookie_jar.write(cookie)
+
+
+_jar = CookieJar()
+
+
 def init_logging():
     '''
     Initializes logger
@@ -57,7 +86,7 @@ def init_logging():
     f_formatter = logging.Formatter(
         fmt='%(asctime)s %(levelname)s %(message)s')
     f.setFormatter(f_formatter)
-    f.setLevel(logging.INFO)
+    f.setLevel(logging.DEBUG)
 
     logger.addHandler(console)
     logger.addHandler(f)
@@ -208,8 +237,7 @@ def process_nelrtu_log(infile, hostname='unknown'):
                                 if match:
                                     event['filename'] = match.group('filename')
                                     event['line'] = match.group('line')
-                                    event['message'] = line[match.end()
-                                                                      :].strip()
+                                    event['message'] = line[match.end():].strip()
                                 else:
                                     event['message'] = line.strip()
                     else:
@@ -276,6 +304,12 @@ def write_events_to_csv(outfile, events):
                              'message': event['message']})
 
 
+def write_to_cookie(root, file):
+    cookie_file = '%s/.danzig' % (os.environ['HOME'])
+    with open(cookie_file, 'w+') as cookie:
+        cookie.write('%s/%s' % (root, file))
+
+
 def cleanup(directory, keep_flag=False):
     '''
     Remove a given directory
@@ -293,28 +327,35 @@ def do_work(root, file, dry_run=False, keep=False):
     tempdir = tempfile.mkdtemp()
     filename, extension = os.path.splitext(file)
 
-    result = -1
-    if extension.lower() == '.zip':
-        result = uncompress_zip('%s/%s' % (root, file), '%s/logs' % (tempdir))
-    elif extension.lower() == '.gz':
-        result = uncompress_tar('%s/%s' % (root, file), tempdir)
-    elif extension.lower() == '.7z':
-        result = uncompress_7zip('%s/%s' % (root, file), '%s/logs' % (tempdir))
-    else:
-        logging.warning('Found unknown file type, %s, skipping', file)
+    if not _jar.is_inside(root, file):
+        result = -1
 
-    if result == 0:
-        logfiles = uncompress_nelrtu_logs('%s/logs' % (tempdir))
-        if not dry_run:
-            logging.debug('logfiles: %s', logfiles)
-            events = []
-            for log in logfiles:
-                events.extend(process_nelrtu_log(log))
-            logging.info('Total number of events: %d', len(events))
-            if len(events) > 0:
-                basename = os.path.basname(root)
-                write_events_to_csv('%s-%s.csv' % (basename, filename), events)
-    cleanup(tempdir, keep)
+        if extension.lower() == '.zip':
+            result = uncompress_zip(
+                '%s/%s' % (root, file), '%s/logs' % (tempdir))
+        elif extension.lower() == '.gz':
+            result = uncompress_tar('%s/%s' % (root, file), tempdir)
+        elif extension.lower() == '.7z':
+            result = uncompress_7zip(
+                '%s/%s' % (root, file), '%s/logs' % (tempdir))
+        else:
+            logging.warning('Found unknown file type, %s, skipping', file)
+
+        if result == 0:
+            logfiles = uncompress_nelrtu_logs('%s/logs' % (tempdir))
+            if not dry_run:
+                logging.debug('logfiles: %s', logfiles)
+                events = []
+                for log in logfiles:
+                    events.extend(process_nelrtu_log(log))
+                logging.info('Total number of events: %d', len(events))
+                if len(events) > 0:
+                    basename = os.path.basname(root)
+                    write_events_to_csv('%s-%s.csv' %
+                                        (basename, filename), events)
+                # write to a cookie file
+                _jar.store_cookie(root, file)
+        cleanup(tempdir, keep)
 
 
 def main():
