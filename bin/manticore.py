@@ -12,6 +12,38 @@ import tempfile
 from time import time
 
 
+class Cookies:
+    def __init__(self):
+        '''
+        '''
+        self._cookie_file = '%s/.manticore' % (os.environ['HOME'])
+        self._cookies = []
+        self.load_cookies()
+
+    def load_cookies(self):
+        '''
+        '''
+        try:
+            with open(self._cookie_file, 'r') as cookies:
+                for cookie in cookies:
+                    self._cookies.append(cookie)
+        except:
+            pass
+
+    def is_processed(self, filepath):
+        '''
+        '''
+        return filepath in self._cookies
+
+    def save_cookie(self, filepath):
+        '''
+        '''
+        if not self.is_processed(filepath):
+            self._cookies.append(cookie)
+            with open(self._cookie_file, 'w+') as cookies:
+                cookies.write(filepath)
+
+
 def init_logging():
     logger = logging.getLogger()
     logger.setLevel(logging.DEBUG)
@@ -33,12 +65,12 @@ def init_logging():
 
 
 def uncompress_tar(tarfile, destination):
-    logging.debug('Uncompressing a tarfile, %s to %s', tarfile, destination)
+    logging.info('Uncompressing a tarfile, %s to %s', tarfile, destination)
     return subprocess.call(['/bin/tar', 'xzf', tarfile, '-C', destination])
 
 
 def uncompress_gzip(gzipfile, destination):
-    logging.debug('Uncompressing a gzipfile, %s to %s', gzipfile, destination)
+    logging.info('Uncompressing a gzipfile, %s to %s', gzipfile, destination)
     return subprocess.call(['/bin/gunzip', gzipfile])
 
 
@@ -133,6 +165,8 @@ def process_nelrtu_log(infile, hostname='unknown'):
     - DEBUG level events are ignored
     - Hexdump events are also ignored
     '''
+
+    logging.info('Processing file, %s ...', infile)
     events = []
 
     with open(infile, 'r') as logfile:
@@ -191,8 +225,7 @@ def process_nelrtu_log(infile, hostname='unknown'):
                                 if match:
                                     event['filename'] = match.group('filename')
                                     event['line'] = match.group('line')
-                                    event['message'] = line[match.end()
-                                                                      :].strip()
+                                    event['message'] = line[match.end()                                                            :].strip()
                                 else:
                                     event['message'] = line.strip()
                     else:
@@ -213,7 +246,8 @@ def process_nelrtu_log(infile, hostname='unknown'):
                     continue
 
                 # Only keep the SWC log with 0x000000: otherwise, drop all other SWC log
-                if event['message'].find('0x') != -1:# and event['message'].find('0x000000') == -1:
+                # and event['message'].find('0x000000') == -1:
+                if event['message'].find('0x') != -1:
                     continue
 
                 logging.debug('timestamp: %s', event['timestamp'])
@@ -266,7 +300,10 @@ def cleanup(directory):
 
 def do_work(root, file, dry_run=True, keep=False):
     '''
+    Look for NELRTU log files and process the log files
     '''
+    logging.info('Processing %s/%s ...', root, file)
+
     # We will only process tarballs created by our backup script
     if file.find('_DailyNELRTULog_') == -1:
         logging.warning('%s does not match the expected filename', file)
@@ -285,16 +322,18 @@ def do_work(root, file, dry_run=True, keep=False):
     if result == 0:
         logdir = '%s/var/log' % (tempdir)
         logfiles = filter_nelrtu_logs(logdir)
-        logging.info('Processing the log file(s)... %s', logfiles)
 
-        events = []
-        for log in logfiles:
-            ev = process_nelrtu_log(log)
-            events.extend(ev)
+        if len(logfiles) > 0:
+            events = []
+            for log in logfiles:
+                ev = process_nelrtu_log(log)
+                events.extend(ev)
 
-        if len(events) > 0:
-            csvfile = '%s/%s.csv' % (root, filename)
-            write_events_to_csv(csvfile, events)
+            if len(events) > 0:
+                # Remove the .tar from filename
+                filename, _ = os.path.splitext(filename)
+                csvfile = '%s/%s.csv' % (root, filename)
+                write_events_to_csv(csvfile, events)
 
     if not keep:
         cleanup(tempdir)
@@ -313,11 +352,14 @@ def main():
                         default=False, dest='keep',
                         help='Keep temporary files for debugging purpose')
     args = parser.parse_args()
-    logging.debug('args: %s', args)
+
+    cookies = Cookies()
 
     for root, _, files in os.walk(args.directory):
         for file in files:
-            do_work(root, file, args.dry_run, args.keep)
+            if not cookies.is_processed('%s/%s' % (root, file)):
+                do_work(root, file, args.dry_run, args.keep)
+                cookies.save_cookie('%s/%s' % (root, file))
 
 
 if __name__ == "__main__":
