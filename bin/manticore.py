@@ -39,7 +39,7 @@ class Cookies:
         '''
         '''
         if not self.is_processed(filepath):
-            self._cookies.append(cookie)
+            self._cookies.append(filepath)
             with open(self._cookie_file, 'w+') as cookies:
                 cookies.write(filepath)
 
