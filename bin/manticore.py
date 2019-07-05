@@ -40,8 +40,9 @@ class Cookies:
         '''
         if not self.is_processed(filepath):
             self._cookies.append(filepath)
-            with open(self._cookie_file, 'w+') as cookies:
+            with open(self._cookie_file, 'a+') as cookies:
                 cookies.write(filepath)
+                cookies.write('\n')
 
 
 def init_logging():
@@ -225,7 +226,7 @@ def process_nelrtu_log(infile, hostname='unknown'):
                                 if match:
                                     event['filename'] = match.group('filename')
                                     event['line'] = match.group('line')
-                                    event['message'] = line[match.end()                                                            :].strip()
+                                    event['message'] = line[match.end():].strip()
                                 else:
                                     event['message'] = line.strip()
                     else:
@@ -307,13 +308,13 @@ def do_work(root, file, dry_run=True, keep=False):
     # We will only process tarballs created by our backup script
     if file.find('_DailyNELRTULog_') == -1:
         logging.warning('%s does not match the expected filename', file)
-        return
+        return -1
 
     filename, ext = os.path.splitext(file)
     # We expect that the file to have '.gz' extension
     if ext.lower() != '.gz':
         logging.warning('Found unknown file type, %s, skipping ...', file)
-        return
+        return -1
 
     tempdir = tempfile.mkdtemp()
     tarfile = '%s/%s' % (root, file)
@@ -337,6 +338,7 @@ def do_work(root, file, dry_run=True, keep=False):
 
     if not keep:
         cleanup(tempdir)
+    return 0
 
 
 def main():
@@ -357,9 +359,13 @@ def main():
 
     for root, _, files in os.walk(args.directory):
         for file in files:
-            if not cookies.is_processed('%s/%s' % (root, file)):
-                do_work(root, file, args.dry_run, args.keep)
-                cookies.save_cookie('%s/%s' % (root, file))
+            if not cookies.is_processed(file):
+                result = do_work(root, file, args.dry_run, args.keep)
+                if result == 0:
+                    cookies.save_cookie(file)
+            else:
+                logging.info(
+                    'Skipping %s as it has been processed before', file)
 
 
 if __name__ == "__main__":
