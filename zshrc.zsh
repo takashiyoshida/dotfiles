@@ -49,7 +49,7 @@ if [[ "${OSTYPE}" =~ darwin* ]]; then
     plugins=(colored-man-pages docker gem go osx python rake ruby svn tmux vagrant)
 else
     # and everything else here (but only tested on Linux)
-    plugins=(colored-man-pages docker gem go python rake ruby svn tmux vagrant)
+    plugins=(colored-man-pages debian docker gem go python rake ruby svn tmux vagrant)
 fi
 
 source $ZSH/oh-my-zsh.sh

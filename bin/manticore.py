@@ -13,39 +13,46 @@ from time import time
 
 
 class Cookies:
-    def __init__(self):
+    def __init__(self, filename='.cookies'):
         '''
+        Initializes and loads cookies file
         '''
-        self._cookie_file = '%s/.manticore' % (os.environ['HOME'])
-        self._cookies = []
+        self.cookies_file = '%s/%s' % (os.environ['HOME'], filename)
+        self.cookies = []
         self.load_cookies()
 
     def load_cookies(self):
         '''
+        Loads cookies file to a list
         '''
         try:
-            with open(self._cookie_file, 'r') as cookies:
-                for cookie in cookies:
-                    self._cookies.append(cookie)
+            with open(self.cookies_file, 'r+') as f:
+                for cookie in f:
+                    self.cookies.append(cookie.strip())
         except:
             pass
 
-    def is_processed(self, filepath):
+    def exists(self, cookie):
         '''
+        Returns True when cookie already exists in cookies list
         '''
-        return filepath in self._cookies
+        return cookie in self.cookies
 
-    def save_cookie(self, filepath):
+    def save_cookie(self, cookie):
         '''
+        Writes a cookie to a list of cookies and files
         '''
-        if not self.is_processed(filepath):
-            self._cookies.append(filepath)
-            with open(self._cookie_file, 'a+') as cookies:
-                cookies.write(filepath)
-                cookies.write('\n')
+        if not self.exists(cookie):
+            self.cookies.append(cookie.strip())
+            with open(self.cookies_file, 'a+') as f:
+                f.write(cookie.strip())
+                f.write('\n')
 
 
 def init_logging():
+    '''
+    Initialize logger
+    '''
     logger = logging.getLogger()
     logger.setLevel(logging.DEBUG)
 
@@ -66,17 +73,25 @@ def init_logging():
 
 
 def uncompress_tar(tarfile, destination):
+    '''
+    Uncompresses a tarball at the given destination
+    '''
     logging.info('Uncompressing a tarfile, %s to %s', tarfile, destination)
     return subprocess.call(['/bin/tar', 'xzf', tarfile, '-C', destination])
 
 
 def uncompress_gzip(gzipfile, destination):
+    '''
+    Uncompresses a gzip file at the given destination
+    '''
     logging.info('Uncompressing a gzipfile, %s to %s', gzipfile, destination)
     return subprocess.call(['/bin/gunzip', gzipfile])
 
 
 def filter_nelrtu_logs(directory):
     '''
+    Returns a list of uncompressed NELRTU log (nelrtu.log*) in the 
+    given directory
     '''
     result = -1
     logfiles = []
@@ -105,7 +120,7 @@ def filter_nelrtu_logs(directory):
 
 def purify_text(text):
     '''
-    Remove non-ASCII characters from text
+    Removes non-ASCII characters from text
     '''
     clean = (c for c in text if 0 < ord(c) < 127)
     return ''.join(clean).strip()
@@ -113,6 +128,7 @@ def purify_text(text):
 
 def convert_level_num_to_name(text):
     '''
+    Returns a log level matching a given number (text)
     '''
     levels = {0: 'emerg',
               1: 'alert',
@@ -226,7 +242,7 @@ def process_nelrtu_log(infile, hostname='unknown'):
                                 if match:
                                     event['filename'] = match.group('filename')
                                     event['line'] = match.group('line')
-                                    event['message'] = line[match.end():].strip()
+                                    event['message'] = line[match.end()                                                            :].strip()
                                 else:
                                     event['message'] = line.strip()
                     else:
@@ -299,15 +315,14 @@ def cleanup(directory):
     shutil.rmtree(directory)
 
 
-def do_work(root, file, dry_run=True, keep=False):
+def do_work(root, file, keep=False):
     '''
     Look for NELRTU log files and process the log files
     '''
-    logging.info('Processing %s/%s ...', root, file)
-
     # We will only process tarballs created by our backup script
     if file.find('_DailyNELRTULog_') == -1:
-        logging.warning('%s does not match the expected filename', file)
+        logging.warning(
+            '%s does not match the expected filename, skipping ...', file)
         return -1
 
     filename, ext = os.path.splitext(file)
@@ -316,8 +331,11 @@ def do_work(root, file, dry_run=True, keep=False):
         logging.warning('Found unknown file type, %s, skipping ...', file)
         return -1
 
+    logging.info('Processing %s/%s ...', root, file)
+
     tempdir = tempfile.mkdtemp()
     tarfile = '%s/%s' % (root, file)
+    # tarball will be uncompressed to tempdir/var/log
     result = uncompress_tar(tarfile, tempdir)
 
     if result == 0:
@@ -347,25 +365,22 @@ def main():
     parser = argparse.ArgumentParser(prog='manticore')
     parser.add_argument('--directory', '-d', required=True,
                         dest='directory', help='path to NELRTU log directory')
-    parser.add_argument('--dry-run', '-r', required=False, action='store_true',
-                        default=True, dest='dry_run',
-                        help='Traverses the given directory, but does not process the discovered NELRTU log files')
     parser.add_argument('--keep', '-k', required=False, action='store_true',
                         default=False, dest='keep',
                         help='Keep temporary files for debugging purpose')
     args = parser.parse_args()
 
-    cookies = Cookies()
+    cookies = Cookies('.manticore')
 
     for root, _, files in os.walk(args.directory):
         for file in files:
-            if not cookies.is_processed(file):
-                result = do_work(root, file, args.dry_run, args.keep)
+            if not cookies.exists(file):
+                result = do_work(root, file, args.keep)
                 if result == 0:
                     cookies.save_cookie(file)
             else:
                 logging.info(
-                    'Skipping %s as it has been processed before', file)
+                    '%s has been processed before, skipping ...', file)
 
 
 if __name__ == "__main__":
