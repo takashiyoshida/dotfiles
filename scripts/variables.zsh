@@ -52,3 +52,8 @@ export EDITOR="TERM=xterm-256color emacs -nw"
 export CVS_EDITOR="TERM=xterm-256color emacs -nw"
 export GIT_EDITOR="TERM=xterm-256color emacs -nw"
 export SVN_EDITOR="TERM=xterm-256color emacs -nw"
+
+if [[ "${OSTYPE}" =~ linux-gnu* ]]; then
+    LD_LIBRARY_PATH="${LD_LIBRARY_PATH}:/usr/lib/x86_64-linux-gnu"
+    export LD_LIBRARY_PATH
+fi
