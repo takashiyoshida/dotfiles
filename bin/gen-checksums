@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+
+for item in $@; do
+    md5sum ${item} > ${item}.md5
+    sha1sum ${item} > ${item}.sha1
+    sha256sum ${item} > ${item}.sha256
+done
