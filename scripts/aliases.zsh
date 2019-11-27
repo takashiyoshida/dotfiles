@@ -22,6 +22,9 @@ alias svninfo="svn info --show-item=url"
 # Ignore unversioned files from svn status
 alias svnst="svn status -q"
 
+# For jekyll draft, post, publish, unpublish, page
+alias jekyll="bundle exec jekyll"
+
 alias cdpr="cd ${HOME}/Projects"
 alias env="env | sort"
 
