@@ -3,6 +3,7 @@
 declare -a SVN_REPOS=("${HOME}/Documents/c755a/docs"
                       "${HOME}/Documents/c755b/docs"
                       "${HOME}/Documents/rturep/docs"
+                      "${HOME}/Projects/nelman/docs"
                       "${HOME}/Projects/NELdev/src"
                       "${HOME}/Projects/rturep-dev/src"
                       )
