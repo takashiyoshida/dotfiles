@@ -23,8 +23,13 @@ if which pyenv > /dev/null; then
     eval "$(pyenv init -)"
 fi
 
-if which rbenv > /dev/null; then
-    eval "$(rbenv init -)"
+if [[ "${OSTYPE}" =~ darwin* ]]; then
+    # rbenv looks a bit old for Pop!_OS
+    if which rbenv > /dev/null; then
+        eval "$(rbenv init -)"
+    fi
+else
+    PATH="${PATH}:${HOME}/.gem/ruby/2.5.0/bin"
 fi
 
 if which nodenv > /dev/null; then
