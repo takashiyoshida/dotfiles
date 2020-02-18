@@ -6,6 +6,7 @@ import logging.handlers
 import os
 import os.path
 import shutil
+import tarfile
 
 # A list of valid environment
 ENVIRONMENT = ['ATS', 'BGK', 'BNK', 'CMS', 'CNT', 'CQY', 'DBG', 'ECS', 'EMS', 'FRP',
@@ -28,7 +29,7 @@ def init_logging():
     f_formatter = logging.Formatter(
         fmt='%(asctime)s %(levelname)s %(message)s')
     f.setFormatter(f_formatter)
-    f.setLevel(logging.INFO)
+    f.setLevel(logging.DEBUG)
 
     logger.addHandler(c)
     logger.addHandler(f)
@@ -111,37 +112,41 @@ def prerequisites_exists(database_path, environment):
 
     logging.info('Checking pre-requisites for %s environment ...', environment)
 
-    archives_dir = '%s/Archives/DB_%s' % (database_path, environment)
+    archives_dir = os.path.join(
+        database_path, 'Archives', 'DB_%s' % (environment))
+
     if not directory_exists(archives_dir):
         return False
 
     if environment == 'CMS':
-        powlight_cfg = '%s/POWLIGHT.cfg' % (archives_dir)
+        powlight_cfg = os.path.join(archives_dir, 'POWLIGHT.cfg')
         if not file_exists(powlight_cfg):
             return False
-        powmxd_cfg = '%s/POWMXD.cfg' % (archives_dir)
+
+        powmxd_cfg = os.path.join(archives_dir, 'POWMXD.cfg')
         if not file_exists(powmxd_cfg):
             return False
     elif environment == 'ECS':
-        ecs_cfg = '%s/ECS.cfg' % (archives_dir)
+        ecs_cfg = os.path.join(archives_dir, 'ECS.cfg')
         if not file_exists(ecs_cfg):
             return False
 
-    dac_dir = '%s/dac_DB_%s' % (database_path, environment)
+    dac_dir = os.path.join(database_path, 'dac_DB_%s' % (environment))
     if not directory_exists(dac_dir):
         return False
 
-    concentrator = '%s/dac_DB_%s/%s/ScsDacCtrt.cfg' % (
-        database_path, environment, environment)
+    concentrator = os.path.join(database_path, 'dac_DB_%s' % (
+        environment), environment, 'ScsDacCtrt.cfg')
     if not file_exists(concentrator):
         return False
 
-    xml_dir = '%s/Database/xml_DB_%s' % (database_path, environment)
+    xml_dir = os.path.join(database_path, 'Database',
+                           'xml_DB_%s' % (environment))
     if not directory_exists(xml_dir):
         return False
 
-    classlist = '%s/Database/classlist_%s.txt' % (
-        database_path, environment)
+    classlist = os.path.join(database_path, 'Database',
+                             'classlist_%s.txt' % (environment))
     if not file_exists(classlist):
         return False
 
@@ -163,22 +168,24 @@ def create_export_directory(directory):
         return False
 
     if directory == 'CMS':
-        powlight_dir = '%s/CMST_POWLIGHT' % (archives_dir)
+        powlight_dir = os.path.join(archives_dir, 'CMST_POWLIGHT')
         if not create_directory(powlight_dir):
             return False
-        powmxd_dir = '%s/CMST_POWMXD' % (archives_dir)
+
+        powmxd_dir = os.path.join(archives_dir, 'CMST_POWMXD')
         if not create_directory(powmxd_dir):
             return False
+
     elif directory == 'ECS':
-        ecs_dir = '%s/ECST_ECS' % (archives_dir)
+        ecs_dir = os.path.join(archives_dir, 'ECST_ECS')
         if not create_directory(ecs_dir):
             return False
 
-    dac_dir = '%s/dac' % (directory)
+    dac_dir = os.path.join(directory, 'dac')
     if not create_directory(dac_dir):
         return False
 
-    database_dir = '%s/Database' % (directory)
+    database_dir = os.path.join(directory, 'Database')
     if not create_directory(database_dir):
         return False
 
@@ -261,12 +268,21 @@ def main():
     parser = argparse.ArgumentParser(prog='db-prepper')
     parser.add_argument('--database-path', '-d', required=True,
                         dest='database_path', help='path to database directory')
-    parser.add_argument('--environment', '-e', nargs='+', required=True,
+    parser.add_argument('--environment', '-e', nargs='+', required=False, default='',
                         dest='environment', help='name of ISCS environment')
+    parser.add_argument('--compress', '-z', type=int, required=False, dest='db_version',
+                        help='creates a tarball from exported files')
 
     args = parser.parse_args()
 
     logging.debug('database_path: %s', args.database_path)
+    if args.db_version == None:
+        logging.debug('db_version was not specified')
+    else:
+        logging.debug('db_version: %d', args.db_version)
+
+    if args.environment == '':
+        args.environment = ENVIRONMENT
 
     for environ in args.environment:
         environ = environ.upper()
@@ -295,6 +311,15 @@ def main():
 
         logging.info(
             'Prepping database files for %s environment complete ...', environ)
+
+    if args.db_version != None:
+        for environ in args.environment:
+            outfile = 'NELDB_%s_C755B_%d.tar.gz' % (environ, args.db_version)
+            logging.info(
+                'Creating a tarball %s from %s directory ...', outfile, environ)
+            with tarfile.open(outfile, 'w:gz') as tar:
+                tar.add(environ, arcname=os.path.basename(environ))
+            logging.info('OK')
 
 
 if __name__ == '__main__':
