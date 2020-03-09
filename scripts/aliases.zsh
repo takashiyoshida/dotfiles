@@ -24,6 +24,7 @@ alias svnst="svn status -q"
 
 # For jekyll draft, post, publish, unpublish, page
 alias jekyll="bundle exec jekyll"
+alias jkld="jekyll draft"
 
 alias cdpr="cd ${HOME}/Projects"
 alias env="env | sort"
@@ -103,7 +104,7 @@ function dotfiles
 {
     tmux has-session -t dotfiles 2>/dev/null
     if [ $? != 0 ]; then
-        tmux detach        
+        tmux detach
         cd ${HOME}/Projects/dotfiles
         tmux new-session -s dotfiles -d
 
