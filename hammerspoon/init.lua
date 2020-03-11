@@ -1,3 +1,6 @@
+-- Offset to ensure that window is not covered by the SwitchGlass application switcher
+SWITCHGLASS_OFFSET_X = 43
+
 -- Return a rect that allows the focused window to move to one of the screen corners
 function getScreenCornerRectForFocusedWindow(location)
     local frame = hs.screen.mainScreen():frame()
@@ -5,74 +8,100 @@ function getScreenCornerRectForFocusedWindow(location)
     local window = hs.window.focusedWindow()
     local size = window:size()
 
+    print("getScreenCornerRectForFocusedWindow")
+    print("location: " .. location)
+    print("frame:    " .. frame.x, frame.y, frame.w, frame.h)
+
     if location == "TOP_LEFT" then
         -- top left
         return hs.geometry.rect(frame.x, frame.y, size.w, size.h)
     elseif location == "TOP_RIGHT" then
         -- top right
-        return hs.geometry.rect(fullFrame.w - size.w, frame.y, size.w, size.h)
+        -- ensure that the window is not covered by the SwitchGlass application switcher
+        return hs.geometry.rect(fullFrame.w - size.w - SWITCHGLASS_OFFSET_X, frame.y, size.w, size.h)
     elseif location == "BOTTOM_LEFT" then
         -- bottom left
         return hs.geometry.rect(frame.x, fullFrame.h - size.h, size.w, size.h)
     elseif location == "BOTTOM_RIGHT" then
         -- bottom right
-        return hs.geometry.rect(fullFrame.w - size.w, fullFrame.h - size.h,
-                                size.w, size.h)
+        -- ensure that the window is not covered by the SwitchGlass application switcher
+        return hs.geometry.rect(fullFrame.w - size.w - SWITCHGLASS_OFFSET_X, fullFrame.h - size.h, size.w, size.h)
     end
 end
 
 -- Move the current window to the top left corner
 function moveWindowToTopLeft()
+    print("Moving the current window to the top left corner ...")
     local rect = getScreenCornerRectForFocusedWindow("TOP_LEFT")
     hs.window.focusedWindow():move(rect)
 end
 hs.hotkey.bind({"cmd", "ctrl"}, "U", moveWindowToTopLeft)
 
 function moveWindowToTopRight()
+    print("Moving the current window to the top right corner ...")
     local rect = getScreenCornerRectForFocusedWindow("TOP_RIGHT")
     hs.window.focusedWindow():move(rect)
 end
 hs.hotkey.bind({"cmd", "ctrl"}, "O", moveWindowToTopRight)
 
 function moveWindowToBottomLeft()
+    print("Moving the current window to the bottom left corner ...")
     local rect = getScreenCornerRectForFocusedWindow("BOTTOM_LEFT")
     hs.window.focusedWindow():move(rect)
 end
 hs.hotkey.bind({"cmd", "ctrl"}, "J", moveWindowToBottomLeft)
 
 function moveWindowToBottomRight()
+    print("Moving the current window to the bottom right corner ...")
     local rect = getScreenCornerRectForFocusedWindow("BOTTOM_RIGHT")
     hs.window.focusedWindow():move(rect)
 end
 hs.hotkey.bind({"cmd", "ctrl"}, "L", moveWindowToBottomRight)
 
+function maximizeWindow()
+    local frame = hs.screen.mainScreen():frame()
+    local fullFrame = hs.screen.mainScreen():fullFrame()
+
+    print("Maximizing the current window ...")
+    print("frame: " .. frame.x, frame.y, frame.w, frame.h)
+    print("fullFrame: " .. fullFrame.x, fullFrame.y, fullFrame.w, fullFrame.h)
+
+    -- Ensure that the maximized window is not covered by the SwitchGlass application switcher
+    local rect = hs.geometry.rect(frame.x, frame.y, frame.w - SWITCHGLASS_OFFSET_X, frame.h)
+    hs.window.focusedWindow():move(rect)
+end
+hs.hotkey.bind({"cmd", "ctrl"}, "Z", maximizeWindow)
+
 function applicationWatcher(appName, eventType, appObject)
-    print('appName = ' .. appName)
-    print('eventType = ' .. eventType)
+    print("Calling applicationWatcher ...")
+    print("appName = " .. appName)
+    print("eventType = " .. eventType)
     if (eventType == hs.application.watcher.launching) then
-        print('launching') -- 0
+        print("launching") -- 0
     elseif (eventType == hs.application.watcher.launched) then
-        print('launched') -- 1
+        print("launched") -- 1
     elseif (eventType == hs.application.watcher.terminated) then
-        print('terminated') -- 2
+        print("terminated") -- 2
     elseif (eventType == hs.application.watcher.hidden) then
-        print('hidden') -- 3
+        print("hidden") -- 3
     elseif (eventType == hs.application.watcher.unhidden) then
-        print('unhidden') -- 4
+        print("unhidden") -- 4
     elseif (eventType == hs.application.watcher.activated) then
-        print('activated') -- 5
+        print("activated") -- 5
     elseif (eventType == hs.application.watcher.deactivated) then
-        print('deactivated') -- 6
+        print("deactivated") -- 6
     end
 
     if (eventType == hs.application.watcher.activated) then
-        if (appName == 'Finder') then
+        if (appName == "Finder") then
             -- Bring all Finder windows to forward when one gets activated
+            print("Switching to Finder ...")
             appObject:selectMenuItem({"Window", "Bring All to Front"})
-        elseif (appName == 'Fantastical') then
+        elseif (appName == "Fantastical") then
             -- Switch to Fantastical 2 and open its window
             -- Without this, Fantastical becomes active with no window in
             -- a different space
+            print("Switching to Fantastical ...")
             appObject:selectMenuItem({"Window", "Full Calendar Window"})
         end
     end
@@ -83,21 +112,25 @@ appWatcher:start()
 
 -- Move the current window to the center of the screen
 function center_window()
+    print("Moving the current window to the center of the main screen ...")
     local window = hs.window.focusedWindow()
     window:centerOnScreen()
 end
-hs.hotkey.bind({'cmd', 'alt', 'ctrl'}, 'c', center_window)
+hs.hotkey.bind({"cmd", "alt", "ctrl"}, "c", center_window)
 
 -- Gather all windows from the frontmost application at the center of the screen
 function gather_windows()
     local app = hs.application.frontmostApplication()
     local windows = app:allWindows()
-    for i, win in ipairs(windows) do win:centerOnScreen() end
+    for i, win in ipairs(windows) do
+        win:centerOnScreen()
+    end
 end
 -- hs.hotkey.bind({'cmd', 'alt', 'ctrl'}, 'g', gather_windows)
 
 -- Extend the height of the current window to the bottom of the screen
 function extend_window_vertically()
+    print("Extending window vertically ...")
     local win = hs.application.frontmostApplication():mainWindow()
     local size = win:size()
     -- frame.w is the width of the window (we need to keep this)
@@ -105,33 +138,37 @@ function extend_window_vertically()
     size.h = screenFrame.h
     win:setSize(size)
 end
-hs.hotkey.bind({'cmd', 'alt', 'ctrl'}, 'v', extend_window_vertically)
+hs.hotkey.bind({"cmd", "alt", "ctrl"}, "v", extend_window_vertically)
 
--- Cascade all windows of the current window
--- TODO: Come up with a better algorithm for arranging windows
--- FIXME: Windows become smaller and smaller as you use this
+-- Cascade all windows of the current application
 function cascade_windows()
+    -- the current target behavior is:
+    -- move the first window to the top left corner
+    -- adjust the location of the next window by moving it down and right
+    -- don't adjust the window size (yet)
+    print("Cascading all windows ...")
+
     local offsetX, offsetY = 25, 25
     local f = hs.screen.mainScreen():frame()
     local app = hs.application.frontmostApplication()
     for i, win in ipairs(app:allWindows()) do
-        hs.printf("i: %d", i)
+        hs.printf("i: " .. i)
         local size = win:size()
-        win:move(hs.geometry.rect(f.x + ((i - 1) * offsetX),
-                                  f.y + ((i - 1) * offsetY), size.w,
-                                  size.h - ((i - 1) * offsetY)))
-        win:focus()
+        win:move(hs.geometry.rect(f.x + ((i - 1) * offsetX), f.y + ((i - 1) * offsetY), size.w, size.h))
     end
 end
-hs.hotkey.bind({'cmd', 'alt', 'ctrl'}, 'space', cascade_windows)
+hs.hotkey.bind({"cmd", "alt", "ctrl"}, "space", cascade_windows)
 
 function resize_browser_window_for_google()
-    if (hs.application.frontmostApplication():name() == "Safari") or
-        (hs.application.frontmostApplication():name() == "Google Chrome") or
-        (hs.application.frontmostApplication():name() == "Brave") then
+    print("Resizing browser window for Google search page ...")
+    if
+        (hs.application.frontmostApplication():name() == "Safari") or
+            (hs.application.frontmostApplication():name() == "Google Chrome") or
+            (hs.application.frontmostApplication():name() == "Brave")
+     then
         local win = hs.application.frontmostApplication():mainWindow()
         local frame = win:frame()
-        print('frame: ' .. frame.x, frame.y, frame.w, frame.h)
+        print("frame: " .. frame.x, frame.y, frame.w, frame.h)
         if (frame.w < 1200) then
             local screen = hs.screen.mainScreen():fullFrame()
             if ((frame.x + 1200) > screen.w) then
@@ -143,18 +180,21 @@ function resize_browser_window_for_google()
         win:move(frame)
     end
 end
-hs.hotkey.bind({'cmd', 'alt', 'ctrl'}, 'g', resize_browser_window_for_google)
+hs.hotkey.bind({"cmd", "alt", "ctrl"}, "g", resize_browser_window_for_google)
 
 function resize_browser_window_for_iterm()
-    if (hs.application.frontmostApplication():name() == "Safari") or
-        (hs.application.frontmostApplication():name() == "Google Chrome") or
-        (hs.application.frontmostApplication():name() == "Brave") then
+    print("Resizing browser window for iTerm ...")
+    if
+        (hs.application.frontmostApplication():name() == "Safari") or
+            (hs.application.frontmostApplication():name() == "Google Chrome") or
+            (hs.application.frontmostApplication():name() == "Brave")
+     then
         moveWindowToTopLeft()
         local win = hs.application.frontmostApplication():mainWindow()
         local frame = win:frame()
-        print('frame: ' .. frame.x, frame.y, frame.w, frame.h)
+        print("frame: " .. frame.x, frame.y, frame.w, frame.h)
         frame.w = 980
         win:move(frame)
     end
 end
-hs.hotkey.bind({'cmd', 'alt', 'ctrl'}, 't', resize_browser_window_for_iterm)
+hs.hotkey.bind({"cmd", "alt", "ctrl"}, "t", resize_browser_window_for_iterm)
