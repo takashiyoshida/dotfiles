@@ -1,13 +1,15 @@
 # Set the OS specific aliases first, then string together other aliases the build on them
-# OS X specific aliases
 if [[ "${OSTYPE}" =~ darwin* ]]; then
+    # OS X specific aliases
     source "${DOTFILES}/mac-aliases.zsh"
 else
+    # Linux specific aliases
     source "${DOTFILES}/linux-aliases.zsh"
 fi
 
 # Common set of aliases
 alias lh="ls -lh"
+alias lah="ls -lah"
 alias lll="ll | less"
 
 # Set TERM to xterm-256color to avoid incorrect color from being used
