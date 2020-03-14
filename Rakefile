@@ -34,6 +34,7 @@ desc "Install zsh configurations"
 task :zsh do
   install_dir = get_install_dir
   install_file("zshrc.zsh", File.join(install_dir, ".zshrc"))
+  install_file("zshenv.zsh", File.join(install_dir, ".zshenv"))
   install_file("scripts/projects.zsh", File.join(install_dir, ".projects.zsh"))
 end
 

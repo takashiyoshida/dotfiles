@@ -37,10 +37,6 @@ ZSH_THEME="takashiyoshida"
 # much faster.
 # DISABLE_UNTRACKED_FILES_DIRTY="true"
 
-export DOTFILES="${HOME}/Projects/dotfiles/scripts"
-# PATH, EDITOR, CVSEDITOR, GITEDITOR, SVNEDITOR
-source "${DOTFILES}/variables.zsh"
-
 # Which plugins would you like to load? (plugins can be found in ~/.oh-my-zsh/plugins/*)
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
@@ -67,6 +63,7 @@ alias ....="cd ../../.."
 
 alias rake="noglob rake"
 
+export DOTFILES="${HOME}/Projects/dotfiles/scripts"
 source "${DOTFILES}/aliases.zsh"
 source "${DOTFILES}/peco.zsh"
 source "${DOTFILES}/pet.zsh"
