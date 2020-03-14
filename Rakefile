@@ -96,3 +96,11 @@ task :pet do
   end
   install_file("pet", File.join(config, "pet"))
 end
+
+
+desc "Install editor-related configurations"
+task :editor do
+  install_dir = get_install_dir
+  install_file("spacemacs", File.join(install_dir, ".spacemacs"))
+  install_file("vimrc", File.join(install_dir, ".vimrc"))
+end
