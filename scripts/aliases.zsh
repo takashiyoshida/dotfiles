@@ -14,7 +14,6 @@ alias lll="ll | less"
 
 # Set TERM to xterm-256color to avoid incorrect color from being used
 # in tmux session
-alias emacs="TERM=xterm-256color emacs -nw"
 alias tailf="tail -f"
 alias history="history -i"
 
