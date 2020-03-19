@@ -148,13 +148,33 @@ function cascade_windows()
     -- don't adjust the window size (yet)
     print("Cascading all windows ...")
 
-    local offsetX, offsetY = 25, 25
-    local f = hs.screen.mainScreen():frame()
     local app = hs.application.frontmostApplication()
-    for i, win in ipairs(app:allWindows()) do
-        hs.printf("i: " .. i)
-        local size = win:size()
-        win:move(hs.geometry.rect(f.x + ((i - 1) * offsetX), f.y + ((i - 1) * offsetY), size.w, size.h))
+    local mainFrame = hs.screen.mainScreen():frame()
+
+    local offsetX, offsetY = 25, 25
+    local n = 1
+
+    for i, window in ipairs(app:allWindows()) do
+        hs.printf(
+            "Window %d: title: %s visible: %s standard: %s",
+            i,
+            window:title(),
+            window:isVisible(),
+            window:isStandard()
+        )
+        hs.printf("      size: %d, %d", window:size().w, window:size().h)
+
+        if not window:isStandard() or window:title() == "" then
+            hs.printf("Window % is not a standard window or has no titles; Ignoring ...")
+            window:centerOnScreen()
+        else
+            local newX = mainFrame.x + ((n - 1) * offsetX)
+            local newY = mainFrame.y + ((n - 1) * offsetY)
+
+            hs.printf("Moving window %d to (%d, %d) ...", n, newX, newY)
+            window:move(hs.geometry.rect(newX, newY, window:size().w, window:size().h))
+            n = n + 1
+        end
     end
 end
 hs.hotkey.bind({"cmd", "alt", "ctrl"}, "space", cascade_windows)
