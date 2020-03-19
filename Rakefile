@@ -1,72 +1,68 @@
-def get_install_dir()
-  install_dir = Dir.home
-  if ENV.has_key? "DOTFILES_DEBUG"
-    install_dir = File.join(Dir.getwd, "test")
-  end
-  return install_dir
-end
-
-
+# Overwrite the destination if ppprompted
 def overwrite?(destination)
   overwrite = "y"
   if File.exist? destination
     puts "#{destination} already exists"
-    print "Overwrite #{File.basename(destination)}? (y/n) [n] "
+    print "Overwrite #{File.basename(destination)}? (y/N) [N] "
     overwrite = STDIN.gets.chomp
   end
   return overwrite
 end
 
-
-def install_file(source, destination)
+# Install the source to the destination
+def install(source, destination)
   overwrite = overwrite? destination
   if overwrite.downcase == "y"
     FileUtils.copy_entry(source, destination, :preserve=>true, :remove_destination=>true)
     return true
   else
-    puts "Skipped installation of #{source}"
+    puts "Skipped installation of #{File.basename(source)}"
     return false
   end
 end
 
 
-desc "Install zsh configurations"
-task :zsh do
-  install_dir = get_install_dir
-  install_file("zshrc.zsh", File.join(install_dir, ".zshrc"))
-  install_file("zprofile.zsh", File.join(install_dir, ".zprofile"))
-  install_file("scripts/projects.zsh", File.join(install_dir, ".projects.zsh"))
-end
+desc "Install shell configurations"
+task :shell do
+  # Install the xterm-24bit.terminfo for Emacs (terminal)
+  %{/usr/bin/tic -x -o ${HOME}/.terminfo term/xterm-24bit.terminfo}
 
+  # Install zsh configuration files
+  # /etc/zshenv
+  # ~/.zshenv
+  install("zshenv.zsh", File.join(Dir.home, ".zshenv"))
+  # /etc/zprofile
+  # ~/.zprofile
+  install("zprofile.zsh", File.join(Dir.home, ".zprofile"))
+  # /etc/zshrc
+  # ~/.zshrc
+  install("zshrc.zsh", File.join(Dir.home, ".zshrc"))
 
-desc "Install tmux.conf"
-task :tmux do
-  install_dir = get_install_dir
-  install_file("tmux.conf", File.join(install_dir, ".tmux.conf"))
+  # Install project-related file
+  install("projects.zsh", File.join(Dir.home, ".projects.zsh"))
+
+  # Install tmux configuration
+  install("tmux.conf", File.join(Dir.home, ".tmux.conf"))
+
+  # Install Emacs and Vim configurations
+  install_file("spacemacs", File.join(Dir.home, ".spacemacs"))
+  install_file("vimrc", File.join(Dir.home, ".vimrc"))
 end
 
 
 desc "Install Hammerspoon configurations"
 task :hammerspoon do
-  install_dir = get_install_dir
-
-  hammerspoon = File.join(install_dir, ".hammerspoon")
+  hammerspoon = File.join(Dir.home, ".hammerspoon")
   if not Dir.exist? hammerspoon
     Dir.mkdir(hammerspoon, 0755)
   end
-  Dir.foreach("hammerspoon") do | item |
-    if item == "." or item == ".."
-      next
-    end
-    install_file(File.join("hammerspoon", item), File.join(hammerspoon, item))
-  end
+  install(File.join("hammerspoon", "init.lua"), File.join(hammerspoon, "init.lua"))
 end
 
 
 desc "Install gitconfig"
 task :git do
-  install_dir = get_install_dir
-  if install_file("gitconfig", File.join(install_dir, ".gitconfig"))
+  if install_file("gitconfig", File.join(Dir.home, ".gitconfig"))
     print "What is your GitHub/GitLab name? "
     git_name = STDIN.gets.chomp
     print "What is your GitHub/GitLab email? "
@@ -80,27 +76,5 @@ end
 
 desc "Install peco-related configurations"
 task :peco do
-  install_dir = get_install_dir
-  install_file("peco", File.join(install_dir, ".peco"))
-end
-
-
-desc "Install pet-related configurations"
-task :pet do
-  install_dir = get_install_dir
-  # Check if ${HOME}/.config exists
-  config = File.join(install_dir, ".config")
-  puts config
-  if not Dir.exist? config
-    Dir.mkdir(config, 0755)
-  end
-  install_file("pet", File.join(config, "pet"))
-end
-
-
-desc "Install editor-related configurations"
-task :editor do
-  install_dir = get_install_dir
-  install_file("spacemacs", File.join(install_dir, ".spacemacs"))
-  install_file("vimrc", File.join(install_dir, ".vimrc"))
+  install_file("peco", File.join(Dir.home, ".peco"))
 end

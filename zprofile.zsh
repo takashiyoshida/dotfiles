@@ -37,10 +37,6 @@ if which nodenv > /dev/null; then
     eval "$(nodenv init -)"
 fi
 
-if [ -f ${HOME}/.cargo/env ]; then
-    source ${HOME}/.cargo/env
-fi
-
 
 export LC_ALL="en_US.UTF-8"
 export LC_CTYPE="UTF-8"
@@ -54,10 +50,10 @@ export HOMEBREW_GITHUB_API_TOKEN=""
 # CVS_EDITOR
 # GIT_EDITOR
 # SVN_EDITOR
-export EDITOR="TERM=xterm-256color emacs -nw"
-export CVS_EDITOR="TERM=xterm-256color emacs -nw"
-export GIT_EDITOR="TERM=xterm-256color emacs -nw"
-export SVN_EDITOR="TERM=xterm-256color emacs -nw"
+export EDITOR="TERM=xterm-24bit emacsclient -c -t"
+export CVS_EDITOR="TERM=xterm-24bit emacsclient -c -t"
+export GIT_EDITOR="TERM=xterm-24bit emacsclient -c -t"
+export SVN_EDITOR="TERM=xterm-24bit emacsclient -c -t"
 
 if [[ "${OSTYPE}" =~ linux-gnu* ]]; then
     LD_LIBRARY_PATH="${LD_LIBRARY_PATH}:/usr/lib/x86_64-linux-gnu"
