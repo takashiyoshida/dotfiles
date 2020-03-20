@@ -45,8 +45,8 @@ task :shell do
   install("tmux.conf", File.join(Dir.home, ".tmux.conf"))
 
   # Install Emacs and Vim configurations
-  install_file("spacemacs", File.join(Dir.home, ".spacemacs"))
-  install_file("vimrc", File.join(Dir.home, ".vimrc"))
+  install("spacemacs", File.join(Dir.home, ".spacemacs"))
+  install("vimrc", File.join(Dir.home, ".vimrc"))
 end
 
 
