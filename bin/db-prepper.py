@@ -314,13 +314,15 @@ def main():
 
     if args.db_version != None:
         for environ in args.environment:
-            outfile = 'NELDB_%s_C755B_%d.tar.gz' % (environ, args.db_version)
-            logging.info(
-                'Creating a tarball %s from %s directory ...', outfile, environ)
-            with tarfile.open(outfile, 'w:gz') as tar:
-                tar.add(environ, arcname=os.path.basename(environ))
-            logging.info('OK')
-
+            if directory_exists(environ):
+                outfile = 'NELDB_%s_C755B_%d.tar.gz' % (environ, args.db_version)
+                logging.info(
+                    'Creating a tarball %s from %s directory ...', outfile, environ)
+                with tarfile.open(outfile, 'w:gz') as tar:
+                    tar.add(environ, arcname=os.path.basename(environ))
+                logging.info('OK')
+            else:
+                logging.warn('%s does not exist. Skipping ...', environ)
 
 if __name__ == '__main__':
     main()
