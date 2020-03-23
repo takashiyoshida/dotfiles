@@ -65,3 +65,5 @@ export DOTFILES="${HOME}/Projects/dotfiles/scripts"
 source "${DOTFILES}/aliases.zsh"
 source "${DOTFILES}/peco.zsh"
 source "${HOME}/.projects.zsh"
+
+add-ssh-private-keys
