@@ -33,6 +33,23 @@ alias env="env | sort"
 # Remove emacs backup files
 alias rmeb="find . -name \"*~\" -delete"
 
+# List fingerprints of SSH private keys
+alias ls-idents="ssh-add -l -E md5"
+
+# Add a set of my SSH private keys to ssh-agent and also a keychain
+function add-ssh-private-keys
+{
+    ssh-add -l -E md5 > /dev/null 2>&1
+    if [ $? != 0 ]; then
+        # ssh-agent has no identities
+        ssh-add -K ${HOME}/.ssh/digitalocean_rsa
+        ssh-add -K ${HOME}/.ssh/heroku_rsa
+        ssh-add -K ${HOME}/.ssh/takashi-thales_rsa
+        ssh-add -K ${HOME}/.ssh/github_rsa
+        ssh-add -K ${HOME}/.ssh/id_rsa
+    fi
+}
+
 # Useful functions to convert a hexadecimal number to a decimal number and vice versa
 # http://www.cyberciti.biz/faq/linux-unix-convert-hex-to-decimal-number/
 function h2d
