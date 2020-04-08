@@ -9,8 +9,8 @@ import shutil
 import tarfile
 
 # A list of valid environment
-ENVIRONMENT = ['ATS', 'BGK', 'BNK', 'CMS', 'CNT', 'CQY', 'DBG', 'ECS', 'EMS', 'FRP',
-               'HBF', 'HGN', 'KVN', 'LTI', 'NED', 'OTP', 'PGC', 'PGL', 'PTP', 'SER', 'SKG', 'WLH']
+ENVIRONMENT = ['ATS', 'BGK', 'BNK', 'CMS', 'CNT', 'CQY', 'DBG', 'ECS', 'EMS', 'FRP', 'HBF',
+               'HGN', 'KVN', 'LTI', 'NED', 'OTP', 'PGC', 'PGL', 'PTP', 'SER', 'SKG', 'WLH']
 
 
 def init_logging():
@@ -38,6 +38,8 @@ def init_logging():
 
 def is_environment_valid(environment):
     '''
+    Returns true if the given environment name is valid.
+    See ENVIRONMENT for the valid environment name
     '''
     try:
         ENVIRONMENT.index(environment.upper())
