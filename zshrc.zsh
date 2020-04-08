@@ -1,3 +1,15 @@
+if [[ "${OSTYPE}" =~ linux-gnu* ]]; then
+    # Source .zprofile
+    case $- in
+        *i*) # interactive shell
+            source ${HOME}/.zprofile
+            ;;
+        *) # non-interactive shell
+            # Should already have sourced .zprofile
+            ;;
+    esac
+fi
+
 # Path to your oh-my-zsh configuration.
 ZSH="${HOME}/Projects/dotfiles/zsh"
 
