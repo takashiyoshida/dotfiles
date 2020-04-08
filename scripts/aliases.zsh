@@ -72,50 +72,165 @@ function dirsize
     du -h -d 1 ${MY_DIR} | sort -h -r
 }
 
-function c755b-dev
+function mk-c755a-workspace
 {
-    tmux has-session -t c755b 2>/dev/null
-    if [ $? != 0 ]; then
-        tmux detach # Detach from the current session
-        cd ${HOME}/Projects/c755b-dev
-        tmux new-session -s c755b -n servers -d
-        # Split the window in half (two panes side by side)
-        tmux split-window -h -p 50 -t c755b
-        # Split the left pane in half (two panes, top and bottom)
-        tmux split-window -v -p 50 -t c755b:1.1
-        # Split the right pane in half (two panes, top and bottom)
-        tmux split-window -v -p 50 -t c755b:1.3
-        # Make the top left pane active
-        tmux select-pane -t c755b:1.1
-
-        tmux new-window -n dev -n editor
-        tmux split-window -h -p 50 -t c755b:2
-        tmux select-pane -t c755b:2.1
+    workspace=${PWD}
+    if [[ $# != 0 ]]; then
+        workspace=$1
+        if [ ! -d ${workspace} ]; then
+            echo "${workspace} does not exist"
+            return
+        fi
     fi
-    tmux attach -t c755b
+
+    session_name=$(basename ${workspace})
+    tmux has-session -t ${session_name} 2> /dev/null
+    if [[ $? != 0 ]]; then
+        tmux detach
+
+        cd ${workspace}
+
+        tmux new-session -s ${session_name} -n build -d
+        tmux split-window -h -t build
+        tmux select-pane -t :.1 # Move the focus to the pane 1 of the build window
+
+        # Administrating test VM (i.e. install new packages, etc)
+        tmux new-window -n admin
+
+        # Split ATS window in half (one for running ATS and another for logs)
+        tmux new-window -n ATS
+        tmux split-window -h -t ATS
+        tmux select-pane -t :.1 # Move the focus to pane 1 of the ATS window
+
+        # Split CMS window in half (one for running CMS and another for logs)
+        tmux new-window -n CMS
+        tmux split-window -h -t CMS
+        tmux select-pane -t :.1 # Move the focus to pane 1 of the CMS window
+
+        # Split ECS window in half (one for running ECS and another for logs)
+        tmux new-window -n ECS
+        tmux split-window -h -t ECS
+        tmux select-pane -t :.1 # Move the focus to pane 1 of the ECS window
+
+        # Split NED window in half (one for running NED and another for logs)
+        tmux new-window -n NED
+        tmux split-window -h -t NED
+        tmux select-pane -t :.1 # Move the focus to pane 1 of the NED window
+
+        # Split PGC window in half (one for running PGC and another for logs)
+        tmux new-window -n PGC
+        tmux split-window -h -t PGC
+        tmux select-pane -t :.1 # Move the focus to pane 1 of the PGC window
+
+        # Split SIM window in half (one for running SIM and another for logs)
+        tmux new-window -n SIM
+        tmux split-window -h -t SIM
+        tmux select-pane -t :.1 # Move the focus to pane 1 of the SIM window
+
+        # Go back to the build window and select the first pane
+        tmux select-window -t build
+        tmux select-pane -t :.1
+    fi
+    tmux attach -t ${session_name}
 }
 
-function rturep-dev
+function mk-c755b-workspace
 {
-    tmux has-session -t rturep 2>/dev/null
-    if [ $? != 0 ]; then
-        tmux detach # Detach from the current session
-        cd ${HOME}/Projects/rturep-dev
-        tmux new-session -s rturep -n servers -d
-        # Split the window in half (two panes side by side)
-        tmux split-window -h -p 50 -t rturep
-        # Split the left pane in half (two panes, top and bottom)
-        tmux split-window -v -p 50 -t rturep:1.1
-        # Split the right pane in half (two panes, top and bottom)
-        tmux split-window -v -p 50 -t rturep:1.3
-        # Make the top left pane active
-        tmux select-pane -t rturep:1.1
-
-        tmux new-window -n dev -n editor
-        tmux split-window -h -p 50 -t rturep:2
-        tmux select-pane -t rturep:2.1
+    workspace=${PWD}
+    if [[ $# != 0 ]]; then
+        workspace=$1
+        if [ ! -d ${workspace} ]; then
+            echo "${workspace} does not exist"
+            return
+        fi
     fi
-    tmux attach -t rturep
+
+    session_name=$(basename ${workspace})
+    tmux has-session -t ${session_name} 2> /dev/null
+    if [ $? != 0 ]; then
+        tmux detach
+
+        cd ${workspace}
+
+        tmux new-session -s ${session_name} -n build -d
+        tmux split-window -h -t build
+        tmux select-pane -t :.1 # Move the focus to pane 1 of build window
+
+        # Administrating test VM (i.e. install new packages, etc)
+        tmux new-window -n admin
+
+        # Split ATS window in half (one for running ATS and another for logs)
+        tmux new-window -n ATS
+        tmux split-window -h -t ATS
+        tmux select-pane -t :.1 # Move the focus to pane 1 of the ATS window
+
+        # Split CMS window in half (one for running CMS and another for logs)
+        tmux new-window -n CMS
+        tmux split-window -h -t CMS
+        tmux select-pane -t :.1 # Move the focus to pane 1 of the CMS window
+
+        # Split ECS window in half (one for running ECS and another for logs)
+        tmux new-window -n ECS
+        tmux split-window -h -t ECS
+        tmux select-pane -t :.1 # Move the focus to pane 1 of the ECS window
+
+        # Split NED window in half (one for running NED and another for logs)
+        tmux new-window -n NED
+        tmux split-window -h -t NED
+        tmux select-pane -t :.1 # Move the focus to pane 1 of the NED window
+
+        # Split PGC window in half (one for running PGC and another for logs)
+        tmux new-window -n PGC
+        tmux split-window -h -t PGC
+        tmux select-pane -t :.1 # Move the focus to pane 1 of the PGC window
+
+        # Split SIM window in half (one for running SIM and another for logs)
+        tmux new-window -n SIM
+        tmux split-window -h -t SIM
+        tmux select-pane -t :.1 # Move the focus to pane 1 of the SIM window
+
+        # Go back to the build window and select the first pane
+        tmux select-window -t build
+        tmux select-pane -t :.1
+    fi
+    tmux attach -t ${session_name}
+}
+
+function mk-rturep-workspace
+{
+    workspace=${PWD}
+    if [[ $# != 0 ]]; then
+        workspace=$1
+        if [ ! -d ${workspace} ]; then
+            echo "${workspace} does not exist"
+            return
+        fi
+    fi
+
+    session_name=$(basename ${workspace})
+    tmux has-session -t ${session_name} 2> /dev/null
+    if [ $? != 0 ]; then
+        tmux detach
+
+        cd ${workspace}
+
+        tmux new-session -s ${session_name} -n build -d
+        tmux split-window -h -t build
+        tmux select-pane -t :.1 # Move the focus to pane 1 of build window
+
+        # Administrating test VM (i.e. install new packages, etc)
+        tmux new-window -n admin
+
+        # Split WLH window in half (one for running WLH and another for logs)
+        tmux new-window -n WLH
+        tmux split-window -h -t WLH
+        tmux select-pane -t :.1 # Move the focus to pane 1 of the WLH window
+
+        # Go back to the build window and select the first pane
+        tmux select-window -t build
+        tmux select-pane -t :.1
+    fi
+    tmux attach -t ${session_name}
 }
 
 function dotfiles
@@ -126,7 +241,7 @@ function dotfiles
         cd ${HOME}/Projects/dotfiles
         tmux new-session -s dotfiles -d
 
-        tmux split-window -h -p 50 -t dotfiles
+        tmux split-window -h -t dotfiles
         tmux select-pane -t dotfiles:1.1
     fi
     tmux attach -t dotfiles
