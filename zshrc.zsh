@@ -78,4 +78,5 @@ source "${DOTFILES}/aliases.zsh"
 source "${DOTFILES}/peco.zsh"
 source "${HOME}/.projects.zsh"
 
+# Add SSH keys
 add-ssh-private-keys

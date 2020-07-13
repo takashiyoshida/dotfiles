@@ -1,7 +1,7 @@
-# Go
+# Configure Golang environment
 export GOPATH="${HOME}/Projects"
 
-# PATH
+# Configure PATH variable
 PATH="/usr/local/bin:/usr/local/sbin"
 PATH="${PATH}:/usr/bin:/usr/sbin"
 PATH="${PATH}:/bin:/sbin"
@@ -19,24 +19,33 @@ PATH="${PATH}:${HOME}/bin"
 PATH="${PATH}:${HOME}/Projects/dotfiles/bin"
 export PATH
 
+# Configure LD_LIBRARY_PATH
+if [[ "${OSTYPE}" =~ linux-gnu* ]]; then
+    LD_LIBRARY_PATH="${LD_LIBRARY_PATH}:/usr/lib/x86_64-linux-gnu"
+    export LD_LIBRARY_PATH
+fi
+
+# Configure Python, Ruby and Node.js
+# Python
 if which pyenv > /dev/null; then
     eval "$(pyenv init -)"
 fi
 
+# Ruby
 if [[ "${OSTYPE}" =~ darwin* ]]; then
-    # rbenv looks a bit old for Pop!_OS
     if which rbenv > /dev/null; then
         eval "$(rbenv init -)"
     fi
 else
+    # rbenv looks a bit old for Pop!_OS
     PATH="${PATH}:${HOME}/.gem/ruby/2.5.0/bin"
 fi
 
+# Node.js
 if which nodenv > /dev/null; then
     export PATH="${HOME}/.nodenv/bin:${PATH}"
     eval "$(nodenv init -)"
 fi
-
 
 export LC_ALL="en_US.UTF-8"
 export LC_CTYPE="UTF-8"
@@ -50,16 +59,14 @@ export HOMEBREW_GITHUB_API_TOKEN=""
 # CVS_EDITOR
 # GIT_EDITOR
 # SVN_EDITOR
-MY_TERM=""
 if [[ "${OSTYPE}" =~ darwin* ]]; then
-    MY_TERM="TERM=xterm-24bit"
-fi
-export EDITOR="${MY_TERM} emacsclient -c -t"
-export CVS_EDITOR="${MY_TERM} emacsclient -c -t"
-export GIT_EDITOR="${MY_TERM} emacsclient -c -t"
-export SVN_EDITOR="${MY_TERM} emacsclient -c -t"
-
-if [[ "${OSTYPE}" =~ linux-gnu* ]]; then
-    LD_LIBRARY_PATH="${LD_LIBRARY_PATH}:/usr/lib/x86_64-linux-gnu"
-    export LD_LIBRARY_PATH
+    export EDITOR="TERM=xterm-24bit emacsclient -c -t"
+    export CVS_EDITOR="TERM=xterm-24bit emacsclient -c -t"
+    export GIT_EDITOR="TERM=xterm-24bit emacsclient -c -t"
+    export SVN_EDITOR="TERM=xterm-24bit emacsclient -c -t"
+else
+    export EDITOR="emacsclient -c -t"
+    export CVS_EDITOR="emacsclient -c -t"
+    export GIT_EDITOR="emacsclient -c -t"
+    export SVN_EDITOR="emacsclient -c -t"
 fi
