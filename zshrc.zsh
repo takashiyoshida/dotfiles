@@ -53,9 +53,9 @@ ZSH_THEME="takashiyoshida"
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 if [[ "${OSTYPE}" =~ darwin* ]]; then
-    plugins=(colored-man-pages docker extract gem go osx python rake ruby ssh-agent svn tmux vagrant)
+    plugins=(colored-man-pages docker extract gem golang osx python rake ruby ssh-agent svn tmux vagrant)
 else
-    plugins=(colored-man-pages debian docker extract gem go python rake ruby ssh-agent svn tmux vagrant)
+    plugins=(colored-man-pages debian docker extract gem golang python rake ruby ssh-agent svn tmux vagrant)
 fi
 
 source $ZSH/oh-my-zsh.sh
