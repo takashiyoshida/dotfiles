@@ -139,7 +139,7 @@ function mkdev
     tmux attach -t ${session_name}
 }
 
-alias mkdev.c755a="mkdev ${HOME}/Projects/c755a-fix-bugs"
+alias mkdev.c755a="mkdev ${HOME}/Projects/c755a-dev"
 alias mkdev.c755b="mkdev ${HOME}/Projects/c755b-dev"
 
 
