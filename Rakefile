@@ -62,7 +62,7 @@ end
 
 desc "Install gitconfig"
 task :git do
-  if install_file("gitconfig", File.join(Dir.home, ".gitconfig"))
+  if install("gitconfig", File.join(Dir.home, ".gitconfig"))
     print "What is your GitHub/GitLab name? "
     git_name = STDIN.gets.chomp
     print "What is your GitHub/GitLab email? "
@@ -76,5 +76,5 @@ end
 
 desc "Install peco-related configurations"
 task :peco do
-  install_file("peco", File.join(Dir.home, ".peco"))
+  install("peco", File.join(Dir.home, ".peco"))
 end
