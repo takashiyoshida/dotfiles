@@ -76,7 +76,6 @@ task :git do
 
     os_type = %x{uname -s}.strip()
     if os_type == "Darwin"
-      puts "This is Darwin"
       # Configure macOS specific Git configurations
       %x{echo >> #{File.join(Dir.home, ".gitconfig")}}
       %x{git config --global diff.tool Kaleidoscope}
