@@ -50,10 +50,14 @@ export HOMEBREW_GITHUB_API_TOKEN=""
 # CVS_EDITOR
 # GIT_EDITOR
 # SVN_EDITOR
-export EDITOR="TERM=xterm-24bit emacsclient -c -t"
-export CVS_EDITOR="TERM=xterm-24bit emacsclient -c -t"
-export GIT_EDITOR="TERM=xterm-24bit emacsclient -c -t"
-export SVN_EDITOR="TERM=xterm-24bit emacsclient -c -t"
+MY_TERM=""
+if [[ "${OSTYPE}" =~ darwin* ]]; then
+    MY_TERM="TERM=xterm-24bit"
+fi
+export EDITOR="${MY_TERM} emacsclient -c -t"
+export CVS_EDITOR="${MY_TERM} emacsclient -c -t"
+export GIT_EDITOR="${MY_TERM} emacsclient -c -t"
+export SVN_EDITOR="${MY_TERM} emacsclient -c -t"
 
 if [[ "${OSTYPE}" =~ linux-gnu* ]]; then
     LD_LIBRARY_PATH="${LD_LIBRARY_PATH}:/usr/lib/x86_64-linux-gnu"
