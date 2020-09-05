@@ -30,10 +30,12 @@ alias jkld="jekyll draft"
 alias cdpr="cd ${HOME}/Projects"
 alias env="env | sort"
 
-alias youtube-dl="youtube-dl -o \"%(title)s-%(id)s.%(ext)s\""
+alias youtube-dl="youtube-dl --audio-quality 0 -o \"%(title)s-%(id)s.%(ext)s\""
 
 alias e="emacsclient -c"
 alias enw="emacsclient -c -nw"
+
+alias df="df -H"
 
 # Remove emacs backup files
 alias rmeb="find . -name \"*~\" -delete"
