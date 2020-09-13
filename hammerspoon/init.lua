@@ -1,34 +1,6 @@
 -- Offset to ensure that window is not covered by the SwitchGlass application switcher
 SWITCHGLASS_OFFSET_X = 43
 
--- Return a rect that allows the focused window to move to one of the screen corners
-function getScreenCornerRectForFocusedWindow(location)
-    local frame = hs.screen.mainScreen():frame()
-    local fullFrame = hs.screen.mainScreen():fullFrame()
-    local window = hs.window.focusedWindow()
-    local size = window:size()
-
-    print("getScreenCornerRectForFocusedWindow")
-    print("location: " .. location)
-    print("frame:    " .. frame.x, frame.y, frame.w, frame.h)
-
-    if location == "TOP_LEFT" then
-        -- top left
-        return hs.geometry.rect(frame.x, frame.y, size.w, size.h)
-    elseif location == "TOP_RIGHT" then
-        -- top right
-        -- ensure that the window is not covered by the SwitchGlass application switcher
-        return hs.geometry.rect(fullFrame.w - size.w - SWITCHGLASS_OFFSET_X, frame.y, size.w, size.h)
-    elseif location == "BOTTOM_LEFT" then
-        -- bottom left
-        return hs.geometry.rect(frame.x, fullFrame.h - size.h, size.w, size.h)
-    elseif location == "BOTTOM_RIGHT" then
-        -- bottom right
-        -- ensure that the window is not covered by the SwitchGlass application switcher
-        return hs.geometry.rect(fullFrame.w - size.w - SWITCHGLASS_OFFSET_X, fullFrame.h - size.h, size.w, size.h)
-    end
-end
-
 function printFocusedWindowScreen()
     local frame = hs.window.focusedWindow():screen():frame()
     local fullFrame = hs.window.focusedWindow():screen():fullFrame()
