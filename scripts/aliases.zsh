@@ -44,7 +44,9 @@ alias rmeb="find . -name \"*~\" -delete"
 alias ls-idents="ssh-add -l -E md5"
 
 # Send colored grep result to a pager (less)
-alias grep="grep --color=always -R"
+alias grep="grep --color=always"
+
+alias tree="tree -N"
 
 # Add a set of my SSH private keys to ssh-agent and also a keychain
 function add-ssh-private-keys
