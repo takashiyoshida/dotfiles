@@ -29,6 +29,78 @@ function getScreenCornerRectForFocusedWindow(location)
     end
 end
 
+function printFocusedWindowScreen()
+    local frame = hs.window.focusedWindow():screen():frame()
+    local fullFrame = hs.window.focusedWindow():screen():fullFrame()
+
+    print("frame    : " .. frame.x, frame.y, frame.w, frame.h)
+    print("fullFrame: " .. fullFrame.x, fullFrame.y, fullFrame.w, fullFrame.h)
+end
+
+function focusedWindowScreenFrame()
+    local screenFrame = hs.window.focusedWindow():screen():frame()
+    screenFrame.w = screenFrame.w - SWITCHGLASS_OFFSET_X
+    return screenFrame
+end
+
+function focusedWindowScreenFullFrame()
+    local screenFrame = hs.window.focusedWindow():screen():fullFrame()
+    screenFrame.w = screenFrame.w - SWITCHGLASS_OFFSET_X
+    return screenFrame
+end
+
+function moveTopLeft()
+    local screenFullFrame = hs.window.focusedWindow():screen():fullFrame()
+    local screenFrame = hs.window.focusedWindow():screen():frame()
+    local windowFrame = hs.window.focusedWindow():frame()
+
+    windowFrame.x = screenFrame.x
+    windowFrame.y = screenFrame.y
+
+    print("windowFrame: " .. windowFrame.x, windowFrame.y, windowFrame.w, windowFrame.h)
+    hs.window.focusedWindow():move(windowFrame)
+end
+
+function moveTopRight()
+    local screenFullFrame = hs.window.focusedWindow():screen():fullFrame()
+    local screenFrame = screenFullFrame
+    local windowFrame = hs.window.focusedWindow():frame()
+
+    screenFrame.w = screenFrame.w - SWITCHGLASS_OFFSET_X
+
+    windowFrame.x = screenFullFrame.x + screenFrame.w - windowFrame.w
+    windowFrame.y = screenFrame.y
+
+    print("windowFrame: " .. windowFrame.x, windowFrame.y, windowFrame.w, windowFrame.h)
+    hs.window.focusedWindow():move(windowFrame)
+end
+
+function moveBottomLeft()
+    local screenFullFrame = hs.window.focusedWindow():screen():fullFrame()
+    local screenFrame = hs.window.focusedWindow():screen():frame()
+    local windowFrame = hs.window.focusedWindow():frame()
+
+    windowFrame.x = screenFrame.x
+    windowFrame.y = screenFullFrame.h - windowFrame.h
+
+    print("windowFrame: " .. windowFrame.x, windowFrame.y, windowFrame.w, windowFrame.h)
+    hs.window.focusedWindow():move(windowFrame)
+end
+
+function moveBottomRight()
+    local screenFullFrame = hs.window.focusedWindow():screen():fullFrame()
+    local screenFrame = screenFullFrame
+    local windowFrame = hs.window.focusedWindow():frame()
+
+    screenFrame.w = screenFrame.w - SWITCHGLASS_OFFSET_X
+
+    windowFrame.x = screenFullFrame.x + screenFrame.w - windowFrame.w
+    windowFrame.y = screenFullFrame.h - windowFrame.h
+
+    print("windowFrame: " .. windowFrame.x, windowFrame.y, windowFrame.w, windowFrame.h)
+    hs.window.focusedWindow():move(windowFrame)
+end
+
 -- Move the current window to the top left corner
 function moveWindowToTopLeft()
     print("Moving the current window to the top left corner ...")
