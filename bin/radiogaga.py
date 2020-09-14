@@ -8,7 +8,7 @@ import re
 import struct
 
 # DD/MM HH:mm:ss
-TIMESTAMP = r'[0-3][0-9]\/[01][0-9] [0-2][0-9]:[0-5][0-9]:[0-5][0-9]'
+TIMESTAMP = r'[01][0-9]\/[0-3][0-9]\/[0-9]{2} [0-2][0-9]:[0-5][0-9]:[0-5][0-9]\.[0-9]{3}'
 METHOD_EVENT = r'Method = [\da-f]+|Event = [\da-f]+'
 
 # Ignore the second timestamp
