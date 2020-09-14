@@ -12,7 +12,7 @@ PATH="${PATH}:${GOPATH}/bin"
 
 if [[ "${OSTYPE}" =~ darwin* ]]; then
     # Installed by MacTex; 2019.0508 release works with macOS Catalina
-    PATH="${PATH}:/usr/local/texlive/2019/bin/x86_64-darwin"
+    PATH="${PATH}:/usr/local/texlive/2020/bin/x86_64-darwin"
 fi
 
 PATH="${PATH}:${HOME}/bin"
