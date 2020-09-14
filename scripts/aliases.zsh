@@ -129,10 +129,10 @@ function mkdev
         tmux split-window -h -t NED
         tmux select-pane -t :.1 # Move the focus to pane 1 of the NED window
 
-        # Split PGC window in half (one for running PGC and another for logs)
-        tmux new-window -n PGC
-        tmux split-window -h -t PGC
-        tmux select-pane -t :.1 # Move the focus to pane 1 of the PGC window
+        # Split SMS window in half (one for running SMS and another for logs)
+        tmux new-window -n SMS
+        tmux split-window -h -t SMS
+        tmux select-pane -t :.1 # Move the focus to pane 1 of the SMS window
 
         # Split SIM window in half (one for running SIM and another for logs)
         tmux new-window -n SIM
@@ -148,7 +148,6 @@ function mkdev
 
 alias mkdev.c755a="mkdev ${HOME}/Projects/c755a-dev"
 alias mkdev.c755b="mkdev ${HOME}/Projects/c755b-dev"
-
 
 function mkrturep
 {
