@@ -10,7 +10,8 @@ function help
     echo "Options:"
     echo "-h     Print this help message"
     echo
-    echo "$(basename $0) extracts RTUREP progress per feature from JIRA"
+    echo "Prints progresses of RTUREP epics from JIRA."
+    echo "Each epic has a pair of a number of planned and a number of closed tasks."
     exit 0
 }
 
@@ -21,6 +22,8 @@ do
     esac
 done
 
+# To add a new epic, you need to create a corresponding filter in JIRA and add the URLs for
+# a number of planned tasks (all tasks) in the epic and a number of closed tasks in the epic.
 
 # Code stablization
 planned=$(download-jira-issues-rss-feed -q -f "http://jira.eng.sgp-tsa.sg.thales:8080/sr/jira.issueviews:searchrequest-rss/15417/SearchRequest-15417.xml?tempMax=1000")

@@ -1,5 +1,9 @@
 #!/usr/bin/env python
 
+# This script is used by gen-rturep-sprint-stats to generate a list of files to be submitted
+# to SBST by the end of a sprint. Read gen-rturep-sprint-stats to figure out how to use this script.
+# You also need access to JIRA and a working JIRA account in order to generate the reports.
+
 from __future__ import print_function
 
 import argparse
