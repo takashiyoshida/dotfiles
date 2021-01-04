@@ -29,6 +29,14 @@ fi
 # Python
 if which pyenv > /dev/null; then
     eval "$(pyenv init -)"
+
+    # It is better to use `brew --prefix` so that I do not need to hardcode the path
+    # to zlib and bzip2. But `brew --prefix` runs a bit slow and causes the zsh startup
+    # time to be longer.
+	# export LDFLAGS="-L$(brew --prefix zlib)/lib -L$(brew --prefix bzip2)/lib"
+	# export CPPFLAGS="-I$(brew --prefix zlib)/include -I$(brew --prefix bzip2)/include"
+	export LDFLAGS="-L/usr/local/opt/zlib/lib -L/usr/local/opt/bzip2/lib"
+	export CPPFLAGS="-I/usr/local/opt/zlib/include -I/usr/local/opt/bzip2/include"
 fi
 
 # Ruby
