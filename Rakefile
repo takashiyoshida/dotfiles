@@ -78,15 +78,24 @@ task :git do
     if os_type == "Darwin"
       # Configure macOS specific Git configurations
       %x{echo >> #{File.join(Dir.home, ".gitconfig")}}
+
       %x{git config --global diff.tool Kaleidoscope}
       %x{echo >> #{File.join(Dir.home, ".gitconfig")}}
+
+      %x{git config --global difftool.prompt "false"}
+      %x{echo >> #{File.join(Dir.home, ".gitconfig")}}
+
       %x{git config --global difftool.Kaleidoscope.cmd 'ksdiff --partial-changeset --relative-path \"$MERGED\" -- \"$LOCAL\" \"$REMOTE\"'}
       %x{echo >> #{File.join(Dir.home, ".gitconfig")}}
 
       %x{git config --global merge.tool Kaleidoscope}
       %x{echo >> #{File.join(Dir.home, ".gitconfig")}}
+
+      %x{git config --global mergetool.prompt "false"}
+      %x{echo >> #{File.join(Dir.home, ".gitconfig")}}
+
       %x{git config --global mergetool.Kaleidoscope.cmd 'ksdiff --merge --output \"$MERGED\" --base \"$BASE\" -- \"$LOCAL\" --snapshot \"$REMOTE\" --snapshot'}
-      %x{git config --global mergetool.Kaleidoscope.trustexitcode "true"}
+      %x{git config --global mergetool.Kaleidoscope.trustExitCode "true"}
       %x{echo >> #{File.join(Dir.home, ".gitconfig")}}
 
       %x{git config --global credential.helper "osxkeychain"}

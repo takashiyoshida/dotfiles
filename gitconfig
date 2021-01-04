@@ -29,10 +29,3 @@
 
 [log]
 	date = iso8601
-
-[difftool]
-	prompt = false
-
-[mergetool]
-	prompt = false
-	keepBackup = true
