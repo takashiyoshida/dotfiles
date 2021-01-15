@@ -67,14 +67,8 @@ export HOMEBREW_GITHUB_API_TOKEN=""
 # CVS_EDITOR
 # GIT_EDITOR
 # SVN_EDITOR
-if [[ "${OSTYPE}" =~ darwin* ]]; then
-    export EDITOR="TERM=xterm-24bit emacsclient -c -t"
-    export CVS_EDITOR="TERM=xterm-24bit emacsclient -c -t"
-    export GIT_EDITOR="TERM=xterm-24bit emacsclient -c -t"
-    export SVN_EDITOR="TERM=xterm-24bit emacsclient -c -t"
-else
-    export EDITOR="emacsclient -c -t"
-    export CVS_EDITOR="emacsclient -c -t"
-    export GIT_EDITOR="emacsclient -c -t"
-    export SVN_EDITOR="emacsclient -c -t"
-fi
+export EDITOR="emacsclient -c -t"
+export CVS_EDITOR="emacsclient -c -t"
+export GIT_EDITOR="emacsclient -c -t"
+export SVN_EDITOR="emacsclient -c -t"
+
