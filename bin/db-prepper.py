@@ -272,7 +272,7 @@ def main():
                         dest='database_path', help='path to database directory')
     parser.add_argument('--environment', '-e', nargs='+', required=False, default='',
                         dest='environment', help='name of ISCS environment')
-    parser.add_argument('--compress', '-z', type=int, required=False, dest='db_version',
+    parser.add_argument('--compress', '-z', required=False, dest='db_version',
                         help='creates a tarball from exported files')
 
     args = parser.parse_args()
@@ -317,7 +317,8 @@ def main():
     if args.db_version != None:
         for environ in args.environment:
             if directory_exists(environ):
-                outfile = 'NELDB_%s_C755B_%d.tar.gz' % (environ, args.db_version)
+                outfile = 'NELDB_%s_C755B_%s.tar.gz' % (
+                    environ, args.db_version)
                 logging.info(
                     'Creating a tarball %s from %s directory ...', outfile, environ)
                 with tarfile.open(outfile, 'w:gz') as tar:
@@ -325,6 +326,7 @@ def main():
                 logging.info('OK')
             else:
                 logging.warn('%s does not exist. Skipping ...', environ)
+
 
 if __name__ == '__main__':
     main()
