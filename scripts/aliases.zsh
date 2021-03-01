@@ -251,3 +251,18 @@ function RTUreport
     fi
     tmux attach -t RTUreport
 }
+
+function standup
+{
+    tmux has-session -t standup 2>/dev/null
+    if [ $? != 0 ]; then
+        tmux detach
+        cd ${HOME}/Projects/standup
+        tmux new-session -s standup -n standup -d
+        tmux split-window -h -p 50 -t standup
+
+        tmux select-pane -t standup:1.1
+    fi
+    tmux attach -t standup
+}
+
