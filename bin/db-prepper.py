@@ -267,9 +267,12 @@ def main():
     '''
     init_logging()
 
-    parser = argparse.ArgumentParser(prog='db-prepper')
+    parser = argparse.ArgumentParser(prog='db-prepper', description='Generate a tarball from Configurator\'s output.')
+    # Path to database directory
     parser.add_argument('--database-path', '-d', required=True,
                         dest='database_path', help='path to database directory')
+    # Enter the environment name (i.e. CMS, ATS, HBF, ..., PGL)
+    # Lowercase environment names are converted to uppercase environment names automatically.
     parser.add_argument('--environment', '-e', nargs='+', required=False, default='',
                         dest='environment', help='name of ISCS environment')
     parser.add_argument('--compress', '-z', required=False, dest='db_version',

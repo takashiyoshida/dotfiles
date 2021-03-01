@@ -1,5 +1,7 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
+# A simple script to update the local SVN repositories defined under SVN_REPOS.
+# Note that this does not checkout the repository if the local repository does not exist.
 declare -a SVN_REPOS=("${HOME}/Documents/c755a/docs"
                       "${HOME}/Documents/c755b/docs"
                       "${HOME}/Documents/rturep/docs"
@@ -7,7 +9,8 @@ declare -a SVN_REPOS=("${HOME}/Documents/c755a/docs"
                       "${HOME}/Projects/rturep-dev/src"
                       )
 
-# There's a possibility that keychain password needs to be entered
+# There's a possibility that keychain password needs to be entered,
+# especially when a password is changed.
 for repo in "${SVN_REPOS[@]}"; do
     svn up "${repo}"
 done

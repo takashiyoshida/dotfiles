@@ -65,6 +65,16 @@ function moveWindowToBottomRight()
 end
 hs.hotkey.bind({"cmd", "ctrl"}, "L", moveWindowToBottomRight)
 
+function moveWindowToOneScreenEast()
+    hs.window.focusedWindow():moveOneScreenEast(true, true)
+end
+hs.hotkey.bind({"cmd", "ctrl", "shift"}, "L", moveWindowToOneScreenEast)
+
+function moveWindowToOneScreenWest()
+    hs.window.focusedWindow():moveOneScreenWest(true, true)
+end
+hs.hotkey.bind({"cmd", "ctrl", "shift"}, "J", moveWindowToOneScreenWest)
+
 function maximizeWindow()
     local frame = hs.screen.mainScreen():frame()
     local fullFrame = hs.screen.mainScreen():fullFrame()

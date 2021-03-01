@@ -29,6 +29,14 @@ fi
 # Python
 if which pyenv > /dev/null; then
     eval "$(pyenv init -)"
+
+    # It is better to use `brew --prefix` so that I do not need to hardcode the path
+    # to zlib and bzip2. But `brew --prefix` runs a bit slow and causes the zsh startup
+    # time to be longer.
+	# export LDFLAGS="-L$(brew --prefix zlib)/lib -L$(brew --prefix bzip2)/lib"
+	# export CPPFLAGS="-I$(brew --prefix zlib)/include -I$(brew --prefix bzip2)/include"
+	export LDFLAGS="-L/usr/local/opt/zlib/lib -L/usr/local/opt/bzip2/lib"
+	export CPPFLAGS="-I/usr/local/opt/zlib/include -I/usr/local/opt/bzip2/include"
 fi
 
 # Ruby
@@ -59,14 +67,8 @@ export HOMEBREW_GITHUB_API_TOKEN=""
 # CVS_EDITOR
 # GIT_EDITOR
 # SVN_EDITOR
-if [[ "${OSTYPE}" =~ darwin* ]]; then
-    export EDITOR="TERM=xterm-24bit emacsclient -c -t"
-    export CVS_EDITOR="TERM=xterm-24bit emacsclient -c -t"
-    export GIT_EDITOR="TERM=xterm-24bit emacsclient -c -t"
-    export SVN_EDITOR="TERM=xterm-24bit emacsclient -c -t"
-else
-    export EDITOR="emacsclient -c -t"
-    export CVS_EDITOR="emacsclient -c -t"
-    export GIT_EDITOR="emacsclient -c -t"
-    export SVN_EDITOR="emacsclient -c -t"
-fi
+export EDITOR="emacsclient -c -t"
+export CVS_EDITOR="emacsclient -c -t"
+export GIT_EDITOR="emacsclient -c -t"
+export SVN_EDITOR="emacsclient -c -t"
+
