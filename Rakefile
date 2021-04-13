@@ -44,6 +44,9 @@ task :shell do
   # Install project-related file
   install_file("projects.zsh", File.join(Dir.home, ".projects.zsh"))
 
+  # Install secrets file
+  install_file("secrets.zsh", File.join(Dir.home, ".secrets.zsh"))
+
   # Install tmux configuration
   install_file("tmux.conf", File.join(Dir.home, ".tmux.conf"))
 
