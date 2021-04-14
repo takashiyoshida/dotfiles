@@ -26,11 +26,11 @@ hs.hotkey.bind({"cmd", "ctrl"}, "U", moveWindowToTopLeft)
 function moveWindowToTopRight()
     print("Moving the current window to the top right corner ...")
 
-    local screenFullFrame = hs.window.focusedWindow():screen():fullFrame()
+    local screenFrame = hs.window.focusedWindow():screen():frame()
     local windowFrame = hs.window.focusedWindow():frame()
 
-    windowFrame.x = screenFullFrame.x + (screenFullFrame.w - SWITCHGLASS_OFFSET_X) - windowFrame.w
-    windowFrame.y = screenFullFrame.y
+    windowFrame.x = screenFrame.x + (screenFrame.w - SWITCHGLASS_OFFSET_X) - windowFrame.w
+    windowFrame.y = screenFrame.y
 
     print("windowFrame: " .. windowFrame.x, windowFrame.y, windowFrame.w, windowFrame.h)
     hs.window.focusedWindow():move(windowFrame)
