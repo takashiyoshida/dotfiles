@@ -2,8 +2,7 @@
 export GOPATH="${HOME}/Projects"
 
 # Configure PATH variable
-
-# Default PATH
+# Default PATH (macOS Big Sur)
 # PATH=/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/Library/Apple/usr/bin
 # - /usr/local/bin
 # - /usr/bin
@@ -12,15 +11,11 @@ export GOPATH="${HOME}/Projects"
 # - /sbin
 # - /Library/Apple/usr/bin
 
-# Not sure about /usr/local/go/bin in non-macOS environment
-#PATH="${PATH}:/usr/local/go/bin"
-#PATH="${PATH}:${GOPATH}/bin"
-
-# Disable this for now, as MacTex is not ready for Apple Silicon
-# if [[ "${OSTYPE}" =~ darwin* ]]; then
-    # Installed by MacTex; 2019.0508 release works with macOS Catalina
-    # PATH="${PATH}:/usr/local/texlive/2020/bin/x86_64-darwin"
-# fi
+# MacTex (brew install --cask mactex) is a Universal binary package
+# Installed by mactex-20210328.pkg release works with macOS Big Sur (including Apple Silicon)
+if [[ "${OSTYPE}" =~ darwin* ]]; then
+    PATH="${PATH}:/usr/local/texlive/2021/bin/universal-darwin"
+fi
 
 PATH="${PATH}:${HOME}/Projects/dotfiles/bin"
 PATH="${PATH}:${HOME}/bin"
@@ -39,8 +34,13 @@ fi
 if which pyenv > /dev/null; then
     eval "$(pyenv init -)"
 
-	export LDFLAGS="-L$(brew --prefix zlib)/lib -L$(brew --prefix bzip2)/lib"
-	export CPPFLAGS="-I$(brew --prefix zlib)/include -I$(brew --prefix bzip2)/include"
+    CPPFLAGS="${CPPFLAGS} -I$(brew --prefix bzip2)/include"
+    CPPFLAGS="${CPPFLAGS} -I$(brew --prefix zlib)/include"
+    LDFLAGS="${LDFLAGS} -L$(brew --prefix bzip2)/lib"
+    LDFLAGS="${LDFLAGS} -L$(brew --prefix bzip2)/lib"
+
+    export CPPFLAGS
+    export LDFLAGS
 fi
 
 # Ruby
