@@ -53,12 +53,11 @@ function add-ssh-private-keys
 {
     ssh-add -l -E md5 > /dev/null 2>&1
     if [ $? != 0 ]; then
-        # ssh-agent has no identities
         ssh-add -K ${HOME}/.ssh/digitalocean_rsa
         ssh-add -K ${HOME}/.ssh/heroku_rsa
         ssh-add -K ${HOME}/.ssh/takashi-thales_rsa
         ssh-add -K ${HOME}/.ssh/github_rsa
-        ssh-add -K ${HOME}/.ssh/id_rsa
+        ssh-add -K ${HOME}/.ssh/id_ed25519
     fi
 }
 
@@ -265,4 +264,3 @@ function standup
     fi
     tmux attach -t standup
 }
-
