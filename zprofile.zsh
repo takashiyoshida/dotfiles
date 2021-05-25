@@ -32,7 +32,9 @@ fi
 # Configure Python, Ruby and Node.js
 # Python
 if which pyenv > /dev/null; then
-    eval "$(pyenv init -)"
+	export PYENV_ROOT="${HOME}/.pyenv"
+	export PATH="${PYENV_ROOT}/bin:${PATH}"
+    eval "$(pyenv init --path)"
 
     CPPFLAGS="${CPPFLAGS} -I$(brew --prefix bzip2)/include"
     CPPFLAGS="${CPPFLAGS} -I$(brew --prefix zlib)/include"
