@@ -267,7 +267,8 @@ def main():
     '''
     init_logging()
 
-    parser = argparse.ArgumentParser(prog='db-prepper', description='Generate a tarball from Configurator\'s output.')
+    parser = argparse.ArgumentParser(
+        prog='db-prepper', description='Generate a tarball from Configurator\'s output.')
     # Path to database directory
     parser.add_argument('--database-path', '-d', required=True,
                         dest='database_path', help='path to database directory')
@@ -284,7 +285,7 @@ def main():
     if args.db_version == None:
         logging.debug('db_version was not specified')
     else:
-        logging.debug('db_version: %d', args.db_version)
+        logging.debug('db_version: %s', args.db_version)
 
     if args.environment == '':
         args.environment = ENVIRONMENT
