@@ -1,9 +1,10 @@
 NELARCHIVER_IP=$(grep "nelarchiver" /etc/hosts | awk '{ print $1 }')
 NELARCHIVER_PORT="80"
 
-if [ "${NELARCHIVER_IP}" != "" ]; then
+if [ -z "${NELARCHIVER_IP}" ]; then
     # When not working from office, I will run a Docker container as a nelarchiver
-    NELARCHIVER_IP=$(ifconfig en0 | grep "inet " | awk '{ print $2 }')
+    # Depending on your OS, you will need to change the network interface below
+    NELARCHIVER_IP=$(ifconfig en0 | grep --color=never "inet " | awk '{ print $2 }')
     NELARCHIVER_PORT="8080"
 fi
 export NELARCHIVER_IP
