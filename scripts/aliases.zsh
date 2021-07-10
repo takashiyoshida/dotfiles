@@ -52,12 +52,20 @@ alias tree="tree -N"
 function add-ssh-private-keys
 {
     ssh-add -l -E md5 > /dev/null 2>&1
+
+    SSH_ADD_OPTION=""
+
+    if [[ "${OSTYPE}" =~ darwin* ]]; then
+        SSH_ADD_OPTION="-K"
+    fi
+
+
     if [ $? != 0 ]; then
-        ssh-add -K ${HOME}/.ssh/digitalocean_rsa
-        ssh-add -K ${HOME}/.ssh/heroku_rsa
-        ssh-add -K ${HOME}/.ssh/takashi-thales_rsa
-        ssh-add -K ${HOME}/.ssh/github_rsa
-        ssh-add -K ${HOME}/.ssh/id_ed25519
+        ssh-add ${SSH_ADD_OPTION} ${HOME}/.ssh/digitalocean_rsa
+        ssh-add ${SSH_ADD_OPTION} ${HOME}/.ssh/heroku_rsa
+        ssh-add ${SSH_ADD_OPTION} ${HOME}/.ssh/takashi-thales_rsa
+        ssh-add ${SSH_ADD_OPTION} ${HOME}/.ssh/github_rsa
+        ssh-add ${SSH_ADD_OPTION} ${HOME}/.ssh/id_ed25519
     fi
 }
 
