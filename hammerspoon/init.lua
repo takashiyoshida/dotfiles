@@ -21,7 +21,7 @@ function moveWindowToTopLeft()
     print("windowFrame: " .. windowFrame.x, windowFrame.y, windowFrame.w, windowFrame.h)
     hs.window.focusedWindow():move(windowFrame)
 end
-hs.hotkey.bind({"cmd", "ctrl"}, "U", moveWindowToTopLeft)
+-- hs.hotkey.bind({"cmd", "ctrl"}, "U", moveWindowToTopLeft)
 
 function moveWindowToTopRight()
     print("Moving the current window to the top right corner ...")
@@ -35,7 +35,7 @@ function moveWindowToTopRight()
     print("windowFrame: " .. windowFrame.x, windowFrame.y, windowFrame.w, windowFrame.h)
     hs.window.focusedWindow():move(windowFrame)
 end
-hs.hotkey.bind({"cmd", "ctrl"}, "O", moveWindowToTopRight)
+-- hs.hotkey.bind({"cmd", "ctrl"}, "O", moveWindowToTopRight)
 
 function moveWindowToBottomLeft()
     print("Moving the current window to the bottom left corner ...")
@@ -50,7 +50,7 @@ function moveWindowToBottomLeft()
     print("windowFrame: " .. windowFrame.x, windowFrame.y, windowFrame.w, windowFrame.h)
     hs.window.focusedWindow():move(windowFrame)
 end
-hs.hotkey.bind({"cmd", "ctrl"}, "J", moveWindowToBottomLeft)
+-- hs.hotkey.bind({"cmd", "ctrl"}, "J", moveWindowToBottomLeft)
 
 function moveWindowToBottomRight()
     print("Moving the current window to the bottom right corner ...")
@@ -63,17 +63,17 @@ function moveWindowToBottomRight()
     print("windowFrame: " .. windowFrame.x, windowFrame.y, windowFrame.w, windowFrame.h)
     hs.window.focusedWindow():move(windowFrame)
 end
-hs.hotkey.bind({"cmd", "ctrl"}, "L", moveWindowToBottomRight)
+-- hs.hotkey.bind({"cmd", "ctrl"}, "L", moveWindowToBottomRight)
 
 function moveWindowToOneScreenEast()
     hs.window.focusedWindow():moveOneScreenEast(true, true)
 end
-hs.hotkey.bind({"cmd", "ctrl", "shift"}, "L", moveWindowToOneScreenEast)
+-- hs.hotkey.bind({"cmd", "ctrl", "shift"}, "L", moveWindowToOneScreenEast)
 
 function moveWindowToOneScreenWest()
     hs.window.focusedWindow():moveOneScreenWest(true, true)
 end
-hs.hotkey.bind({"cmd", "ctrl", "shift"}, "J", moveWindowToOneScreenWest)
+-- hs.hotkey.bind({"cmd", "ctrl", "shift"}, "J", moveWindowToOneScreenWest)
 
 function maximizeWindow()
     local frame = hs.screen.mainScreen():frame()
@@ -87,7 +87,7 @@ function maximizeWindow()
     local rect = hs.geometry.rect(frame.x, frame.y, frame.w - SWITCHGLASS_OFFSET_X, frame.h)
     hs.window.focusedWindow():move(rect)
 end
-hs.hotkey.bind({"cmd", "ctrl"}, "Z", maximizeWindow)
+-- hs.hotkey.bind({"cmd", "ctrl"}, "Z", maximizeWindow)
 
 function applicationWatcher(appName, eventType, appObject)
     print("Calling applicationWatcher ...")
@@ -133,7 +133,7 @@ function center_window()
     local window = hs.window.focusedWindow()
     window:centerOnScreen()
 end
-hs.hotkey.bind({"cmd", "alt", "ctrl"}, "c", center_window)
+-- hs.hotkey.bind({"cmd", "alt", "ctrl"}, "c", center_window)
 
 -- Gather all windows from the frontmost application at the center of the screen
 function gather_windows()
@@ -155,7 +155,7 @@ function extend_window_vertically()
     size.h = screenFrame.h
     win:setSize(size)
 end
-hs.hotkey.bind({"cmd", "alt", "ctrl"}, "v", extend_window_vertically)
+-- hs.hotkey.bind({"cmd", "alt", "ctrl"}, "v", extend_window_vertically)
 
 -- Cascade all windows of the current application
 function cascade_windows()
@@ -234,4 +234,161 @@ function resize_browser_window_for_iterm()
         win:move(frame)
     end
 end
-hs.hotkey.bind({"cmd", "alt", "ctrl"}, "t", resize_browser_window_for_iterm)
+-- hs.hotkey.bind({"cmd", "alt", "ctrl"}, "t", resize_browser_window_for_iterm)
+
+function toggle_system_output_mute()
+    print("toggle_system_output_mute")
+
+    -- Fetch current output device
+    local currOut = hs.audiodevice.current()
+    --[[
+    It appears that some output devices do not support filling some details.
+    Some of these data may be nil.
+    ]]--
+    print('name:   ' .. tostring(currOut.name))
+    print('uid:    ' .. tostring(currOut.uid))
+    print('muted:  ' .. tostring(currOut.muted))
+    print('volume: ' .. tostring(currOut.volume))
+
+    if currOut.name ~= nil then
+        local device = hs.audiodevice.findOutputByName(currOut.name)
+        print(device)
+
+        if device ~= nil then
+            local isMuted = device:muted()
+            print('isMuted (before): ' .. tostring(isMuted))
+
+            if isMuted ~= nil then
+                local result = device:setMuted(not isMuted)
+                print('result: ' .. tostring(result))
+                if not result then
+                    print('ERROR: failed to mute/unmute ' .. currOut.name)
+                end
+            else
+                print('ERROR: ' .. currOut.name .. ' does not support mute/unmute')
+            end
+        else
+            print('ERROR: failed to find device ' .. currOut.name)
+        end
+    end
+end
+hs.hotkey.bind({"cmd", "alt", "ctrl"}, "q", toggle_system_output_mute)
+
+function set_default_output_device(deviceName)
+    print('foobar: ' .. deviceName)
+
+    if deviceName ~= nil then
+        local output = hs.audiodevice.findOutputByName(deviceName)
+        if output ~= nil then
+            local result = output:setDefaultOutputDevice()
+            print('result: ' .. tostring(result))
+        else
+            print('ERROR: unable to find device, ' .. deviceName)
+        end
+    else
+        print('ERROR: deviceName cannot be nil')
+    end
+end
+
+function show_system_output_chooser()
+    print('show_system_output_chooser')
+
+    local choices = {}
+    local devices = hs.audiodevice.allOutputDevices()
+
+    for i = 1, #devices do
+        print('name:   ' .. tostring(devices[i]:name()))
+        print('uid:    ' .. tostring(devices[i]:uid()))
+        print('muted:  ' .. tostring(devices[i]:muted()))
+        print('volume: ' .. tostring(devices[i]:volume()))
+
+        if devices[i]:name() ~= nil then
+            local subtext = ''
+            if devices[i]:volume() ~= nil then
+                subtext = 'Volume: ' .. math.floor(devices[i]:volume()) .. '%'
+            else
+                subtext = 'Volume: N/A'
+            end
+
+            if devices[i]:muted() ~= nil then
+                if devices[i]:muted() == true then
+                    subtext = subtext .. ' Muted: Yes'
+                else
+                    subtext = subtext .. ' Muted: No'
+                end
+            else
+                subtext = subtext .. ' Muted: N/A'
+            end
+
+            table.insert(choices,
+                {
+                    text = tostring(devices[i]:name()),
+                    subText = subtext
+                    -- subText = tostring(devices[i]:uid())
+                })
+        end
+        print('No. of items in the choices: ' .. #choices)
+    end
+
+    local function focusLastFocused()
+        local wf = hs.window.filter
+        local lastFocused = wf.defaultCurrentSpace:getWindows(wf.sortByFocusedLast)
+        if #lastFocused > 0 then
+            lastFocused[1]:focus()
+        end
+    end
+
+    local chooser = hs.chooser.new(function(choice)
+        if not choice then
+            -- focusLastFocused()
+            return
+        end
+
+        print('choice: ' .. choice['text'])
+        set_default_output_device(choice['text'])
+
+        -- focusLastFocused()
+    end)
+
+    chooser:searchSubText(false)
+    chooser:choices(choices)
+    chooser:rows(#choices)
+    chooser:show()
+end
+hs.hotkey.bind({"cmd", "alt", "ctrl"}, "w", show_system_output_chooser)
+
+function toggle_system_input_device()
+    print('toggle_system_input_device')
+    local currIn = hs.audiodevice.current(true)
+    --[[
+    It appears that some output devices do not support filling some details.
+    Some of these data may be nil.
+    ]]--
+    print('name:   ' .. tostring(currIn.name))
+    print('uid:    ' .. tostring(currIn.uid))
+    print('muted:  ' .. tostring(currIn.muted))
+    print('volume: ' .. tostring(currIn.volume))
+
+    if currIn.name ~= nil then
+        local device = hs.audiodevice.findInputByName(currIn.name)
+        print(device)
+
+        if device ~= nil then
+            local isMuted = device:muted()
+            print('isMuted (before): ' .. tostring(isMuted))
+
+            if isMuted ~= nil then
+                local result = device:setMuted(not isMuted)
+                print('result: ' .. tostring(result))
+                if not result then
+                    print('ERROR: failed to mute/unmute ' .. currIn.name)
+                end
+            else
+                print('ERROR: ' .. currIn.name .. ' does not support mute/unmute')
+            end
+        else
+            print('ERROR: failed to find device ' .. currIn.name)
+        end
+    end
+end
+hs.hotkey.bind({"cmd", "alt", "ctrl"}, "e", toggle_system_input_device)
