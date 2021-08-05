@@ -155,6 +155,7 @@ function mkdev
 
 alias mkdev.c755a="mkdev ${HOME}/Projects/c755a-dev"
 alias mkdev.c755b="mkdev ${HOME}/Projects/c755b-dev"
+alias mkdev.wsl="mkdev /mnt/c/Users/takashi/Work/c755b-dev"
 
 function mkrturep
 {
