@@ -115,3 +115,10 @@ desc "Install peco-related configurations"
 task :peco do
   install_file("peco", File.join(Dir.home, ".peco"))
 end
+
+
+desc "Install Karabiner configurations"
+task :karabiner do
+  install_file(File.join("karabiner", "karabiner.json"),
+    File.join(Dir.home, ".config", "karabiner", "karabiner.json"))
+end

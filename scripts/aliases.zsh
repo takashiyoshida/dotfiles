@@ -59,7 +59,6 @@ function add-ssh-private-keys
         SSH_ADD_OPTION="-K"
     fi
 
-
     if [ $? != 0 ]; then
         ssh-add ${SSH_ADD_OPTION} ${HOME}/.ssh/digitalocean_rsa
         ssh-add ${SSH_ADD_OPTION} ${HOME}/.ssh/heroku_rsa
@@ -153,46 +152,7 @@ function mkdev
     tmux attach -t ${session_name}
 }
 
-alias mkdev.c755a="mkdev ${HOME}/Projects/c755a-dev"
 alias mkdev.c755b="mkdev ${HOME}/Projects/c755b-dev"
-alias mkdev.wsl="mkdev /mnt/c/Users/takashi/Work/c755b-dev"
-
-function mkrturep
-{
-    workspace="${HOME}/Projects/rturep-dev"
-    if [[ $# != 0 ]]; then
-        workspace=$1
-        if [ ! -d ${workspace} ]; then
-            echo "${workspace} does not exist"
-            return
-        fi
-    fi
-
-    session_name=$(basename ${workspace})
-    tmux has-session -t ${session_name} 2> /dev/null
-    if [ $? != 0 ]; then
-        tmux detach
-
-        cd ${workspace}
-
-        tmux new-session -s ${session_name} -n build -d
-        tmux split-window -h -t build
-        tmux select-pane -t :.1 # Move the focus to pane 1 of build window
-
-        # Administrating test VM (i.e. install new packages, etc)
-        tmux new-window -n admin
-
-        # Split WLH window in half (one for running WLH and another for logs)
-        tmux new-window -n WLH
-        tmux split-window -h -t WLH
-        tmux select-pane -t :.1 # Move the focus to pane 1 of the WLH window
-
-        # Go back to the build window and select the first pane
-        tmux select-window -t build
-        tmux select-pane -t :.1
-    fi
-    tmux attach -t ${session_name}
-}
 
 function dotfiles
 {
@@ -206,70 +166,4 @@ function dotfiles
         tmux select-pane -t dotfiles:1.1
     fi
     tmux attach -t dotfiles
-}
-
-function rturep-elk
-{
-    tmux has-session -t rturep-elk 2>/dev/null
-    if [ $? != 0 ]; then
-        tmux detach
-        cd ${HOME}/Projects/rturep-elk
-        tmux new-session -s rturep-elk -d
-
-        tmux split-window -h -p 50 -t rturep-elk
-        tmux select-pane -t rturep-elk:1.1
-
-        if [[ "${OSTYPE}" =~ darwin* ]]; then
-            tmux send-keys -t rturep-elk:1.1 'docker-compose up' C-m
-        else
-            tmux send-keys -t rturep-elk:1.1 'sudo docker-compose up' C-m
-        fi
-    fi
-    tmux attach -t rturep-elk
-}
-
-function RTUtest
-{
-    tmux has-session -t RTUtest 2>/dev/null
-    if [ $? != 0 ]; then
-        tmux detach
-        cd /var/log
-        tmux new-session -s RTUtest -n RTUtest -d
-        tmux split-window -h -p 50 -t RTUtest
-        tmux split-window -v -p 50 -t RTUtest:1.1
-        tmux split-window -v -p 50 -t RTUtest:1.3
-
-        tmux send-keys -t RTUtest:1.1 'top' C-m
-        tmux select-pane -t RTUtest:1.1
-    fi
-    tmux attach -t RTUtest
-}
-
-function RTUreport
-{
-    tmux has-session -t RTUreport 2>/dev/null
-    if [ $? != 0 ]; then
-        tmux detach
-        cd ${HOME}/Documents/rturep/2\ Project\ Execution\ Data/2.2\ Work\ Products/04_Software/SprintReportsStatistics
-        tmux new-session -s RTUreport -n RTUreport -d
-        tmux split-window -h -p 50 -t RTUreport
-
-        tmux select-pane -t RTUreport:1.1
-        tmux send-keys -t RTUreport:1.1 'cd ${HOME}/Projects/dotfiles/bin' C-m
-    fi
-    tmux attach -t RTUreport
-}
-
-function standup
-{
-    tmux has-session -t standup 2>/dev/null
-    if [ $? != 0 ]; then
-        tmux detach
-        cd ${HOME}/Projects/standup
-        tmux new-session -s standup -n standup -d
-        tmux split-window -h -p 50 -t standup
-
-        tmux select-pane -t standup:1.1
-    fi
-    tmux attach -t standup
 }

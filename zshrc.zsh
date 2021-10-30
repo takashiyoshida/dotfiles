@@ -81,5 +81,3 @@ source "${HOME}/.secrets.zsh"
 
 # Add SSH keys
 add-ssh-private-keys
-
-eval "$(pyenv init -)"
