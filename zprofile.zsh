@@ -10,37 +10,23 @@
 
 if [[ "${OSTYPE}" =~ darwin* ]]; then
     # MacTex (brew install --cask mactex) is a Universal binary package
-    # Installed by mactex-20210328.pkg release works with macOS Big Sur (including Apple Silicon)
     PATH="${PATH}:/usr/local/texlive/2021/bin/universal-darwin"
 
     # Add Homebrew path (/opt/homebrew/bin) to PATH
     eval "$(/opt/homebrew/bin/brew shellenv)"
-
-    # Configure Python, Ruby and Node.js
-    # Python
-    if which pyenv > /dev/null; then
-        export PYENV_ROOT="${HOME}/.pyenv"
-        export PATH="${PYENV_ROOT}/bin:${PATH}"
-        eval "$(pyenv init --path)"
-
-        CPPFLAGS="${CPPFLAGS} -I$(brew --prefix bzip2)/include"
-        CPPFLAGS="${CPPFLAGS} -I$(brew --prefix zlib)/include"
-        LDFLAGS="${LDFLAGS} -L$(brew --prefix bzip2)/lib"
-        LDFLAGS="${LDFLAGS} -L$(brew --prefix bzip2)/lib"
-
-        export CPPFLAGS
-        export LDFLAGS
+    # For some reason, my MacBook Pro 14" does not do tab-completion for
+    # Homebrew so this allows the tab-completion to work.
+    if type brew >/dev/null 2>&1; then
+        FPATH=$(brew --prefix)/completions/zsh:${FPATH}
+        autoload -Uz compinit
+        compinit
     fi
 
-    if which rbenv > /dev/null; then
-        eval "$(rbenv init -)"
-    fi
-
-    # Node.js
-    if which nodenv > /dev/null; then
-        export PATH="${HOME}/.nodenv/bin:${PATH}"
-        eval "$(nodenv init -)"
-    fi
+    # Building Python via pyenv install...
+    CPPFLAGS="${CPPFLAGS} -I$(brew --prefix bzip2)/include"
+    CPPFLAGS="${CPPFLAGS} -I$(brew --prefix zlib)/include"
+    LDFLAGS="${LDFLAGS} -L$(brew --prefix bzip2)/lib"
+    LDFLAGS="${LDFLAGS} -L$(brew --prefix bzip2)/lib"
 fi
 
 # Configure LD_LIBRARY_PATH
@@ -53,7 +39,19 @@ if [[ "${OSTYPE}" =~ linux-gnu* ]]; then
 fi
 
 if which pyenv > /dev/null; then
+    export PYENV_ROOT="${HOME}/.pyenv"
+    export PATH="${PYENV_ROOT}/bin:${PATH}"
+    eval "$(pyenv init --path)"
     eval "$(pyenv init -)"
+fi
+
+if which rbenv > /dev/null; then
+    eval "$(rbenv init -)"
+fi
+
+if which nodenv > /dev/null; then
+    export PATH="${HOME}/.nodenv/bin:${PATH}"
+    eval "$(nodenv init -)"
 fi
 
 PATH="${PATH}:${HOME}/Projects/dotfiles/bin"
