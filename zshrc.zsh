@@ -81,3 +81,6 @@ source "${HOME}/.secrets.zsh"
 
 # Add SSH keys
 add-ssh-private-keys
+
+# Start emacs service (macOS)
+start-emacs-service

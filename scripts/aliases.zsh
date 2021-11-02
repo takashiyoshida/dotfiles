@@ -52,19 +52,27 @@ alias tree="tree -N"
 function add-ssh-private-keys
 {
     ssh-add -l -E md5 > /dev/null 2>&1
-
-    SSH_ADD_OPTION=""
-
     if [[ "${OSTYPE}" =~ darwin* ]]; then
-        SSH_ADD_OPTION="-K"
+        ssh-add --apple-load-keychain
+        # Not sure how this should be done in Linux yet
     fi
+}
 
-    if [ $? != 0 ]; then
-        ssh-add ${SSH_ADD_OPTION} ${HOME}/.ssh/digitalocean_rsa
-        ssh-add ${SSH_ADD_OPTION} ${HOME}/.ssh/heroku_rsa
-        ssh-add ${SSH_ADD_OPTION} ${HOME}/.ssh/takashi-thales_rsa
-        ssh-add ${SSH_ADD_OPTION} ${HOME}/.ssh/github_rsa
-        ssh-add ${SSH_ADD_OPTION} ${HOME}/.ssh/id_ed25519
+function start-emacs-service
+{
+    if [[ "${OSTYPE}" =~ darwin* ]]; then
+        if [[ "$(brew services list | grep "emacs-plus@27" | awk '{ print $2 }')" =~ stopped ]]; then
+            brew services start d12frosted/emacs-plus/emacs-plus@27 > /dev/null 2>&1
+        fi
+    fi
+}
+
+function stop-emacs-service
+{
+    if [[ "${OSTYPE}" =~ darwin* ]]; then
+        if [[ "$(brew services list | grep "emacs-plus@27" | awk '{ print $2 }')" =~ started ]]; then
+            brew services stop d12frosted/emacs-plus/emacs-plus@27 > /dev/null 2>&1
+        fi
     fi
 }
 
