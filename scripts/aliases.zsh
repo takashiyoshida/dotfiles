@@ -51,10 +51,14 @@ alias tree="tree -N"
 # Add a set of my SSH private keys to ssh-agent and also a keychain
 function add-ssh-private-keys
 {
-    ssh-add -l -E md5 > /dev/null 2>&1
     if [[ "${OSTYPE}" =~ darwin* ]]; then
-        ssh-add --apple-load-keychain
-        # Not sure how this should be done in Linux yet
+        pgrep -U $(id -u) "ssh-agent" > /dev/null 2>&1
+        if [[ $? != 0 ]]; then
+            ssh-add -l -E md5 > /dev/null 2>&1
+            ssh-add ${HOME}/.ssh/id_ed25519
+            ssh-add ${HOME}/.ssh/takashi-thales_rsa
+            ssh-add --apple-load-keychain
+        fi
     fi
 }
 
