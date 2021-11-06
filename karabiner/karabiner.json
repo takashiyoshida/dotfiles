@@ -43,6 +43,38 @@
                         ]
                     },
                     {
+                        "description": "Post Hyper key when escape is held with another key, escape key if tapped alone",
+                        "manipulators": [
+                            {
+                                "type": "basic",
+                                "from": {
+                                    "key_code": "escape",
+                                    "modifiers": {
+                                        "optional": [
+                                            "any"
+                                        ]
+                                    }
+                                },
+                                "to": [
+                                    {
+                                        "key_code": "left_shift",
+                                        "modifiers": [
+                                            "left_command",
+                                            "left_control",
+                                            "left_option"
+                                        ],
+                                        "lazy": true
+                                    }
+                                ],
+                                "to_if_alone": [
+                                    {
+                                        "key_code": "escape"
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    {
                         "description": "Use left control + pn to move a cursor up/down in Craft (rev. 0)",
                         "manipulators": [
                             {
@@ -158,7 +190,7 @@
                                 },
                                 "to": [
                                     {
-                                        "key_code":  "up_arrow"
+                                        "key_code": "up_arrow"
                                     }
                                 ],
                                 "type": "basic"
