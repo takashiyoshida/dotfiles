@@ -53,7 +53,7 @@ ZSH_THEME="takashiyoshida"
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 if [[ "${OSTYPE}" =~ darwin* ]]; then
-    plugins=(colored-man-pages docker extract gem golang osx python rake ruby ssh-agent svn tmux vagrant)
+    plugins=(colored-man-pages docker extract gem golang macos python rake ruby svn tmux vagrant)
 else
     plugins=(colored-man-pages debian docker extract gem golang python rake ruby ssh-agent svn tmux vagrant)
 fi
@@ -82,4 +82,5 @@ source "${HOME}/.secrets.zsh"
 # Add SSH keys
 add-ssh-private-keys
 
-eval "$(pyenv init -)"
+# Start emacs service (macOS)
+start-emacs-service
