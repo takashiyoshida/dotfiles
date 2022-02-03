@@ -24,7 +24,6 @@ alias svninfo="svn info --show-item=url"
 alias svnst="svn status -q"
 
 # For jekyll draft, post, publish, unpublish, page
-alias jekyll="bundle exec jekyll"
 alias jkld="jekyll draft"
 
 alias cdpr="cd ${HOME}/Projects"
@@ -45,38 +44,18 @@ alias ls-idents="ssh-add -l -E md5"
 
 # Send colored grep result to a pager (less)
 alias grep="grep --color=always"
-
 alias tree="tree -N"
-
-# Add a set of my SSH private keys to ssh-agent and also a keychain
-function add-ssh-private-keys
-{
-    if [[ "${OSTYPE}" =~ darwin* ]]; then
-        pgrep -U $(id -u) "ssh-agent" > /dev/null 2>&1
-        if [[ $? != 0 ]]; then
-            ssh-add -l -E md5 > /dev/null 2>&1
-            ssh-add ${HOME}/.ssh/id_ed25519
-            ssh-add ${HOME}/.ssh/takashi-thales_rsa
-            ssh-add --apple-load-keychain
-        fi
-    fi
-}
 
 function start-emacs-service
 {
     if [[ "${OSTYPE}" =~ darwin* ]]; then
         if [[ "$(brew services list | grep "emacs-plus@27" | awk '{ print $2 }')" =~ stopped ]]; then
-            brew services start d12frosted/emacs-plus/emacs-plus@27 > /dev/null 2>&1
+            brew services start emacs-plus@27 > /dev/null 2>&1
         fi
-    fi
-}
-
-function stop-emacs-service
-{
-    if [[ "${OSTYPE}" =~ darwin* ]]; then
-        if [[ "$(brew services list | grep "emacs-plus@27" | awk '{ print $2 }')" =~ started ]]; then
-            brew services stop d12frosted/emacs-plus/emacs-plus@27 > /dev/null 2>&1
-        fi
+    else
+        # It should be something like this for Linux
+        # Refer to https://www.emacswiki.org/emacs/EmacsAsDaemon
+        # systemctl start --user emacs
     fi
 }
 

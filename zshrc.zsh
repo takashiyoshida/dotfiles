@@ -1,3 +1,8 @@
+# Uncomment the following line to debug zsh startup time
+# Reference: https://gist.github.com/elalemanyo/cb3395af64ac23df2e0c3ded8bd63b2f
+#
+# zmodload zsh/zprof
+
 # Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
 # Initialization code that may require console input (password prompts, [y/n]
 # confirmations, etc.) must go above this block; everything else may go below.
@@ -24,11 +29,25 @@ ZSH="${HOME}/Projects/dotfiles/zsh"
 # Look in ~/.oh-my-zsh/themes/
 # Optionally, if you set this to "random", it'll load a random theme each
 # time that oh-my-zsh is loaded.
-ZSH_THEME="takashiyoshida"
+# Disabled because I'm using powerlevel10k to configure my theme
+# ZSH_THEME="takashiyoshida"
 
 # Example aliases
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
+
+# Minimum set of aliases
+alias mv="mv -i"
+alias cp="cp -i"
+alias rm="rm -i"
+
+alias ..="cd .."
+alias ...="cd ../.."
+alias ....="cd ../../.."
+
+alias rake="noglob rake"
+
+# The rest of aliases are defined further down below...
 
 # Set to this to use case-sensitive completion
 # CASE_SENSITIVE="true"
@@ -60,45 +79,36 @@ ZSH_THEME="takashiyoshida"
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 if [[ "${OSTYPE}" =~ darwin* ]]; then
-    plugins=(colored-man-pages docker extract gem golang macos python rake ruby svn tmux vagrant)
+    plugins=(colored-man-pages docker gem golang macos python rake ruby tmux)
 else
-    plugins=(colored-man-pages debian docker extract gem golang python rake ruby ssh-agent svn tmux vagrant)
+    plugins=(colored-man-pages docker gem golang python rake ruby ssh-agent svn tmux vagrant)
 fi
 
 source $ZSH/oh-my-zsh.sh
 
 # Customize to your needs...
-
-# Minimum set of aliases
-alias mv="mv -i"
-alias cp="cp -i"
-alias rm="rm -i"
-
-alias ..="cd .."
-alias ...="cd ../.."
-alias ....="cd ../../.."
-
-alias rake="noglob rake"
-
 export DOTFILES="${HOME}/Projects/dotfiles/scripts"
+# Load the rest of generic aliases and platform-specific aliases
 source "${DOTFILES}/aliases.zsh"
 source "${DOTFILES}/peco.zsh"
+
 source "${HOME}/.projects.zsh"
 source "${HOME}/.secrets.zsh"
 
-# Add SSH keys
-add-ssh-private-keys
-
-# Start emacs service (macOS)
+# This should be called only after sourcing the ${DOTFILES}/aliases.zsh file
 if [[ "${OSTYPE}" =~ darwin* ]]; then
+    add-ssh-private-keys
     start-emacs-service
-fi
 
-if [ -e "${HOME}/.iterm2_shell_integration.zsh" ]; then
-    source "${HOME}/.iterm2_shell_integration.zsh"
+    if [ -e "${HOME}/.iterm2_shell_integration.zsh" ]; then
+        source "${HOME}/.iterm2_shell_integration.zsh"
+    fi
 fi
-
-source ${HOME}/Projects/powerlevel10k/powerlevel10k.zsh-theme
 
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
+source ${HOME}/Projects/powerlevel10k/powerlevel10k.zsh-theme
 [[ ! -f "${HOME}/.p10k.zsh" ]] || source ${HOME}/.p10k.zsh
+
+# Uncomment the following line to enable zsh startup time
+# zprof
+# Finally, run `time zsh -i -c exit`
