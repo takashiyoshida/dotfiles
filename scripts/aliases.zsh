@@ -46,19 +46,6 @@ alias ls-idents="ssh-add -l -E md5"
 alias grep="grep --color=always"
 alias tree="tree -N"
 
-function start-emacs-service
-{
-    if [[ "${OSTYPE}" =~ darwin* ]]; then
-        if [[ "$(brew services list | grep "emacs-plus@27" | awk '{ print $2 }')" =~ stopped ]]; then
-            brew services start emacs-plus@27 > /dev/null 2>&1
-        fi
-    else
-        # It should be something like this for Linux
-        # Refer to https://www.emacswiki.org/emacs/EmacsAsDaemon
-        # systemctl start --user emacs
-    fi
-}
-
 # Useful functions to convert a hexadecimal number to a decimal number and vice versa
 # http://www.cyberciti.biz/faq/linux-unix-convert-hex-to-decimal-number/
 function h2d

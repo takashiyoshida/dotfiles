@@ -21,14 +21,14 @@ function add-ssh-private-keys
 
 function start-emacs-service
 {
-    if [[ "$(brew services list | grep "emacs-plus@27" | awk '{ print $2 }')" =~ stopped ]]; then
-        brew services start emacs-plus@27 > /dev/null 2>&1
+    if [[ "$(brew services list | grep 'emacs-plus@27' | awk '{ print $2 }')" != "started" ]]; then
+        brew services start emacs-plus@27
     fi
 }
 
 function stop-emacs-service
 {
-    if [[ "$(brew services list | grep "emacs-plus@27" | awk '{ print $2 }')" =~ started ]]; then
-        brew services stop emacs-plus@27 > /dev/null 2>&1
+    if [[ "$(brew services list | grep 'emacs-plus@27' | awk '{ print $2 }')" =~ started ]]; then
+        brew services stop emacs-plus@27
     fi
 }

@@ -95,19 +95,18 @@ source "${DOTFILES}/peco.zsh"
 source "${HOME}/.projects.zsh"
 source "${HOME}/.secrets.zsh"
 
-# This should be called only after sourcing the ${DOTFILES}/aliases.zsh file
-if [[ "${OSTYPE}" =~ darwin* ]]; then
-    add-ssh-private-keys
-    start-emacs-service
-
-    if [ -e "${HOME}/.iterm2_shell_integration.zsh" ]; then
-        source "${HOME}/.iterm2_shell_integration.zsh"
-    fi
-fi
-
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 source ${HOME}/Projects/powerlevel10k/powerlevel10k.zsh-theme
 [[ ! -f "${HOME}/.p10k.zsh" ]] || source ${HOME}/.p10k.zsh
+
+# This should be called only after sourcing the ${DOTFILES}/aliases.zsh file
+if [[ "${OSTYPE}" =~ darwin* ]]; then
+    if [ -e "${HOME}/.iterm2_shell_integration.zsh" ]; then
+        source "${HOME}/.iterm2_shell_integration.zsh"
+    fi
+
+    add-ssh-private-keys
+fi
 
 # Uncomment the following line to enable zsh startup time
 # zprof
