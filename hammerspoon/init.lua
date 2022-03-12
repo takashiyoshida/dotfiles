@@ -71,8 +71,24 @@ hs.hotkey.bind({"cmd", "ctrl"}, ".", moveWindowToBottomRight)
 -- Move the current window to the center of the screen
 function center_window()
     print("Moving the current window to the center of the main screen ...")
-    local window = hs.window.focusedWindow()
-    window:centerOnScreen()
+
+    local appName = hs.application.frontmostApplication():name()
+    if appName == "Spark" then
+        local screenFrame = hs.window.focusedWindow():screen():frame()
+        local windowFrame = hs.window.focusedWindow():frame()
+
+        if screenFrame.x < 0 then
+            windowFrame.x = (screenFrame.x / 2) - (windowFrame.w / 2)
+        else
+            windowFrame.x = (screenFrame.w / 2) - (windowFrame.w / 2)
+        end
+
+        windowFrame.y = screenFrame.y + (screenFrame.h - windowFrame.h) / 2
+        hs.window.focusedWindow():move(windowFrame)
+    else
+        local window = hs.window.focusedWindow()
+        window:centerOnScreen()
+    end
 end
 hs.hotkey.bind({"cmd", "ctrl"}, "K", center_window)
 
@@ -110,8 +126,13 @@ function moveWindowToTopCenter()
     local screenFrame = hs.window.focusedWindow():screen():frame()
     local windowFrame = hs.window.focusedWindow():frame()
 
-    windowFrame.x = screenFrame.x + screenFrame.w - windowFrame.w
-    windowFrame.x = windowFrame.x / 2
+    print("screenFrame: " .. screenFrame.x, screenFrame.y, screenFrame.w, screenFrame.h)
+
+    if screenFrame.x < 0 then
+        windowFrame.x = (screenFrame.x / 2) - (windowFrame.w / 2)
+    else
+        windowFrame.x = (screenFrame.w / 2) - (windowFrame.w / 2)
+    end
     windowFrame.y = screenFrame.y
 
     print("windowFrame: " .. windowFrame.x, windowFrame.y, windowFrame.w, windowFrame.h)
@@ -126,8 +147,11 @@ function moveWindowToBottomCenter()
     local screenFrame = hs.window.focusedWindow():screen():frame()
     local windowFrame = hs.window.focusedWindow():frame()
 
-    windowFrame.x = screenFrame.x + screenFrame.w - windowFrame.w
-    windowFrame.x = windowFrame.x / 2
+    if screenFrame.x < 0 then
+        windowFrame.x = (screenFrame.x / 2) - (windowFrame.w / 2)
+    else
+        windowFrame.x = (screenFrame.w / 2) - (windowFrame.w / 2)
+    end
     windowFrame.y = screenFullFrame.h - windowFrame.h
 
     print("windowFrame: " .. windowFrame.x, windowFrame.y, windowFrame.w, windowFrame.h)
@@ -136,6 +160,23 @@ end
 hs.hotkey.bind({"cmd", "ctrl"}, ",", moveWindowToBottomCenter)
 
 function moveWindowToOneScreenEast()
+    print("moveWindowToOneScreenEast")
+
+    local destScreenFrame = hs.screen.mainScreen():toWest():frame()
+    local windowFrame = hs.window.focusedWindow():frame()
+
+    print("destScreenFrame: " .. destScreenFrame.x, destScreenFrame.y, destScreenFrame.w, destScreenFrame.h)
+    print("windowFrame: " .. windowFrame.x, windowFrame.y, windowFrame.w, windowFrame.h)
+
+    local size = windowFrame.size
+    if windowFrame.w > destScreenFrame.w then
+        size.w = destScreenFrame.w - SWITCHGLASS_OFFSET_X
+    end
+
+    if windowFrame.h > destScreenFrame.h then
+        size.h = destScreenFrame.h
+    end
+    hs.window.focusedWindow():setSize(size)
     hs.window.focusedWindow():moveOneScreenEast(true, true)
 
     local appName = hs.application.frontmostApplication():name()
@@ -155,6 +196,23 @@ end
 hs.hotkey.bind({"cmd", "ctrl", "shift"}, "L", moveWindowToOneScreenEast)
 
 function moveWindowToOneScreenWest()
+    print("moveWindowToOneScreenWest")
+
+    local destScreenFrame = hs.screen.mainScreen():toWest():frame()
+    local windowFrame = hs.window.focusedWindow():frame()
+
+    print("destScreenFrame: " .. destScreenFrame.x, destScreenFrame.y, destScreenFrame.w, destScreenFrame.h)
+    print("windowFrame: " .. windowFrame.x, windowFrame.y, windowFrame.w, windowFrame.h)
+
+    local size = windowFrame.size
+    if windowFrame.w > destScreenFrame.w then
+        size.w = destScreenFrame.w - SWITCHGLASS_OFFSET_X
+    end
+
+    if windowFrame.h > destScreenFrame.h then
+        size.h = destScreenFrame.h
+    end
+    hs.window.focusedWindow():setSize(size)
     hs.window.focusedWindow():moveOneScreenWest(true, true)
 
     local appName = hs.application.frontmostApplication():name()
@@ -253,17 +311,18 @@ function cascade_windows()
     -- move the first window to the top left corner
     -- adjust the location of the next window by moving it down and right
     -- don't adjust the window size (yet)
+
     print("Cascading all windows ...")
 
     local app = hs.application.frontmostApplication()
     local mainFrame = hs.screen.mainScreen():frame()
 
-    local offsetX, offsetY = 25, 25
+    local offsetX, offsetY = 28, 28
     local n = 1
 
     for i, window in ipairs(app:allWindows()) do
         hs.printf(
-            "Window %d: title: %s visible: %s standard: %s",
+            "Window %d: title: %s; visible: %s; standard: %s",
             i,
             window:title(),
             window:isVisible(),
@@ -279,8 +338,16 @@ function cascade_windows()
             local newX = mainFrame.x + ((n - 1) * offsetX)
             local newY = mainFrame.y + ((n - 1) * offsetY)
 
-            hs.printf("Moving window %d to (%d, %d) ...", n, newX, newY)
-            window:move(hs.geometry.rect(newX, newY, window:size().w, window:size().h))
+            -- right now, the height of the window is not adjusted even when
+            -- the window is moved down
+            -- the window's height needs to be adjusted so that the bottom of the window
+            -- can be seen on the screen.
+
+            local newW = window:size().w
+            local newH = window:size().h - ((n - 1) * offsetY)
+
+            hs.printf("Moving window %d to (%d, %d, %d, %d) ...", n, newX, newY, newW, newH)
+            window:move(hs.geometry.rect(newX, newY, newW, newH))
             n = n + 1
         end
     end
