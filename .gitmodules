@@ -1,3 +1,6 @@
 [submodule "zsh"]
 	path = zsh
 	url = https://github.com/takashiyoshida/oh-my-zsh.git
+[submodule "powerlevel10k"]
+	path = powerlevel10k
+	url = https://github.com/takashiyoshida/powerlevel10k.git
