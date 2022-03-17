@@ -1,10 +1,10 @@
 # Set the OS specific aliases first, then string together other aliases the build on them
 if [[ "${OSTYPE}" =~ darwin* ]]; then
     # OS X specific aliases
-    source "${DOTFILES}/mac-aliases.zsh"
+    source "${DOTFILES}/scripts/mac-aliases.zsh"
 else
     # Linux specific aliases
-    source "${DOTFILES}/linux-aliases.zsh"
+    source "${DOTFILES}/scripts/linux-aliases.zsh"
 fi
 
 # Common set of aliases

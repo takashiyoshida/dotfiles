@@ -87,16 +87,16 @@ fi
 source $ZSH/oh-my-zsh.sh
 
 # Customize to your needs...
-export DOTFILES="${HOME}/Projects/dotfiles/scripts"
+export DOTFILES="${HOME}/Projects/dotfiles"
 # Load the rest of generic aliases and platform-specific aliases
-source "${DOTFILES}/aliases.zsh"
-source "${DOTFILES}/peco.zsh"
+source "${DOTFILES}/scripts/aliases.zsh"
+source "${DOTFILES}/scripts/peco.zsh"
 
 source "${HOME}/.projects.zsh"
 source "${HOME}/.secrets.zsh"
 
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
-source ${HOME}/Projects/powerlevel10k/powerlevel10k.zsh-theme
+source "${DOTFILES}/powerlevel10k/powerlevel10k.zsh-theme"
 [[ ! -f "${HOME}/.p10k.zsh" ]] || source ${HOME}/.p10k.zsh
 
 # This should be called only after sourcing the ${DOTFILES}/aliases.zsh file
