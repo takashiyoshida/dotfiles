@@ -23,13 +23,18 @@ if [[ "${OSTYPE}" =~ linux-gnu* ]]; then
 fi
 
 # Path to your oh-my-zsh configuration.
-ZSH="${HOME}/Projects/dotfiles/zsh"
+export DOTFILES="${HOME}/Projects/dotfiles"
+ZSH="${DOTFILES}/zsh"
+
+# To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
+source "${DOTFILES}/powerlevel10k/powerlevel10k.zsh-theme"
+[[ ! -f "${HOME}/.p10k.zsh" ]] || source ${HOME}/.p10k.zsh
 
 # Set name of the theme to load.
 # Look in ~/.oh-my-zsh/themes/
 # Optionally, if you set this to "random", it'll load a random theme each
 # time that oh-my-zsh is loaded.
-# Disabled because I'm using powerlevel10k to configure my theme
+# Disabled because I'm using powerlevel10k to configure ZSH theme
 # ZSH_THEME="takashiyoshida"
 
 # Example aliases
@@ -79,26 +84,22 @@ alias rake="noglob rake"
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 if [[ "${OSTYPE}" =~ darwin* ]]; then
-    plugins=(colored-man-pages docker gem golang macos python rake ruby tmux)
+    plugins=(autojump colored-man-pages docker gem golang macos python rake ruby tmux)
 else
     plugins=(colored-man-pages docker gem golang python rake ruby ssh-agent svn tmux vagrant)
 fi
 
 source $ZSH/oh-my-zsh.sh
 
+if [ -f /opt/homebrew/etc/profile.d/autojump.sh ]; then
+    source /opt/homebrew/etc/profile.d/autojump.sh
+fi
+
 # Customize to your needs...
-export DOTFILES="${HOME}/Projects/dotfiles"
 # Load the rest of generic aliases and platform-specific aliases
-source "${DOTFILES}/scripts/aliases.zsh"
 source "${DOTFILES}/scripts/peco.zsh"
 
-source "${HOME}/.projects.zsh"
-source "${HOME}/.secrets.zsh"
-
-# To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
-source "${DOTFILES}/powerlevel10k/powerlevel10k.zsh-theme"
-[[ ! -f "${HOME}/.p10k.zsh" ]] || source ${HOME}/.p10k.zsh
-
+source "${DOTFILES}/scripts/aliases.zsh"
 # This should be called only after sourcing the ${DOTFILES}/aliases.zsh file
 if [[ "${OSTYPE}" =~ darwin* ]]; then
     if [ -e "${HOME}/.iterm2_shell_integration.zsh" ]; then
@@ -107,6 +108,9 @@ if [[ "${OSTYPE}" =~ darwin* ]]; then
 
     add-ssh-private-keys
 fi
+
+source "${HOME}/.projects.zsh"
+source "${HOME}/.secrets.zsh"
 
 # Uncomment the following line to enable zsh startup time
 # zprof

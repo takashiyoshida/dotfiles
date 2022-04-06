@@ -3,6 +3,9 @@ alias top="top -ocpu -R -F -s 2"
 alias hub=git
 alias vless="/opt/homebrew/share/vim/vim82/macros/less.sh"
 
+alias brout="brew update && brew outdated"
+alias brupg="brew upgrade"
+
 function ql
 {
     qlmanage -p "$@" >& /dev/null &
