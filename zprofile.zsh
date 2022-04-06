@@ -10,7 +10,7 @@
 
 if [[ "${OSTYPE}" =~ darwin* ]]; then
     # MacTex (brew install --cask mactex) is a Universal binary package
-    PATH="${PATH}:/usr/local/texlive/2021/bin/universal-darwin"
+    PATH="${PATH}:/usr/local/texlive/2022/bin/universal-darwin"
 
     # Add Homebrew path (/opt/homebrew/bin) to PATH
     eval "$(/opt/homebrew/bin/brew shellenv)"
