@@ -162,7 +162,7 @@ hs.hotkey.bind({"cmd", "ctrl"}, ",", moveWindowToBottomCenter)
 function moveWindowToOneScreenEast()
     print("moveWindowToOneScreenEast")
 
-    local destScreenFrame = hs.screen.mainScreen():toWest():frame()
+    local destScreenFrame = hs.screen.mainScreen():toEast():frame()
     local windowFrame = hs.window.focusedWindow():frame()
 
     print("destScreenFrame: " .. destScreenFrame.x, destScreenFrame.y, destScreenFrame.w, destScreenFrame.h)
@@ -244,6 +244,31 @@ function maximizeWindow()
     hs.window.focusedWindow():move(rect)
 end
 hs.hotkey.bind({"cmd", "ctrl"}, "Z", maximizeWindow)
+
+-- Move Twitterrific windows to the top-right corner of the screen
+function foobar()
+    local app = hs.application.applicationsForBundleID("com.iconfactory.Twitterrific5")
+    app[1]:activate()
+
+    local offset = 0
+    for i, window in ipairs(app[1]:visibleWindows()) do
+        hs.printf("Window %d: title: %s standard: %s", i, window:title(), window:isStandard())
+        if window:isStandard() then
+            -- Move the window to top right corner of the screen
+            local screenFrame = window:screen():frame()
+            local windowFrame = window:frame()
+
+            windowFrame.x = screenFrame.x + (screenFrame.w - SWITCHGLASS_OFFSET_X) - windowFrame.w
+            windowFrame.y = screenFrame.y
+            -- windowFrame.x needs to be adjusted
+            windowFrame.x = windowFrame.x - (windowFrame.w * (i - 1))
+            print("windowFrame: " .. windowFrame.x, windowFrame.y, windowFrame.w, windowFrame.h)
+            window:move(windowFrame)
+        end
+    end
+end
+hs.hotkey.bind({"cmd", "ctrl"}, "T", foobar)
+
 
 function applicationWatcher(appName, eventType, appObject)
     print("Calling applicationWatcher ...")
