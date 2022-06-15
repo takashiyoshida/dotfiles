@@ -3,3 +3,4 @@ test
 .DS_Store
 .vscode
 .python-version
+Brewfile.lock.json
