@@ -1,3 +1,5 @@
+# echo "zshrc.zsh"
+
 # Uncomment the following line to debug zsh startup time
 # Reference: https://gist.github.com/elalemanyo/cb3395af64ac23df2e0c3ded8bd63b2f
 #
@@ -91,17 +93,16 @@ fi
 
 source $ZSH/oh-my-zsh.sh
 
-if [ -f /opt/homebrew/etc/profile.d/autojump.sh ]; then
-    source /opt/homebrew/etc/profile.d/autojump.sh
-fi
-
 # Customize to your needs...
 # Load the rest of generic aliases and platform-specific aliases
 source "${DOTFILES}/scripts/peco.zsh"
-
 source "${DOTFILES}/scripts/aliases.zsh"
 # This should be called only after sourcing the ${DOTFILES}/aliases.zsh file
 if [[ "${OSTYPE}" =~ darwin* ]]; then
+    if [ -f /opt/homebrew/etc/profile.d/autojump.sh ]; then
+        source /opt/homebrew/etc/profile.d/autojump.sh
+    fi
+
     if [ -e "${HOME}/.iterm2_shell_integration.zsh" ]; then
         source "${HOME}/.iterm2_shell_integration.zsh"
     fi
