@@ -108,7 +108,7 @@ COMMANDS = {
     0x13: 'PA Command Received',  # 19
     0x14: 'Ready for Live/DVA Announcement',  # 20
     0x15: 'ATAS Version Number',  # 21
-    0x16: 'Request for PA REset',  # 22
+    0x16: 'Request for PA Reset',  # 22
     0x17: 'Audio SW on PA',  # 23
     0x18: 'Train PA Message Completed',  # 24
     0x19: 'ATAS Cyclic Announcement',  # 25
