@@ -3,6 +3,10 @@ SWITCHGLASS_OFFSET_X = 43
 -- iTerm2 window width when it shows 80 columns (this will depend on your iTerm2 profile)
 ITERM2_WINDOW_WIDTH = 665
 
+
+--[[
+printFocusedWindowScreen()
+]]
 function printFocusedWindowScreen()
     local frame = hs.window.focusedWindow():screen():frame()
     local fullFrame = hs.window.focusedWindow():screen():fullFrame()
@@ -11,7 +15,12 @@ function printFocusedWindowScreen()
     print("fullFrame: " .. fullFrame.x, fullFrame.y, fullFrame.w, fullFrame.h)
 end
 
+
+--[[
+moveWindowToTopLeft
+]]
 function moveWindowToTopLeft()
+    print("moveWindowToTopLeft")
     print("Moving the current window to the top left corner of the current screen")
 
     local screenFrame = hs.window.focusedWindow():screen():frame()
@@ -25,6 +34,10 @@ function moveWindowToTopLeft()
 end
 hs.hotkey.bind({"cmd", "ctrl"}, "U", moveWindowToTopLeft)
 
+
+--[[
+moveWindowToTopRight
+]]
 function moveWindowToTopRight()
     print("Moving the current window to the top right corner of the current screen")
 
@@ -39,6 +52,10 @@ function moveWindowToTopRight()
 end
 hs.hotkey.bind({"cmd", "ctrl"}, "O", moveWindowToTopRight)
 
+
+--[[
+moveWindowToBottomLeft
+]]
 function moveWindowToBottomLeft()
     print("Moving the current window to the bottom left corner of the current screen")
 
@@ -54,6 +71,10 @@ function moveWindowToBottomLeft()
 end
 hs.hotkey.bind({"cmd", "ctrl"}, "M", moveWindowToBottomLeft)
 
+
+--[[
+moveWindowToBottomRight
+]]
 function moveWindowToBottomRight()
     print("Moving the current window to the bottom right corner of the current screen")
 
@@ -68,7 +89,10 @@ function moveWindowToBottomRight()
 end
 hs.hotkey.bind({"cmd", "ctrl"}, ".", moveWindowToBottomRight)
 
--- Move the current window to the center of the screen
+
+--[[
+moveWindowToCenter
+]]
 function center_window()
     print("Moving the current window to the center of the main screen ...")
 
@@ -92,6 +116,10 @@ function center_window()
 end
 hs.hotkey.bind({"cmd", "ctrl"}, "K", center_window)
 
+
+--[[
+moveWindowToLeftCenter
+]]
 function moveWindowToLeftCenter()
     print("Moving the current window to the left center of the current screen")
 
@@ -106,6 +134,10 @@ function moveWindowToLeftCenter()
 end
 hs.hotkey.bind({"cmd", "ctrl"}, "J", moveWindowToLeftCenter)
 
+
+--[[
+moveWindowToRightCenter
+]]
 function moveWindowToRightCenter()
     print("Moving the current window to the right center of the current screen")
 
@@ -120,6 +152,10 @@ function moveWindowToRightCenter()
 end
 hs.hotkey.bind({"cmd", "ctrl"}, "L", moveWindowToRightCenter)
 
+
+--[[
+moveWindowToTopCenter
+]]
 function moveWindowToTopCenter()
     print("Moving the current window to the top center of the current screen")
 
@@ -140,6 +176,10 @@ function moveWindowToTopCenter()
 end
 hs.hotkey.bind({"cmd", "ctrl"}, "I", moveWindowToTopCenter)
 
+
+--[[
+moveWindowToBottomCenter
+]]
 function moveWindowToBottomCenter()
     print("Moving the current window to the bottom center of the current screen")
 
@@ -159,6 +199,120 @@ function moveWindowToBottomCenter()
 end
 hs.hotkey.bind({"cmd", "ctrl"}, ",", moveWindowToBottomCenter)
 
+
+--[[
+resizeWindowToTopLeftThird
+]]
+function resizeWindowToTopLeftThird()
+    print("resizeWindowToTopLeftThird")
+
+    local screenFrame = hs.window.focusedWindow():screen():frame()
+    local windowFrame = hs.window.focusedWindow():frame()
+
+    local width = (screenFrame.w - SWITCHGLASS_OFFSET_X) / 3
+    local height = screenFrame.h / 2
+    local rect = hs.geometry.rect(screenFrame.x, screenFrame.y, width, height)
+
+    hs.window.focusedWindow():move(rect)
+end
+hs.hotkey.bind({"ctrl", "alt"}, "U", resizeWindowToTopLeftThird)
+
+
+--[[
+resizeWindowToTopCenterThird
+]]
+function resizeWindowToTopCenterThird()
+    print("resizeWindowToTopCenterThird")
+
+    local screenFrame = hs.window.focusedWindow():screen():frame()
+    local windowFrame = hs.window.focusedWindow():frame()
+
+    local width = (screenFrame.w - SWITCHGLASS_OFFSET_X) / 3
+    local height = screenFrame.h / 2
+    local rect = hs.geometry.rect(screenFrame.x, screenFrame.y, width, height)
+
+    local rect = hs.geometry.rect(width, screenFrame.y, width, height)
+    hs.window.focusedWindow():move(rect)
+end
+hs.hotkey.bind({"ctrl", "alt"}, "I", resizeWindowToTopCenterThird)
+
+
+--[[
+resizeWindowToTopRightThird
+]]
+function resizeWindowToTopRightThird()
+    print("resizeWindowToTopRightThird")
+
+    local screenFrame = hs.window.focusedWindow():screen():frame()
+    local windowFrame = hs.window.focusedWindow():frame()
+
+    local width = (screenFrame.w - SWITCHGLASS_OFFSET_X) / 3
+    local height = screenFrame.h / 2
+    local rect = hs.geometry.rect(screenFrame.x, screenFrame.y, width, height)
+
+    local rect = hs.geometry.rect(width * 2, screenFrame.y, width, height)
+    hs.window.focusedWindow():move(rect)
+end
+hs.hotkey.bind({"ctrl", "alt"}, "O", resizeWindowToTopRightThird)
+
+
+--[[
+resizeWindowToBottomLeftThird
+]]
+function resizeWindowToBottomLeftThird()
+    print("resizeWindowToBottomLeftThird")
+
+    local screenFrame = hs.window.focusedWindow():screen():frame()
+    local windowFrame = hs.window.focusedWindow():frame()
+
+    local width = (screenFrame.w - SWITCHGLASS_OFFSET_X) / 3
+    local height = screenFrame.h / 2
+    local rect = hs.geometry.rect(screenFrame.x, screenFrame.y + height, width, height)
+
+    hs.window.focusedWindow():move(rect)
+end
+hs.hotkey.bind({"ctrl", "alt"}, "M", resizeWindowToBottomLeftThird)
+
+
+--[[
+resizeWindowToBottomCenterThird
+]]
+function resizeWindowToBottomCenterThird()
+    print("moveWindowBottomCenterThird")
+
+    local screenFrame = hs.window.focusedWindow():screen():frame()
+    local windowFrame = hs.window.focusedWindow():frame()
+
+    local width = (screenFrame.w - SWITCHGLASS_OFFSET_X) / 3
+    local height = screenFrame.h / 2
+    local rect = hs.geometry.rect(width, screenFrame.y + height, width, height)
+
+    hs.window.focusedWindow():move(rect)
+end
+hs.hotkey.bind({"ctrl", "alt"}, ",", resizeWindowToBottomCenterThird)
+
+
+--[[
+resizeWindowToBottomRightThird
+]]
+function resizeWindowToBottomRightThird()
+    print("resizeWindowToBottomRightThird")
+
+    local screenFrame = hs.window.focusedWindow():screen():frame()
+    local windowFrame = hs.window.focusedWindow():frame()
+
+    local width = (screenFrame.w - SWITCHGLASS_OFFSET_X) / 3
+    local height = screenFrame.h / 2
+    local rect = hs.geometry.rect(width * 2, screenFrame.y + height, width, height)
+
+    hs.window.focusedWindow():move(rect)
+end
+hs.hotkey.bind({"ctrl", "alt"}, ".", resizeWindowToBottomRightThird)
+
+
+--[[
+moveWindowToOneScreenEast
+]]
 function moveWindowToOneScreenEast()
     print("moveWindowToOneScreenEast")
 
@@ -195,6 +349,10 @@ function moveWindowToOneScreenEast()
 end
 hs.hotkey.bind({"cmd", "ctrl", "shift"}, "L", moveWindowToOneScreenEast)
 
+
+--[[
+moveWindowToOneScreenWest
+]]
 function moveWindowToOneScreenWest()
     print("moveWindowToOneScreenWest")
 
@@ -402,6 +560,7 @@ function resize_browser_window_for_google()
 end
 hs.hotkey.bind({"cmd", "alt", "ctrl"}, "g", resize_browser_window_for_google)
 
+
 function resize_browser_window_for_iterm()
     print("Resizing browser window for iTerm ...")
     if
@@ -418,3 +577,14 @@ function resize_browser_window_for_iterm()
     end
 end
 -- hs.hotkey.bind({"cmd", "alt", "ctrl"}, "t", resize_browser_window_for_iterm)
+
+function test()
+    local frame = hs.screen.mainScreen():frame()
+    local fullFrame = hs.screen.mainScreen():fullFrame()
+
+    local rect = hs.geometry.rect(frame.x, frame.y, 1258.5, 707.5)
+    hs.window.focusedWindow():move(rect)
+end
+hs.hotkey.bind({"cmd", "ctrl"}, "R", test)
+
+
