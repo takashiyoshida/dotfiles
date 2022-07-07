@@ -30,14 +30,17 @@ elif [[ "${OSTYPE}" =~ linux-gnu* ]]; then
     PATH="${PATH}:${HOME}/.gem/ruby/2.5.0/bin"
 fi
 
-if which pyenv > /dev/null; then
+if [[ -x "${HOME}/.pyenv/bin/pyenv" ]]; then
     export PYENV_ROOT="${HOME}/.pyenv"
     export PATH="${PYENV_ROOT}/bin:${PATH}"
     eval "$(pyenv init --path)"
     eval "$(pyenv init -)"
 fi
 
-if which rbenv > /dev/null; then
+if [[ -x "${HOME}/.rbenv/bin/rbenv" ]]; then
+#if which rbenv > /dev/null; then
+    export RBENV_ROOT="${HOME}/.rbenv"
+    export PATH="${RBENV_ROOT}/bin:${PATH}"
     eval "$(rbenv init -)"
 fi
 
