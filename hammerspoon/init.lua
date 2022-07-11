@@ -1,3 +1,5 @@
+require "window"
+
 -- Offset to ensure that window is not covered by the SwitchGlass application switcher
 SWITCHGLASS_OFFSET_X = 43
 -- iTerm2 window width when it shows 80 columns (this will depend on your iTerm2 profile)
@@ -316,6 +318,11 @@ moveWindowToOneScreenEast
 function moveWindowToOneScreenEast()
     print("moveWindowToOneScreenEast")
 
+    if hs.screen.mainScreen():toEast() == nil then
+        print("There are no screens on the right")
+        return
+    end
+
     local destScreenFrame = hs.screen.mainScreen():toEast():frame()
     local windowFrame = hs.window.focusedWindow():frame()
 
@@ -355,6 +362,11 @@ moveWindowToOneScreenWest
 ]]
 function moveWindowToOneScreenWest()
     print("moveWindowToOneScreenWest")
+
+    if hs.screen.mainScreen():toWest() == nil then
+        print("There are no screens on the left")
+        return
+    end
 
     local destScreenFrame = hs.screen.mainScreen():toWest():frame()
     local windowFrame = hs.window.focusedWindow():frame()
