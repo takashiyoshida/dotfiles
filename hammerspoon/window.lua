@@ -9,13 +9,27 @@ function winresize(how)
     logger.df("how: %s", how)
 
     if how == "left" then
-        newrect = hs.layout.left50
+        local frame = screenFrameWithSwitchGlass()
+        frame.w = frame.w / 2
+        newrect = frame
     elseif how == "right" then
-        newrect = hs.layout.right50
+        local frame = screenFrameWithSwitchGlass()
+        frame.x = frame.w / 2 + frame.x
+        frame.w = frame.w / 2
+        newrect = frame
     elseif how == "up" then
-        newrect = {0, 0, 1, 0.5}
+        -- newrect = {0, 0, 1, 0.5}
+        local frame = screenFrameWithSwitchGlass()
+        frame.h = frame.h / 2
+        logger.df("frame: %s", frame)
+        newrect = frame
     elseif how == "down" then
-        newrect = {0, 0.5, 1, 0.5}
+        -- newrect = {0, 0.5, 1, 0.5}
+        local frame = screenFrameWithSwitchGlass()
+        frame.y = frame.h / 2 + frame.y
+        frame.h = frame.h / 2
+        logger.df("frame: %s", frame)
+        newrect = frame
     elseif how == "max" then
         -- I don't like this but it actually makes the window in a full-screen mode
         newrect = hs.layout.maximized
@@ -98,13 +112,14 @@ function down_third()
     end
 end
 
+--[[
+Returns a screen frame without SWITCHGLASS dock
+]]
 function screenFrameWithSwitchGlass()
     local fullFrame = hs.window.focusedWindow():screen():fullFrame()
-    local frame = hs.window.focusedWindow():screen():frame()
-
     logger.df("fullFrame: %s", fullFrame)
-    logger.df("frame: %s", frame)
 
+    local frame = hs.window.focusedWindow():screen():frame()
     frame.w = frame.w - SWITCHGLASS_OFFSET_X
     logger.df("frame: %s", frame)
 
@@ -117,8 +132,7 @@ moveWindowToTopLeft
 function moveWindowToTopLeft()
     logger.df("Moving the current window to the top left corner of the current screen")
 
-    -- Take note of the menu bar and also the dock
-    local screenFrame = screenFrameWithSwitchGlass() -- hs.window.focusedWindow():screen():frame()
+    local screenFrame = screenFrameWithSwitchGlass()
     local windowFrame = hs.window.focusedWindow():frame()
 
     windowFrame.x = screenFrame.x
@@ -134,7 +148,7 @@ moveWindowToTopCenter
 function moveWindowToTopCenter()
     logger.df("Moving the current window to the top center of the current screen")
 
-    local screenFrame = screenFrameWithSwitchGlass() -- hs.window.focusedWindow():screen():frame()
+    local screenFrame = screenFrameWithSwitchGlass()
     local windowFrame = hs.window.focusedWindow():frame()
 
     logger.df("screenFrame: %s", screenFrame)
@@ -153,7 +167,7 @@ moveWindowToTopRight
 function moveWindowToTopRight()
     logger.df("Moving the current window to the top right corner of the current screen")
 
-    local screenFrame = screenFrameWithSwitchGlass() -- hs.window.focusedWindow():screen():frame()
+    local screenFrame = screenFrameWithSwitchGlass()
     local windowFrame = hs.window.focusedWindow():frame()
 
     windowFrame.x = screenFrame.x + (screenFrame.w - windowFrame.w)
@@ -164,12 +178,12 @@ function moveWindowToTopRight()
 end
 
 --[[
-moveWindowToLeftCenter
+moveWindowToMiddleLeft
 ]]
-function moveWindowToLeftCenter()
-    print("Moving the current window to the left center of the current screen")
+function moveWindowToMiddleLeft()
+    print("Moving the current window to the middle left of the current screen")
 
-    local screenFrame = screenFrameWithSwitchGlass() -- hs.window.focusedWindow():screen():frame()
+    local screenFrame = screenFrameWithSwitchGlass()
     local windowFrame = hs.window.focusedWindow():frame()
 
     windowFrame.x = screenFrame.x
@@ -180,12 +194,12 @@ function moveWindowToLeftCenter()
 end
 
 --[[
-moveWindowToCenter
+moveWindowToMiddleCenter
 ]]
-function moveWindowToCenter()
-    logger.df("Moving the current window to the center of the main screen ...")
+function moveWindowToMiddleCenter()
+    logger.df("Moving the current window to the middle center of the main screen ...")
 
-    local screenFrame = screenFrameWithSwitchGlass() -- hs.window.focusedWindow():screen():frame()
+    local screenFrame = screenFrameWithSwitchGlass()
     local windowFrame = hs.window.focusedWindow():frame()
 
     logger.df("screenFrame: %s", screenFrame)
@@ -199,12 +213,12 @@ function moveWindowToCenter()
 end
 
 --[[
-moveWindowToRightCenter
+moveWindowToMiddleRight
 ]]
-function moveWindowToRightCenter()
-    logger.df("Moving the current window to the right center of the current screen")
+function moveWindowToMiddleRight()
+    logger.df("Moving the current window to the middle right of the current screen")
 
-    local screenFrame = screenFrameWithSwitchGlass() --hs.window.focusedWindow():screen():frame()
+    local screenFrame = screenFrameWithSwitchGlass()
     local windowFrame = hs.window.focusedWindow():frame()
 
     windowFrame.x = screenFrame.x + (screenFrame.w - windowFrame.w)
@@ -221,7 +235,7 @@ function moveWindowToBottomLeft()
     logger.df("Moving the current window to the bottom left corner of the current screen")
 
     local screenFullFrame = hs.window.focusedWindow():screen():fullFrame()
-    local screenFrame = screenFrameWithSwitchGlass() --hs.window.focusedWindow():screen():frame()
+    local screenFrame = screenFrameWithSwitchGlass()
     local windowFrame = hs.window.focusedWindow():frame()
 
     windowFrame.x = screenFrame.x
@@ -238,7 +252,7 @@ function moveWindowToBottomCenter()
     print("Moving the current window to the bottom center of the current screen")
 
     local screenFullFrame = hs.window.focusedWindow():screen():fullFrame()
-    local screenFrame = screenFrameWithSwitchGlass() -- hs.window.focusedWindow():screen():frame()
+    local screenFrame = screenFrameWithSwitchGlass()
     local windowFrame = hs.window.focusedWindow():frame()
 
     windowFrame.x = (screenFrame.w / 2) - (windowFrame.w / 2) + screenFrame.x
@@ -455,9 +469,6 @@ function maximizeWindow()
     logger.df("Maximizing the current window ...")
     logger.df("frame: %s", frame)
     logger.df("fullFrame: %s", fullFrame)
-    -- print("Maximizing the current window ...")
-    -- print("frame: " .. frame.x, frame.y, frame.w, frame.h)
-    -- print("fullFrame: " .. fullFrame.x, fullFrame.y, fullFrame.w, fullFrame.h)
 
     -- Ensure that the maximized window is not covered by the SwitchGlass application switcher
     local rect = hs.geometry.rect(frame.x, frame.y, frame.w - SWITCHGLASS_OFFSET_X, frame.h)
@@ -500,9 +511,9 @@ hs.hotkey.bind({"cmd", "ctrl"}, "U", moveWindowToTopLeft)
 hs.hotkey.bind({"cmd", "ctrl"}, "I", moveWindowToTopCenter)
 hs.hotkey.bind({"cmd", "ctrl"}, "O", moveWindowToTopRight)
 
-hs.hotkey.bind({"cmd", "ctrl"}, "J", moveWindowToLeftCenter)
-hs.hotkey.bind({"cmd", "ctrl"}, "K", moveWindowToCenter)
-hs.hotkey.bind({"cmd", "ctrl"}, "L", moveWindowToRightCenter)
+hs.hotkey.bind({"cmd", "ctrl"}, "J", moveWindowToMiddleLeft)
+hs.hotkey.bind({"cmd", "ctrl"}, "K", moveWindowToMiddleCenter)
+hs.hotkey.bind({"cmd", "ctrl"}, "L", moveWindowToMiddleRight)
 
 hs.hotkey.bind({"cmd", "ctrl"}, "M", moveWindowToBottomLeft)
 hs.hotkey.bind({"cmd", "ctrl"}, ".", moveWindowToBottomRight)
