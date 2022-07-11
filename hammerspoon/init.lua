@@ -34,8 +34,6 @@ function moveWindowToTopLeft()
     print("windowFrame: " .. windowFrame.x, windowFrame.y, windowFrame.w, windowFrame.h)
     hs.window.focusedWindow():move(windowFrame)
 end
-hs.hotkey.bind({"cmd", "ctrl"}, "U", moveWindowToTopLeft)
-
 
 --[[
 moveWindowToTopRight
@@ -52,8 +50,6 @@ function moveWindowToTopRight()
     print("windowFrame: " .. windowFrame.x, windowFrame.y, windowFrame.w, windowFrame.h)
     hs.window.focusedWindow():move(windowFrame)
 end
-hs.hotkey.bind({"cmd", "ctrl"}, "O", moveWindowToTopRight)
-
 
 --[[
 moveWindowToBottomLeft
@@ -71,8 +67,6 @@ function moveWindowToBottomLeft()
     print("windowFrame: " .. windowFrame.x, windowFrame.y, windowFrame.w, windowFrame.h)
     hs.window.focusedWindow():move(windowFrame)
 end
-hs.hotkey.bind({"cmd", "ctrl"}, "M", moveWindowToBottomLeft)
-
 
 --[[
 moveWindowToBottomRight
@@ -89,8 +83,6 @@ function moveWindowToBottomRight()
     print("windowFrame: " .. windowFrame.x, windowFrame.y, windowFrame.w, windowFrame.h)
     hs.window.focusedWindow():move(windowFrame)
 end
-hs.hotkey.bind({"cmd", "ctrl"}, ".", moveWindowToBottomRight)
-
 
 --[[
 moveWindowToCenter
@@ -116,8 +108,6 @@ function center_window()
         window:centerOnScreen()
     end
 end
-hs.hotkey.bind({"cmd", "ctrl"}, "K", center_window)
-
 
 --[[
 moveWindowToLeftCenter
@@ -134,8 +124,6 @@ function moveWindowToLeftCenter()
     print("windowFrame: " .. windowFrame.x, windowFrame.y, windowFrame.w, windowFrame.h)
     hs.window.focusedWindow():move(windowFrame)
 end
-hs.hotkey.bind({"cmd", "ctrl"}, "J", moveWindowToLeftCenter)
-
 
 --[[
 moveWindowToRightCenter
@@ -152,8 +140,6 @@ function moveWindowToRightCenter()
     print("windowFrame: " .. windowFrame.x, windowFrame.y, windowFrame.w, windowFrame.h)
     hs.window.focusedWindow():move(windowFrame)
 end
-hs.hotkey.bind({"cmd", "ctrl"}, "L", moveWindowToRightCenter)
-
 
 --[[
 moveWindowToTopCenter
@@ -176,8 +162,6 @@ function moveWindowToTopCenter()
     print("windowFrame: " .. windowFrame.x, windowFrame.y, windowFrame.w, windowFrame.h)
     hs.window.focusedWindow():move(windowFrame)
 end
-hs.hotkey.bind({"cmd", "ctrl"}, "I", moveWindowToTopCenter)
-
 
 --[[
 moveWindowToBottomCenter
@@ -199,7 +183,6 @@ function moveWindowToBottomCenter()
     print("windowFrame: " .. windowFrame.x, windowFrame.y, windowFrame.w, windowFrame.h)
     hs.window.focusedWindow():move(windowFrame)
 end
-hs.hotkey.bind({"cmd", "ctrl"}, ",", moveWindowToBottomCenter)
 
 
 --[[
@@ -217,7 +200,6 @@ function resizeWindowToTopLeftThird()
 
     hs.window.focusedWindow():move(rect)
 end
-hs.hotkey.bind({"ctrl", "alt"}, "U", resizeWindowToTopLeftThird)
 
 
 --[[
@@ -236,8 +218,6 @@ function resizeWindowToTopCenterThird()
     local rect = hs.geometry.rect(width, screenFrame.y, width, height)
     hs.window.focusedWindow():move(rect)
 end
-hs.hotkey.bind({"ctrl", "alt"}, "I", resizeWindowToTopCenterThird)
-
 
 --[[
 resizeWindowToTopRightThird
@@ -255,8 +235,6 @@ function resizeWindowToTopRightThird()
     local rect = hs.geometry.rect(width * 2, screenFrame.y, width, height)
     hs.window.focusedWindow():move(rect)
 end
-hs.hotkey.bind({"ctrl", "alt"}, "O", resizeWindowToTopRightThird)
-
 
 --[[
 resizeWindowToBottomLeftThird
@@ -273,7 +251,6 @@ function resizeWindowToBottomLeftThird()
 
     hs.window.focusedWindow():move(rect)
 end
-hs.hotkey.bind({"ctrl", "alt"}, "M", resizeWindowToBottomLeftThird)
 
 
 --[[
@@ -291,7 +268,6 @@ function resizeWindowToBottomCenterThird()
 
     hs.window.focusedWindow():move(rect)
 end
-hs.hotkey.bind({"ctrl", "alt"}, ",", resizeWindowToBottomCenterThird)
 
 
 --[[
@@ -309,8 +285,6 @@ function resizeWindowToBottomRightThird()
 
     hs.window.focusedWindow():move(rect)
 end
-hs.hotkey.bind({"ctrl", "alt"}, ".", resizeWindowToBottomRightThird)
-
 
 --[[
 moveWindowToOneScreenEast
@@ -354,8 +328,6 @@ function moveWindowToOneScreenEast()
         end
     end
 end
-hs.hotkey.bind({"cmd", "ctrl", "shift"}, "L", moveWindowToOneScreenEast)
-
 
 --[[
 moveWindowToOneScreenWest
@@ -399,7 +371,6 @@ function moveWindowToOneScreenWest()
         end
     end
 end
-hs.hotkey.bind({"cmd", "ctrl", "shift"}, "J", moveWindowToOneScreenWest)
 
 function maximizeWindow()
     local frame = hs.screen.mainScreen():frame()
@@ -413,7 +384,6 @@ function maximizeWindow()
     local rect = hs.geometry.rect(frame.x, frame.y, frame.w - SWITCHGLASS_OFFSET_X, frame.h)
     hs.window.focusedWindow():move(rect)
 end
-hs.hotkey.bind({"cmd", "ctrl"}, "Z", maximizeWindow)
 
 -- Move Twitterrific windows to the top-right corner of the screen
 function foobar()
@@ -437,7 +407,6 @@ function foobar()
         end
     end
 end
-hs.hotkey.bind({"cmd", "ctrl"}, "T", foobar)
 
 
 function applicationWatcher(appName, eventType, appObject)
@@ -486,7 +455,6 @@ function gather_windows()
         win:centerOnScreen()
     end
 end
--- hs.hotkey.bind({'cmd', 'alt', 'ctrl'}, 'g', gather_windows)
 
 -- Extend the height of the current window to the bottom of the screen
 function extend_window_vertically()
@@ -498,7 +466,6 @@ function extend_window_vertically()
     size.h = screenFrame.h
     win:setSize(size)
 end
-hs.hotkey.bind({"cmd", "alt", "ctrl"}, "v", extend_window_vertically)
 
 -- Cascade all windows of the current application
 function cascade_windows()
@@ -547,7 +514,6 @@ function cascade_windows()
         end
     end
 end
-hs.hotkey.bind({"cmd", "alt", "ctrl"}, "space", cascade_windows)
 
 function resize_browser_window_for_google()
     print("Resizing browser window for Google search page ...")
@@ -570,8 +536,6 @@ function resize_browser_window_for_google()
         win:move(frame)
     end
 end
-hs.hotkey.bind({"cmd", "alt", "ctrl"}, "g", resize_browser_window_for_google)
-
 
 function resize_browser_window_for_iterm()
     print("Resizing browser window for iTerm ...")
@@ -588,7 +552,6 @@ function resize_browser_window_for_iterm()
         win:move(frame)
     end
 end
--- hs.hotkey.bind({"cmd", "alt", "ctrl"}, "t", resize_browser_window_for_iterm)
 
 function test()
     local frame = hs.screen.mainScreen():frame()
@@ -597,6 +560,29 @@ function test()
     local rect = hs.geometry.rect(frame.x, frame.y, 1258.5, 707.5)
     hs.window.focusedWindow():move(rect)
 end
+
+hs.hotkey.bind({"cmd", "ctrl"}, "U", moveWindowToTopLeft)
+hs.hotkey.bind({"cmd", "ctrl"}, "O", moveWindowToTopRight)
+hs.hotkey.bind({"cmd", "ctrl"}, "M", moveWindowToBottomLeft)
+hs.hotkey.bind({"cmd", "ctrl"}, ".", moveWindowToBottomRight)
+hs.hotkey.bind({"cmd", "ctrl"}, "K", center_window)
+hs.hotkey.bind({"cmd", "ctrl"}, "J", moveWindowToLeftCenter)
+hs.hotkey.bind({"cmd", "ctrl"}, "L", moveWindowToRightCenter)
+hs.hotkey.bind({"cmd", "ctrl"}, "I", moveWindowToTopCenter)
+hs.hotkey.bind({"cmd", "ctrl"}, ",", moveWindowToBottomCenter)
+-- hs.hotkey.bind({"ctrl", "alt"}, "U", resizeWindowToTopLeftThird)
+-- hs.hotkey.bind({"ctrl", "alt"}, "I", resizeWindowToTopCenterThird)
+-- hs.hotkey.bind({"ctrl", "alt"}, "O", resizeWindowToTopRightThird)
+-- hs.hotkey.bind({"ctrl", "alt"}, "M", resizeWindowToBottomLeftThird)
+-- hs.hotkey.bind({"ctrl", "alt"}, ",", resizeWindowToBottomCenterThird)
+-- hs.hotkey.bind({"ctrl", "alt"}, ".", resizeWindowToBottomRightThird)
+hs.hotkey.bind({"cmd", "ctrl", "shift"}, "L", moveWindowToOneScreenEast)
+hs.hotkey.bind({"cmd", "ctrl", "shift"}, "J", moveWindowToOneScreenWest)
+hs.hotkey.bind({"cmd", "ctrl"}, "Z", maximizeWindow)
+hs.hotkey.bind({"cmd", "ctrl"}, "T", foobar)
+-- hs.hotkey.bind({'cmd', 'alt', 'ctrl'}, 'g', gather_windows)
+hs.hotkey.bind({"cmd", "alt", "ctrl"}, "v", extend_window_vertically)
+hs.hotkey.bind({"cmd", "alt", "ctrl"}, "space", cascade_windows)
+hs.hotkey.bind({"cmd", "alt", "ctrl"}, "g", resize_browser_window_for_google)
+-- hs.hotkey.bind({"cmd", "alt", "ctrl"}, "t", resize_browser_window_for_iterm)
 hs.hotkey.bind({"cmd", "ctrl"}, "R", test)
-
-
