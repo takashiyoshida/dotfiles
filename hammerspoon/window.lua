@@ -1,12 +1,16 @@
 local logger = hs.logger.new("windows", "debug")
 
-function winresize(how)
+--[[
+    resizeWindow
+]]
+function resizeWindow(how)
+    logger.df("resizeWindow -- begin")
+    logger.df("resizeWindow -- how: %s", how)
+
     local win = hs.window.focusedWindow()
     local app = win:application():name()
-    local windowLayout
+    -- local windowLayout
     local newrect
-
-    logger.df("how: %s", how)
 
     if how == "left" then
         local frame = screenFrameWithSwitchGlass()
@@ -30,9 +34,9 @@ function winresize(how)
         frame.h = frame.h / 2
         logger.df("frame: %s", frame)
         newrect = frame
-    elseif how == "max" then
-        -- I don't like this but it actually makes the window in a full-screen mode
-        newrect = hs.layout.maximized
+    -- elseif how == "max" then
+    --     -- I don't like this but it actually makes the window in a full-screen mode
+    --     newrect = hs.layout.maximized
     elseif how == "left_third" or how == "hthird-0" then
         newrect = {0, 0, 1/3, 1}
     elseif how == "middle_third_h" or how == "hthird-1" then
@@ -48,86 +52,130 @@ function winresize(how)
     end
 
     win:move(newrect)
+    logger.df("resizeWindow -- end")
 end
 
+--[[
+    get_horizontal_third
+]]
 function get_horizontal_third(win)
+    logger.df("get_horizontal_third -- begin")
+
     local frame = win:frame()
     local screenFrame = win:screen():frame()
     local relFrame = hs.geometry(frame.x - screenFrame.x, frame.y - screenFrame.y, frame.w, frame.h)
+
+    logger.df("get_horizontal_third -- screenFrame: %.1f, %.1f, %.1f, %.1f", screenFrame.x, screenFrame.y, screenFrame.w, screenFrame.h)
+    logger.df("get_horizontal_third -- frame: %.1f, %.1f, %.1f, %.1f", frame.x, frame.y, frame.w, frame.h)
+    logger.df("get_horizontal_third -- relFrame: %.1f, %.1f, %.1f, %.1f", relFrame.x, relFrame.y, relFrame.w, relFrame.h)
+
     local third = math.floor(3.01 * relFrame.x / screenFrame.w)
+    logger.df("get_horizontal_third -- third: %d", third)
+    logger.df("get_horizontal_third -- end")
 
-    logger.df("Screen frame: %s", screenFrame)
-    logger.df("Window frame: %s, relFrame %s is in horizontal third %d", frame, relFrame, third)
     return third
 end
 
+--[[
+    get_vertical_third
+]]
 function get_vertical_third(win)
+    logger.df("get_vertical_third -- begin")
+
     local frame = win:frame()
     local screenFrame = win:screen():frame()
     local relFrame = hs.geometry(frame.x - screenFrame.x, frame.y - screenFrame.y, frame.w, frame.h)
-    local third = math.floor(3.01 * relFrame.y / screenFrame.h)
 
-    logger.df("Screen frame: %s", screenFrame)
-    logger.df("Window frame: %s, relFrame %s is in vertical third %d", frame, relFrame, third)
+    logger.df("get_vertical_third -- screenFrame: %.1f, %.1f, %.1f, %.1f", screenFrame.x, screenFrame.y, screenFrame.w, screenFrame.h)
+    logger.df("get_vertical_third -- frame: %.1f, %.1f, %.1f, %.1f", frame.x, frame.y, frame.w, frame.h)
+    logger.df("get_vertical_third -- relFrame: %.1f, %.1f, %.1f, %.1f", relFrame.x, relFrame.y, relFrame.w, relFrame.h)
+
+    local third = math.floor(3.01 * relFrame.y / screenFrame.h)
+    logger.df("get_vertical_third -- third: %d", third)
+    logger.df("get_vertical_third -- end")
+
     return third
 end
 
+--[[
+    left_third
+]]
 function left_third()
     local win = hs.window.focusedWindow()
     local third = get_horizontal_third(win)
     if third == 0 then
-        winresize("hthird-0")
+        resizeWindow("hthird-0")
     else
-        winresize("hthird-" .. (third - 1))
-    end
-end
-
-function right_third()
-    local win = hs.window.focusedWindow()
-    local third = get_horizontal_third(win)
-    if third == 2 then
-        winresize("hthird-2")
-    else
-        winresize("hthird-" .. (third + 1))
-    end
-end
-
-function up_third()
-    local win = hs.window.focusedWindow()
-    local third = get_vertical_third(win)
-    if third == 0 then
-        winresize("vthird-0")
-    else
-        winresize("vthird-" .. (third - 1))
-    end
-end
-
-function down_third()
-    local win = hs.window.focusedWindow()
-    local third = get_vertical_third(win)
-    if third == 2 then
-        winresize("vthird-2")
-    else
-        winresize("vthird-" .. (third + 1))
+        resizeWindow("hthird-" .. (third - 1))
     end
 end
 
 --[[
-Returns a screen frame without SWITCHGLASS dock
+    right_third
+]]
+function right_third()
+    local win = hs.window.focusedWindow()
+    local third = get_horizontal_third(win)
+    if third == 2 then
+        resizeWindow("hthird-2")
+    else
+        resizeWindow("hthird-" .. (third + 1))
+    end
+end
+
+--[[
+    up_third
+]]
+function up_third()
+    logger.df("up_third -- begin")
+
+    local win = hs.window.focusedWindow()
+    local third = get_vertical_third(win)
+
+    logger.df("up_third -- third: %d", third)
+    if third == 0 then
+        resizeWindow("vthird-0")
+    else
+        resizeWindow("vthird-" .. (third - 1))
+    end
+    logger.df("up_third -- end")
+end
+
+--[[
+    down_third
+]]
+function down_third()
+    logger.df("down_third -- begin")
+
+    local win = hs.window.focusedWindow()
+    local third = get_vertical_third(win)
+
+    logger.df("down_third -- third: %d", third)
+    if third == 2 then
+        resizeWindow("vthird-2")
+    else
+        resizeWindow("vthird-" .. (third + 1))
+    end
+    logger.df("down_third -- end")
+end
+
+--[[
+    screenFrameWithSwitchGlass
+    Returns a screen frame without SWITCHGLASS dock
 ]]
 function screenFrameWithSwitchGlass()
     local fullFrame = hs.window.focusedWindow():screen():fullFrame()
-    logger.df("fullFrame: %s", fullFrame)
+    logger.df("fullFrame: %.1f, %.1f, %.1f, %.1f", fullFrame.x, fullFrame.y, fullFrame.w, fullFrame.h)
 
     local frame = hs.window.focusedWindow():screen():frame()
     frame.w = frame.w - SWITCHGLASS_OFFSET_X
-    logger.df("frame: %s", frame)
+    logger.df("frame: %.1f, %.1f, %.1f, %.1f", frame.x, frame.y, frame.w, frame.h)
 
     return frame
 end
 
 --[[
-moveWindowToTopLeft
+    moveWindowToTopLeft
 ]]
 function moveWindowToTopLeft()
     logger.df("Moving the current window to the top left corner of the current screen")
@@ -138,12 +186,12 @@ function moveWindowToTopLeft()
     windowFrame.x = screenFrame.x
     windowFrame.y = screenFrame.y
 
-    logger.df("windowFrame: %s", windowFrame)
+    logger.df("windowFrame: %.1f, %.1f, %.1f, %.1f", windowFrame.x, windowFrame.y, windowFrame.w, windowFrame.h)
     hs.window.focusedWindow():move(windowFrame)
 end
 
 --[[
-moveWindowToTopCenter
+    moveWindowToTopCenter
 ]]
 function moveWindowToTopCenter()
     logger.df("Moving the current window to the top center of the current screen")
@@ -151,18 +199,17 @@ function moveWindowToTopCenter()
     local screenFrame = screenFrameWithSwitchGlass()
     local windowFrame = hs.window.focusedWindow():frame()
 
-    logger.df("screenFrame: %s", screenFrame)
-    logger.df("windowFrame: %s", windowFrame)
+    logger.df("screenFrame: %.1f, %.1f, %.1f, %.1f", screenFrame.x, screenFrame.y, screenFrame.w, screenFrame.h)
 
     windowFrame.x = (screenFrame.w / 2) - (windowFrame.w / 2) + screenFrame.x
     windowFrame.y = screenFrame.y
 
-    logger.df("windowFrame: %s", windowFrame)
+    logger.df("windowFrame: %.1f, %.1f, %.1f, %.1f", windowFrame.x, windowFrame.y, windowFrame.w, windowFrame.h)
     hs.window.focusedWindow():move(windowFrame)
 end
 
 --[[
-moveWindowToTopRight
+    moveWindowToTopRight
 ]]
 function moveWindowToTopRight()
     logger.df("Moving the current window to the top right corner of the current screen")
@@ -173,15 +220,15 @@ function moveWindowToTopRight()
     windowFrame.x = screenFrame.x + (screenFrame.w - windowFrame.w)
     windowFrame.y = screenFrame.y
 
-    logger.df("windowFrame: %s", windowFrame)
+    logger.df("windowFrame: %.1f, %.1f, %.1f, %.1f", windowFrame.x, windowFrame.y, windowFrame.w, windowFrame.h)
     hs.window.focusedWindow():move(windowFrame)
 end
 
 --[[
-moveWindowToMiddleLeft
+    moveWindowToMiddleLeft
 ]]
 function moveWindowToMiddleLeft()
-    print("Moving the current window to the middle left of the current screen")
+    logger.df("Moving the current window to the middle left of the current screen")
 
     local screenFrame = screenFrameWithSwitchGlass()
     local windowFrame = hs.window.focusedWindow():frame()
@@ -189,12 +236,12 @@ function moveWindowToMiddleLeft()
     windowFrame.x = screenFrame.x
     windowFrame.y = screenFrame.y + (screenFrame.h - windowFrame.h) / 2
 
-    print("windowFrame: " .. windowFrame.x, windowFrame.y, windowFrame.w, windowFrame.h)
+    logger.df("windowFrame: %.1f, %.1f, %.1f, %.1f", windowFrame.x, windowFrame.y, windowFrame.w, windowFrame.h)
     hs.window.focusedWindow():move(windowFrame)
 end
 
 --[[
-moveWindowToMiddleCenter
+    moveWindowToMiddleCenter
 ]]
 function moveWindowToMiddleCenter()
     logger.df("Moving the current window to the middle center of the main screen ...")
@@ -202,18 +249,17 @@ function moveWindowToMiddleCenter()
     local screenFrame = screenFrameWithSwitchGlass()
     local windowFrame = hs.window.focusedWindow():frame()
 
-    logger.df("screenFrame: %s", screenFrame)
-    logger.df("windowFrame: %s", windowFrame)
+    logger.df("screenFrame: %.1f, %.1f, %.1f, %.1f", screenFrame.x, screenFrame.y, screenFrame.w, screenFrame.h)
 
     windowFrame.x = (screenFrame.w / 2) - (windowFrame.w / 2) + (screenFrame.x)
     windowFrame.y = screenFrame.y + (screenFrame.h - windowFrame.h) / 2
 
-    logger.df("windowFrame: %s", windowFrame)
+    logger.df("windowFrame: %.1f, %.1f, %.1f, %.1f", windowFrame.x, windowFrame.y, windowFrame.w, windowFrame.h)
     hs.window.focusedWindow():move(windowFrame)
 end
 
 --[[
-moveWindowToMiddleRight
+    moveWindowToMiddleRight
 ]]
 function moveWindowToMiddleRight()
     logger.df("Moving the current window to the middle right of the current screen")
@@ -224,12 +270,12 @@ function moveWindowToMiddleRight()
     windowFrame.x = screenFrame.x + (screenFrame.w - windowFrame.w)
     windowFrame.y = screenFrame.y + (screenFrame.h - windowFrame.h) / 2
 
-    logger.df("windowFrame: %s", windowFrame)
+    logger.df("windowFrame: %.1f, %.1f, %.1f, %.1f", windowFrame.x, windowFrame.y, windowFrame.w, windowFrame.h)
     hs.window.focusedWindow():move(windowFrame)
 end
 
 --[[
-moveWindowToBottomLeft
+    moveWindowToBottomLeft
 ]]
 function moveWindowToBottomLeft()
     logger.df("Moving the current window to the bottom left corner of the current screen")
@@ -241,15 +287,15 @@ function moveWindowToBottomLeft()
     windowFrame.x = screenFrame.x
     windowFrame.y = screenFullFrame.h - windowFrame.h
 
-    logger.df("windowFrame: %s", windowFrame)
+    logger.df("windowFrame: %.1f, %.1f, %.1f, %.1f", windowFrame.x, windowFrame.y, windowFrame.w, windowFrame.h)
     hs.window.focusedWindow():move(windowFrame)
 end
 
 --[[
-moveWindowToBottomCenter
+    moveWindowToBottomCenter
 ]]
 function moveWindowToBottomCenter()
-    print("Moving the current window to the bottom center of the current screen")
+    logger.df("Moving the current window to the bottom center of the current screen")
 
     local screenFullFrame = hs.window.focusedWindow():screen():fullFrame()
     local screenFrame = screenFrameWithSwitchGlass()
@@ -258,12 +304,12 @@ function moveWindowToBottomCenter()
     windowFrame.x = (screenFrame.w / 2) - (windowFrame.w / 2) + screenFrame.x
     windowFrame.y = screenFullFrame.h - windowFrame.h
 
-    logger.df("windowFrame: %s", windowFrame)
+    logger.df("windowFrame: %.1f, %.1f, %.1f, %.1f", windowFrame.x, windowFrame.y, windowFrame.w, windowFrame.h)
     hs.window.focusedWindow():move(windowFrame)
 end
 
 --[[
-moveWindowToBottomRight
+    moveWindowToBottomRight
 ]]
 function moveWindowToBottomRight()
     logger.df("Moving the current window to the bottom right corner of the current screen")
@@ -274,124 +320,154 @@ function moveWindowToBottomRight()
     windowFrame.x = screenFullFrame.x + (screenFullFrame.w - SWITCHGLASS_OFFSET_X) - windowFrame.w
     windowFrame.y = screenFullFrame.h - windowFrame.h
 
-    logger.df("windowFrame: %s", windowFrame)
+    logger.df("windowFrame: %.1f, %.1f, %.1f, %.1f", windowFrame.x, windowFrame.y, windowFrame.w, windowFrame.h)
     hs.window.focusedWindow():move(windowFrame)
 end
 
 --[[
-resizeWindowToTopLeftThird
+    resizeWindowToTopLeftThird
 ]]
 function resizeWindowToTopLeftThird()
-    print("resizeWindowToTopLeftThird")
+    logger.df("resizeWindowToTopLeftThird")
 
     local screenFrame = hs.window.focusedWindow():screen():frame()
     local windowFrame = hs.window.focusedWindow():frame()
 
+    logger.df("screenFrame: %.1f, %.1f, %.1f, %.1f", screenFrame.x, screenFrame.y, screenFrame.w, screenFrame.h)
+    logger.df("windowFrame: %.1f, %.1f, %.1f, %.1f", windowFrame.x, windowFrame.y, windowFrame.w, windowFrame.h)
+
     local width = (screenFrame.w - SWITCHGLASS_OFFSET_X) / 3
     local height = screenFrame.h / 2
+
     local rect = hs.geometry.rect(screenFrame.x, screenFrame.y, width, height)
+    logger.df("rect: %.1f, %.1f, %.1f, %.1f", rect.x, rect.y, rect.w, rect.h)
 
     hs.window.focusedWindow():move(rect)
 end
 
 --[[
-resizeWindowToTopCenterThird
+    resizeWindowToTopCenterThird
 ]]
 function resizeWindowToTopCenterThird()
-    print("resizeWindowToTopCenterThird")
+    logger.df("resizeWindowToTopCenterThird")
 
     local screenFrame = hs.window.focusedWindow():screen():frame()
     local windowFrame = hs.window.focusedWindow():frame()
 
+    logger.df("screenFrame: %.1f, %.1f, %.1f, %.1f", screenFrame.x, screenFrame.y, screenFrame.w, screenFrame.h)
+    logger.df("windowFrame: %.1f, %.1f, %.1f, %.1f", windowFrame.x, windowFrame.y, windowFrame.w, windowFrame.h)
+
     local width = (screenFrame.w - SWITCHGLASS_OFFSET_X) / 3
     local height = screenFrame.h / 2
-    local rect = hs.geometry.rect(screenFrame.x, screenFrame.y, width, height)
 
+    local rect = hs.geometry.rect(screenFrame.x, screenFrame.y, width, height)
     local rect = hs.geometry.rect(width, screenFrame.y, width, height)
+    logger.df("rect: %.1f, %.1f, %.1f, %.1f", rect.x, rect.y, rect.w, rect.h)
+
     hs.window.focusedWindow():move(rect)
 end
 
 --[[
-resizeWindowToTopRightThird
+    resizeWindowToTopRightThird
 ]]
 function resizeWindowToTopRightThird()
-    print("resizeWindowToTopRightThird")
+    logger.df("resizeWindowToTopRightThird")
 
     local screenFrame = hs.window.focusedWindow():screen():frame()
     local windowFrame = hs.window.focusedWindow():frame()
 
+    logger.df("screenFrame: %.1f, %.1f, %.1f, %.1f", screenFrame.x, screenFrame.y, screenFrame.w, screenFrame.h)
+    logger.df("windowFrame: %.1f, %.1f, %.1f, %.1f", windowFrame.x, windowFrame.y, windowFrame.w, windowFrame.h)
+
     local width = (screenFrame.w - SWITCHGLASS_OFFSET_X) / 3
     local height = screenFrame.h / 2
-    local rect = hs.geometry.rect(screenFrame.x, screenFrame.y, width, height)
 
+    local rect = hs.geometry.rect(screenFrame.x, screenFrame.y, width, height)
     local rect = hs.geometry.rect(width * 2, screenFrame.y, width, height)
+    logger.df("rect: %.1f, %.1f, %.1f, %.1f", rect.x, rect.y, rect.w, rect.h)
+
     hs.window.focusedWindow():move(rect)
 end
 
 --[[
-resizeWindowToBottomLeftThird
+    resizeWindowToBottomLeftThird
 ]]
 function resizeWindowToBottomLeftThird()
-    print("resizeWindowToBottomLeftThird")
+    logger.df("resizeWindowToBottomLeftThird")
 
     local screenFrame = hs.window.focusedWindow():screen():frame()
     local windowFrame = hs.window.focusedWindow():frame()
 
+    logger.df("screenFrame: %.1f, %.1f, %.1f, %.1f", screenFrame.x, screenFrame.y, screenFrame.w, screenFrame.h)
+    logger.df("windowFrame: %.1f, %.1f, %.1f, %.1f", windowFrame.x, windowFrame.y, windowFrame.w, windowFrame.h)
+
     local width = (screenFrame.w - SWITCHGLASS_OFFSET_X) / 3
     local height = screenFrame.h / 2
+
     local rect = hs.geometry.rect(screenFrame.x, screenFrame.y + height, width, height)
+    logger.df("rect: %.1f, %.1f, %.1f, %.1f", rect.x, rect.y, rect.w, rect.h)
 
     hs.window.focusedWindow():move(rect)
 end
 
 --[[
-resizeWindowToBottomCenterThird
+    resizeWindowToBottomCenterThird
 ]]
 function resizeWindowToBottomCenterThird()
-    print("moveWindowBottomCenterThird")
+    logger.df("moveWindowBottomCenterThird")
 
     local screenFrame = hs.window.focusedWindow():screen():frame()
     local windowFrame = hs.window.focusedWindow():frame()
 
+    logger.df("screenFrame: %.1f, %.1f, %.1f, %.1f", screenFrame.x, screenFrame.y, screenFrame.w, screenFrame.h)
+    logger.df("windowFrame: %.1f, %.1f, %.1f, %.1f", windowFrame.x, windowFrame.y, windowFrame.w, windowFrame.h)
+
     local width = (screenFrame.w - SWITCHGLASS_OFFSET_X) / 3
     local height = screenFrame.h / 2
+
     local rect = hs.geometry.rect(width, screenFrame.y + height, width, height)
+    logger.df("rect: %.1f, %.1f, %.1f, %.1f", rect.x, rect.y, rect.w, rect.h)
 
     hs.window.focusedWindow():move(rect)
 end
 
 --[[
-resizeWindowToBottomRightThird
+    resizeWindowToBottomRightThird
 ]]
 function resizeWindowToBottomRightThird()
-    print("resizeWindowToBottomRightThird")
+    logger.df("resizeWindowToBottomRightThird")
 
     local screenFrame = hs.window.focusedWindow():screen():frame()
     local windowFrame = hs.window.focusedWindow():frame()
 
+    logger.df("screenFrame: %.1f, %.1f, %.1f, %.1f", screenFrame.x, screenFrame.y, screenFrame.w, screenFrame.h)
+    logger.df("windowFrame: %.1f, %.1f, %.1f, %.1f", windowFrame.x, windowFrame.y, windowFrame.w, windowFrame.h)
+
     local width = (screenFrame.w - SWITCHGLASS_OFFSET_X) / 3
     local height = screenFrame.h / 2
+
     local rect = hs.geometry.rect(width * 2, screenFrame.y + height, width, height)
+    logger.df("rect: %.1f, %.1f, %.1f, %.1f", rect.x, rect.y, rect.w, rect.h)
 
     hs.window.focusedWindow():move(rect)
 end
 
 --[[
-moveWindowToOneScreenEast
+    moveWindowToOneScreenEast
 ]]
 function moveWindowToOneScreenEast()
-    print("moveWindowToOneScreenEast")
+    logger.df("moveWindowToOneScreenEast")
 
     if hs.screen.mainScreen():toEast() == nil then
-        print("There are no screens on the right")
+        logger.df("There are no screens on the right")
         return
     end
 
     local destScreenFrame = hs.screen.mainScreen():toEast():frame()
     local windowFrame = hs.window.focusedWindow():frame()
 
-    print("destScreenFrame: " .. destScreenFrame.x, destScreenFrame.y, destScreenFrame.w, destScreenFrame.h)
-    print("windowFrame: " .. windowFrame.x, windowFrame.y, windowFrame.w, windowFrame.h)
+    logger.df("destScreenFrame: %.1f, %.1f, %.1f, %.1f", destScreenFrame.x, destScreenFrame.y, destScreenFrame.w, destScreenFrame.h)
+    logger.df("windowFrame: %.1f, %.1f, %.1f, %.1f", windowFrame.x, windowFrame.y, windowFrame.w, windowFrame.h)
 
     local size = windowFrame.size
     if windowFrame.w > destScreenFrame.w then
@@ -401,15 +477,16 @@ function moveWindowToOneScreenEast()
     if windowFrame.h > destScreenFrame.h then
         size.h = destScreenFrame.h
     end
+
     hs.window.focusedWindow():setSize(size)
     hs.window.focusedWindow():moveOneScreenEast(true, true)
 
     local appName = hs.application.frontmostApplication():name()
-    print("appName: " .. appName)
+    logger.df("appName: " .. appName)
 
     if appName == "iTerm2" then
         local windowFrame = hs.window.focusedWindow():frame()
-        print("windowFrame: " .. windowFrame.x, windowFrame.y, windowFrame.w, windowFrame.h)
+        logger.df("windowFrame: " .. windowFrame.x, windowFrame.y, windowFrame.w, windowFrame.h)
 
         if windowFrame.w < ITERM2_WINDOW_WIDTH then
             windowFrame.x = windowFrame.x - (ITERM2_WINDOW_WIDTH - windowFrame.w)
@@ -420,21 +497,21 @@ function moveWindowToOneScreenEast()
 end
 
 --[[
-moveWindowToOneScreenWest
+    moveWindowToOneScreenWest
 ]]
 function moveWindowToOneScreenWest()
-    print("moveWindowToOneScreenWest")
+    logger.df("moveWindowToOneScreenWest")
 
     if hs.screen.mainScreen():toWest() == nil then
-        print("There are no screens on the left")
+        logger.df("There are no screens on the left")
         return
     end
 
     local destScreenFrame = hs.screen.mainScreen():toWest():frame()
     local windowFrame = hs.window.focusedWindow():frame()
 
-    print("destScreenFrame: " .. destScreenFrame.x, destScreenFrame.y, destScreenFrame.w, destScreenFrame.h)
-    print("windowFrame: " .. windowFrame.x, windowFrame.y, windowFrame.w, windowFrame.h)
+    logger.df("destScreenFrame: " .. destScreenFrame.x, destScreenFrame.y, destScreenFrame.w, destScreenFrame.h)
+    logger.df("windowFrame: " .. windowFrame.x, windowFrame.y, windowFrame.w, windowFrame.h)
 
     local size = windowFrame.size
     if windowFrame.w > destScreenFrame.w then
@@ -448,11 +525,11 @@ function moveWindowToOneScreenWest()
     hs.window.focusedWindow():moveOneScreenWest(true, true)
 
     local appName = hs.application.frontmostApplication():name()
-    print("appName: " .. appName)
+    logger.df("appName: " .. appName)
 
     if appName == "iTerm2" then
         local windowFrame = hs.window.focusedWindow():frame()
-        print("windowFrame: " .. windowFrame.x, windowFrame.y, windowFrame.w, windowFrame.h)
+        logger.df("windowFrame: %.1f, %.1f, %.1f, %.1f" .. windowFrame.x, windowFrame.y, windowFrame.w, windowFrame.h)
 
         if windowFrame.w < ITERM2_WINDOW_WIDTH then
             windowFrame.x = windowFrame.x - (ITERM2_WINDOW_WIDTH - windowFrame.w)
@@ -462,6 +539,9 @@ function moveWindowToOneScreenWest()
     end
 end
 
+--[[
+    maximizeWindow
+]]
 function maximizeWindow()
     local frame = hs.screen.mainScreen():frame()
     local fullFrame = hs.screen.mainScreen():fullFrame()
@@ -483,10 +563,10 @@ end
 The following four functions resize the front window to top-half, bottom-half, left-half or
 right-half, depending on the user input.
 ]]
-hs.hotkey.bind({"cmd", "ctrl"}, "Left", hs.fnutils.partial(winresize, "left"))
-hs.hotkey.bind({"cmd", "ctrl"}, "Right", hs.fnutils.partial(winresize, "right"))
-hs.hotkey.bind({"cmd", "ctrl"}, "Up", hs.fnutils.partial(winresize, "up"))
-hs.hotkey.bind({"cmd", "ctrl"}, "Down", hs.fnutils.partial(winresize, "down"))
+hs.hotkey.bind({"cmd", "ctrl"}, "Left", hs.fnutils.partial(resizeWindow, "left"))
+hs.hotkey.bind({"cmd", "ctrl"}, "Right", hs.fnutils.partial(resizeWindow, "right"))
+hs.hotkey.bind({"cmd", "ctrl"}, "Up", hs.fnutils.partial(resizeWindow, "up"))
+hs.hotkey.bind({"cmd", "ctrl"}, "Down", hs.fnutils.partial(resizeWindow, "down"))
 
 --[[
 The following four functions resize the front window to top-third, middle-third (vertical),
@@ -499,7 +579,7 @@ hs.hotkey.bind({"ctrl", "alt"}, "Right", right_third)
 hs.hotkey.bind({"ctrl", "alt"}, "Up", up_third)
 hs.hotkey.bind({"ctrl", "alt"}, "Down", down_third)
 
-hs.hotkey.bind({"cmd", "ctrl", "alt"}, "F", hs.fnutils.partial(winresize, "max"))
+hs.hotkey.bind({"cmd", "ctrl", "alt"}, "F", hs.fnutils.partial(resizeWindow, "max"))
 
 -- The rest are mine
 
