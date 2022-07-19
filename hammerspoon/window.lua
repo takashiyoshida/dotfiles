@@ -22,13 +22,11 @@ function resizeWindow(how)
         frame.w = frame.w / 2
         newrect = frame
     elseif how == "up" then
-        -- newrect = {0, 0, 1, 0.5}
         local frame = screenFrameWithSwitchGlass()
         frame.h = frame.h / 2
         logger.df("frame: %s", frame)
         newrect = frame
     elseif how == "down" then
-        -- newrect = {0, 0.5, 1, 0.5}
         local frame = screenFrameWithSwitchGlass()
         frame.y = frame.h / 2 + frame.y
         frame.h = frame.h / 2
@@ -38,20 +36,50 @@ function resizeWindow(how)
     --     -- I don't like this but it actually makes the window in a full-screen mode
     --     newrect = hs.layout.maximized
     elseif how == "left_third" or how == "hthird-0" then
-        newrect = {0, 0, 1/3, 1}
+        local frame = screenFrameWithSwitchGlass()
+        frame.w = frame.w / 3
+        newrect = frame
+        logger.df("resizeWindow -- newrect: %.1f, %.1f, %.1f, %.1f", newrect.x, newrect.y, newrect.w, newrect.h)
     elseif how == "middle_third_h" or how == "hthird-1" then
-        newrect = {1/3, 0, 1/3, 1}
+        local frame = screenFrameWithSwitchGlass()
+        frame.w = frame.w / 3
+        frame.x = frame.w + frame.x
+        newrect = frame
+        logger.df("resizeWindow -- newrect: %.1f, %.1f, %.1f, %.1f", newrect.x, newrect.y, newrect.w, newrect.h)
     elseif how == "right_third" or how == "hthird-2" then
-        newrect = {2/3, 0, 1/3, 1}
+        -- newrect = {2/3, 0, 1/3, 1}
+        local frame = screenFrameWithSwitchGlass()
+        frame.w = frame.w / 3
+        frame.x = 2 * frame.w + frame.x
+        newrect = frame
+        logger.df("resizeWindow -- newrect: %.1f, %.1f, %.1f, %.1f", newrect.x, newrect.y, newrect.w, newrect.h)
     elseif how == "top_third" or how == "vthird-0" then
-        newrect = {0, 0, 1, 1/3}
+        -- newrect = {0, 0, 1, 1/3}
+        local frame = screenFrameWithSwitchGlass()
+        frame.h = frame.h / 3
+        newrect = frame
+        logger.df("resizeWindow -- newrect: %.1f, %.1f, %.1f, %.1f", newrect.x, newrect.y, newrect.w, newrect.h)
     elseif how == "middle_third_v" or how == "vthird-1" then
-        newrect = {0, 1/3, 1, 1/3}
+        -- newrect = {0, 1/3, 1, 1/3}
+        local frame = screenFrameWithSwitchGlass()
+        frame.h = frame.h / 3
+        frame.y = frame.h + frame.y
+        newrect = frame
+        logger.df("resizeWindow -- newrect: %.1f, %.1f, %.1f, %.1f", newrect.x, newrect.y, newrect.w, newrect.h)
     elseif how == "bottom_third" or how == "vthird-2" then
-        newrect = {0, 2/3, 1, 1/3}
+        -- newrect = {0, 2/3, 1, 1/3}
+        local frame = screenFrameWithSwitchGlass()
+        frame.h = frame.h / 3
+        frame.y = 2 * frame.h + frame.y
+        newrect = frame
+        logger.df("resizeWindow -- newrect: %.1f, %.1f, %.1f, %.1f", newrect.x, newrect.y, newrect.w, newrect.h)
+    else
+        logger.df("resizeWindow -- how: %s is not a valid option", how)
+        return
     end
 
     win:move(newrect)
+
     logger.df("resizeWindow -- end")
 end
 
@@ -63,14 +91,20 @@ function get_horizontal_third(win)
 
     local frame = win:frame()
     local screenFrame = win:screen():frame()
+
+    logger.df("frame.x (%.1f) - screenFrame.x (%.1f) = %.1f", frame.x, screenFrame.x, frame.x - screenFrame.x)
+    logger.df("frame.y (%.1f) - screenFrame.y (%.1f) = %.1f", frame.y, screenFrame.y, frame.y - screenFrame.y)
+
     local relFrame = hs.geometry(frame.x - screenFrame.x, frame.y - screenFrame.y, frame.w, frame.h)
 
-    logger.df("get_horizontal_third -- screenFrame: %.1f, %.1f, %.1f, %.1f", screenFrame.x, screenFrame.y, screenFrame.w, screenFrame.h)
-    logger.df("get_horizontal_third -- frame: %.1f, %.1f, %.1f, %.1f", frame.x, frame.y, frame.w, frame.h)
-    logger.df("get_horizontal_third -- relFrame: %.1f, %.1f, %.1f, %.1f", relFrame.x, relFrame.y, relFrame.w, relFrame.h)
+    logger.df("refFrame.x: %.1f", relFrame.x)
+    logger.df("screenFrame.w: %.1f", screenFrame.w)
 
-    local third = math.floor(3.01 * relFrame.x / screenFrame.w)
+    logger.df("3.01 * relFrame.x (%.1f) / screenFrame.w (%.1f) = %.1f", relFrame.x, screenFrame.w, 3.01 * relFrame.x / screenFrame.w)
+
+    local third = math.ceil(3.01 * relFrame.x / screenFrame.w)
     logger.df("get_horizontal_third -- third: %d", third)
+
     logger.df("get_horizontal_third -- end")
 
     return third
@@ -84,14 +118,20 @@ function get_vertical_third(win)
 
     local frame = win:frame()
     local screenFrame = win:screen():frame()
+
+    logger.df("frame.x (%.1f) - screenFrame.x (%.1f) = %.1f", frame.x, screenFrame.x, frame.x - screenFrame.x)
+    logger.df("frame.y (%.1f) - screenFrame.y (%.1f) = %.1f", frame.y, screenFrame.y, frame.y - screenFrame.y)
+
     local relFrame = hs.geometry(frame.x - screenFrame.x, frame.y - screenFrame.y, frame.w, frame.h)
 
-    logger.df("get_vertical_third -- screenFrame: %.1f, %.1f, %.1f, %.1f", screenFrame.x, screenFrame.y, screenFrame.w, screenFrame.h)
-    logger.df("get_vertical_third -- frame: %.1f, %.1f, %.1f, %.1f", frame.x, frame.y, frame.w, frame.h)
-    logger.df("get_vertical_third -- relFrame: %.1f, %.1f, %.1f, %.1f", relFrame.x, relFrame.y, relFrame.w, relFrame.h)
+    logger.df("relFrame.x: %.1f", relFrame.x)
+    logger.df("screenFrame.w: %.1f", screenFrame.w)
+
+    logger.df("3.01 * relFrame.y (%.1f) / screenFrame.h (%.1f) = %.1f", relFrame.x, screenFrame.w, 3.01 * relFrame.y / screenFrame.h)
 
     local third = math.floor(3.01 * relFrame.y / screenFrame.h)
     logger.df("get_vertical_third -- third: %d", third)
+
     logger.df("get_vertical_third -- end")
 
     return third
@@ -101,26 +141,38 @@ end
     left_third
 ]]
 function left_third()
+    logger.df("left_third -- begin")
+
     local win = hs.window.focusedWindow()
     local third = get_horizontal_third(win)
+
+    logger.df("left_third -- third: %d", third)
     if third == 0 then
         resizeWindow("hthird-0")
     else
         resizeWindow("hthird-" .. (third - 1))
     end
+
+    logger.df("left_third -- end")
 end
 
 --[[
     right_third
 ]]
 function right_third()
+    logger.df("right_third -- begin")
+
     local win = hs.window.focusedWindow()
     local third = get_horizontal_third(win)
+
+    logger.df("right_third -- third: %d", third)
     if third == 2 then
         resizeWindow("hthird-2")
     else
         resizeWindow("hthird-" .. (third + 1))
     end
+
+    logger.df("right_third -- end")
 end
 
 --[[
@@ -164,13 +216,15 @@ end
     Returns a screen frame without SWITCHGLASS dock
 ]]
 function screenFrameWithSwitchGlass()
+    logger.df("screenFrameWithSwitchGlass -- begin")
     local fullFrame = hs.window.focusedWindow():screen():fullFrame()
-    logger.df("fullFrame: %.1f, %.1f, %.1f, %.1f", fullFrame.x, fullFrame.y, fullFrame.w, fullFrame.h)
+    logger.df("screenFrameWithSwitchGlass -- fullFrame: %.1f, %.1f, %.1f, %.1f", fullFrame.x, fullFrame.y, fullFrame.w, fullFrame.h)
 
     local frame = hs.window.focusedWindow():screen():frame()
     frame.w = frame.w - SWITCHGLASS_OFFSET_X
-    logger.df("frame: %.1f, %.1f, %.1f, %.1f", frame.x, frame.y, frame.w, frame.h)
+    logger.df("screenFrameWithSwitchGlass -- frame: %.1f, %.1f, %.1f, %.1f", frame.x, frame.y, frame.w, frame.h)
 
+    logger.df("screenFrameWithSwitchGlass -- end")
     return frame
 end
 
