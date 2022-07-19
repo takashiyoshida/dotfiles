@@ -22,12 +22,10 @@ function resizeWindow(how)
         newrect = frame
     elseif how == "up" then
         frame.h = frame.h / 2
-        logger.df("frame: %s", frame)
         newrect = frame
     elseif how == "down" then
         frame.y = frame.h / 2 + frame.y
         frame.h = frame.h / 2
-        logger.df("frame: %s", frame)
         newrect = frame
     -- elseif how == "max" then
     --     -- I don't like this but it actually makes the window in a full-screen mode
@@ -35,38 +33,32 @@ function resizeWindow(how)
     elseif how == "left_third" or how == "hthird-0" then
         frame.w = frame.w / 3
         newrect = frame
-        logger.df("resizeWindow -- newrect: %.1f, %.1f, %.1f, %.1f", newrect.x, newrect.y, newrect.w, newrect.h)
     elseif how == "middle_third_h" or how == "hthird-1" then
         frame.w = frame.w / 3
         frame.x = frame.w + frame.x
         newrect = frame
-        logger.df("resizeWindow -- newrect: %.1f, %.1f, %.1f, %.1f", newrect.x, newrect.y, newrect.w, newrect.h)
     elseif how == "right_third" or how == "hthird-2" then
         frame.w = frame.w / 3
         frame.x = 2 * frame.w + frame.x
         newrect = frame
-        logger.df("resizeWindow -- newrect: %.1f, %.1f, %.1f, %.1f", newrect.x, newrect.y, newrect.w, newrect.h)
     elseif how == "top_third" or how == "vthird-0" then
         frame.h = frame.h / 3
         newrect = frame
-        logger.df("resizeWindow -- newrect: %.1f, %.1f, %.1f, %.1f", newrect.x, newrect.y, newrect.w, newrect.h)
     elseif how == "middle_third_v" or how == "vthird-1" then
         frame.h = frame.h / 3
         frame.y = frame.h + frame.y
         newrect = frame
-        logger.df("resizeWindow -- newrect: %.1f, %.1f, %.1f, %.1f", newrect.x, newrect.y, newrect.w, newrect.h)
     elseif how == "bottom_third" or how == "vthird-2" then
         frame.h = frame.h / 3
         frame.y = 2 * frame.h + frame.y
         newrect = frame
-        logger.df("resizeWindow -- newrect: %.1f, %.1f, %.1f, %.1f", newrect.x, newrect.y, newrect.w, newrect.h)
     else
-        logger.df("resizeWindow -- how: %s is not a valid option", how)
+        logger.ef("resizeWindow -- how: %s is not a valid option", how)
         return
     end
 
+    logger.df("resizeWindow -- newrect: %.1f, %.1f, %.1f, %.1f", newrect.x, newrect.y, newrect.w, newrect.h)
     win:move(newrect)
-
     logger.df("resizeWindow -- end")
 end
 
