@@ -9,25 +9,22 @@ function resizeWindow(how)
 
     local win = hs.window.focusedWindow()
     local app = win:application():name()
-    -- local windowLayout
+
+    local frame = screenFrameWithSwitchGlass()
     local newrect
 
     if how == "left" then
-        local frame = screenFrameWithSwitchGlass()
         frame.w = frame.w / 2
         newrect = frame
     elseif how == "right" then
-        local frame = screenFrameWithSwitchGlass()
         frame.x = frame.w / 2 + frame.x
         frame.w = frame.w / 2
         newrect = frame
     elseif how == "up" then
-        local frame = screenFrameWithSwitchGlass()
         frame.h = frame.h / 2
         logger.df("frame: %s", frame)
         newrect = frame
     elseif how == "down" then
-        local frame = screenFrameWithSwitchGlass()
         frame.y = frame.h / 2 + frame.y
         frame.h = frame.h / 2
         logger.df("frame: %s", frame)
@@ -36,39 +33,29 @@ function resizeWindow(how)
     --     -- I don't like this but it actually makes the window in a full-screen mode
     --     newrect = hs.layout.maximized
     elseif how == "left_third" or how == "hthird-0" then
-        local frame = screenFrameWithSwitchGlass()
         frame.w = frame.w / 3
         newrect = frame
         logger.df("resizeWindow -- newrect: %.1f, %.1f, %.1f, %.1f", newrect.x, newrect.y, newrect.w, newrect.h)
     elseif how == "middle_third_h" or how == "hthird-1" then
-        local frame = screenFrameWithSwitchGlass()
         frame.w = frame.w / 3
         frame.x = frame.w + frame.x
         newrect = frame
         logger.df("resizeWindow -- newrect: %.1f, %.1f, %.1f, %.1f", newrect.x, newrect.y, newrect.w, newrect.h)
     elseif how == "right_third" or how == "hthird-2" then
-        -- newrect = {2/3, 0, 1/3, 1}
-        local frame = screenFrameWithSwitchGlass()
         frame.w = frame.w / 3
         frame.x = 2 * frame.w + frame.x
         newrect = frame
         logger.df("resizeWindow -- newrect: %.1f, %.1f, %.1f, %.1f", newrect.x, newrect.y, newrect.w, newrect.h)
     elseif how == "top_third" or how == "vthird-0" then
-        -- newrect = {0, 0, 1, 1/3}
-        local frame = screenFrameWithSwitchGlass()
         frame.h = frame.h / 3
         newrect = frame
         logger.df("resizeWindow -- newrect: %.1f, %.1f, %.1f, %.1f", newrect.x, newrect.y, newrect.w, newrect.h)
     elseif how == "middle_third_v" or how == "vthird-1" then
-        -- newrect = {0, 1/3, 1, 1/3}
-        local frame = screenFrameWithSwitchGlass()
         frame.h = frame.h / 3
         frame.y = frame.h + frame.y
         newrect = frame
         logger.df("resizeWindow -- newrect: %.1f, %.1f, %.1f, %.1f", newrect.x, newrect.y, newrect.w, newrect.h)
     elseif how == "bottom_third" or how == "vthird-2" then
-        -- newrect = {0, 2/3, 1, 1/3}
-        local frame = screenFrameWithSwitchGlass()
         frame.h = frame.h / 3
         frame.y = 2 * frame.h + frame.y
         newrect = frame
