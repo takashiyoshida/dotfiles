@@ -63,6 +63,7 @@ task :hammerspoon do
     Dir.mkdir(hammerspoon, 0755)
   end
   install_file(File.join("hammerspoon", "init.lua"), File.join(hammerspoon, "init.lua"))
+  install_file(File.join("hammerspoon", "window.lua"), File.join(hammerspoon, "window.lua"))
 end
 
 

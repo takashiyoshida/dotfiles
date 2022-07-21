@@ -1,3 +1,5 @@
+require "window"
+
 -- Offset to ensure that window is not covered by the SwitchGlass application switcher
 SWITCHGLASS_OFFSET_X = 43
 -- iTerm2 window width when it shows 80 columns (this will depend on your iTerm2 profile)
@@ -14,394 +16,6 @@ function printFocusedWindowScreen()
     print("frame    : " .. frame.x, frame.y, frame.w, frame.h)
     print("fullFrame: " .. fullFrame.x, fullFrame.y, fullFrame.w, fullFrame.h)
 end
-
-
---[[
-moveWindowToTopLeft
-]]
-function moveWindowToTopLeft()
-    print("moveWindowToTopLeft")
-    print("Moving the current window to the top left corner of the current screen")
-
-    local screenFrame = hs.window.focusedWindow():screen():frame()
-    local windowFrame = hs.window.focusedWindow():frame()
-
-    windowFrame.x = screenFrame.x
-    windowFrame.y = screenFrame.y
-
-    print("windowFrame: " .. windowFrame.x, windowFrame.y, windowFrame.w, windowFrame.h)
-    hs.window.focusedWindow():move(windowFrame)
-end
-hs.hotkey.bind({"cmd", "ctrl"}, "U", moveWindowToTopLeft)
-
-
---[[
-moveWindowToTopRight
-]]
-function moveWindowToTopRight()
-    print("Moving the current window to the top right corner of the current screen")
-
-    local screenFrame = hs.window.focusedWindow():screen():frame()
-    local windowFrame = hs.window.focusedWindow():frame()
-
-    windowFrame.x = screenFrame.x + (screenFrame.w - SWITCHGLASS_OFFSET_X) - windowFrame.w
-    windowFrame.y = screenFrame.y
-
-    print("windowFrame: " .. windowFrame.x, windowFrame.y, windowFrame.w, windowFrame.h)
-    hs.window.focusedWindow():move(windowFrame)
-end
-hs.hotkey.bind({"cmd", "ctrl"}, "O", moveWindowToTopRight)
-
-
---[[
-moveWindowToBottomLeft
-]]
-function moveWindowToBottomLeft()
-    print("Moving the current window to the bottom left corner of the current screen")
-
-    local screenFullFrame = hs.window.focusedWindow():screen():fullFrame()
-    local screenFrame = hs.window.focusedWindow():screen():frame()
-    local windowFrame = hs.window.focusedWindow():frame()
-
-    windowFrame.x = screenFrame.x
-    windowFrame.y = screenFullFrame.h - windowFrame.h
-
-    print("windowFrame: " .. windowFrame.x, windowFrame.y, windowFrame.w, windowFrame.h)
-    hs.window.focusedWindow():move(windowFrame)
-end
-hs.hotkey.bind({"cmd", "ctrl"}, "M", moveWindowToBottomLeft)
-
-
---[[
-moveWindowToBottomRight
-]]
-function moveWindowToBottomRight()
-    print("Moving the current window to the bottom right corner of the current screen")
-
-    local screenFullFrame = hs.window.focusedWindow():screen():fullFrame()
-    local windowFrame = hs.window.focusedWindow():frame()
-
-    windowFrame.x = screenFullFrame.x + (screenFullFrame.w - SWITCHGLASS_OFFSET_X) - windowFrame.w
-    windowFrame.y = screenFullFrame.h - windowFrame.h
-
-    print("windowFrame: " .. windowFrame.x, windowFrame.y, windowFrame.w, windowFrame.h)
-    hs.window.focusedWindow():move(windowFrame)
-end
-hs.hotkey.bind({"cmd", "ctrl"}, ".", moveWindowToBottomRight)
-
-
---[[
-moveWindowToCenter
-]]
-function center_window()
-    print("Moving the current window to the center of the main screen ...")
-
-    local appName = hs.application.frontmostApplication():name()
-    if appName == "Spark" then
-        local screenFrame = hs.window.focusedWindow():screen():frame()
-        local windowFrame = hs.window.focusedWindow():frame()
-
-        if screenFrame.x < 0 then
-            windowFrame.x = (screenFrame.x / 2) - (windowFrame.w / 2)
-        else
-            windowFrame.x = (screenFrame.w / 2) - (windowFrame.w / 2)
-        end
-
-        windowFrame.y = screenFrame.y + (screenFrame.h - windowFrame.h) / 2
-        hs.window.focusedWindow():move(windowFrame)
-    else
-        local window = hs.window.focusedWindow()
-        window:centerOnScreen()
-    end
-end
-hs.hotkey.bind({"cmd", "ctrl"}, "K", center_window)
-
-
---[[
-moveWindowToLeftCenter
-]]
-function moveWindowToLeftCenter()
-    print("Moving the current window to the left center of the current screen")
-
-    local screenFrame = hs.window.focusedWindow():screen():frame()
-    local windowFrame = hs.window.focusedWindow():frame()
-
-    windowFrame.x = screenFrame.x
-    windowFrame.y = screenFrame.y + (screenFrame.h - windowFrame.h) / 2
-
-    print("windowFrame: " .. windowFrame.x, windowFrame.y, windowFrame.w, windowFrame.h)
-    hs.window.focusedWindow():move(windowFrame)
-end
-hs.hotkey.bind({"cmd", "ctrl"}, "J", moveWindowToLeftCenter)
-
-
---[[
-moveWindowToRightCenter
-]]
-function moveWindowToRightCenter()
-    print("Moving the current window to the right center of the current screen")
-
-    local screenFrame = hs.window.focusedWindow():screen():frame()
-    local windowFrame = hs.window.focusedWindow():frame()
-
-    windowFrame.x = screenFrame.x + (screenFrame.w - SWITCHGLASS_OFFSET_X) - windowFrame.w
-    windowFrame.y = screenFrame.y + (screenFrame.h - windowFrame.h) / 2
-
-    print("windowFrame: " .. windowFrame.x, windowFrame.y, windowFrame.w, windowFrame.h)
-    hs.window.focusedWindow():move(windowFrame)
-end
-hs.hotkey.bind({"cmd", "ctrl"}, "L", moveWindowToRightCenter)
-
-
---[[
-moveWindowToTopCenter
-]]
-function moveWindowToTopCenter()
-    print("Moving the current window to the top center of the current screen")
-
-    local screenFrame = hs.window.focusedWindow():screen():frame()
-    local windowFrame = hs.window.focusedWindow():frame()
-
-    print("screenFrame: " .. screenFrame.x, screenFrame.y, screenFrame.w, screenFrame.h)
-
-    if screenFrame.x < 0 then
-        windowFrame.x = (screenFrame.x / 2) - (windowFrame.w / 2)
-    else
-        windowFrame.x = (screenFrame.w / 2) - (windowFrame.w / 2)
-    end
-    windowFrame.y = screenFrame.y
-
-    print("windowFrame: " .. windowFrame.x, windowFrame.y, windowFrame.w, windowFrame.h)
-    hs.window.focusedWindow():move(windowFrame)
-end
-hs.hotkey.bind({"cmd", "ctrl"}, "I", moveWindowToTopCenter)
-
-
---[[
-moveWindowToBottomCenter
-]]
-function moveWindowToBottomCenter()
-    print("Moving the current window to the bottom center of the current screen")
-
-    local screenFullFrame = hs.window.focusedWindow():screen():fullFrame()
-    local screenFrame = hs.window.focusedWindow():screen():frame()
-    local windowFrame = hs.window.focusedWindow():frame()
-
-    if screenFrame.x < 0 then
-        windowFrame.x = (screenFrame.x / 2) - (windowFrame.w / 2)
-    else
-        windowFrame.x = (screenFrame.w / 2) - (windowFrame.w / 2)
-    end
-    windowFrame.y = screenFullFrame.h - windowFrame.h
-
-    print("windowFrame: " .. windowFrame.x, windowFrame.y, windowFrame.w, windowFrame.h)
-    hs.window.focusedWindow():move(windowFrame)
-end
-hs.hotkey.bind({"cmd", "ctrl"}, ",", moveWindowToBottomCenter)
-
-
---[[
-resizeWindowToTopLeftThird
-]]
-function resizeWindowToTopLeftThird()
-    print("resizeWindowToTopLeftThird")
-
-    local screenFrame = hs.window.focusedWindow():screen():frame()
-    local windowFrame = hs.window.focusedWindow():frame()
-
-    local width = (screenFrame.w - SWITCHGLASS_OFFSET_X) / 3
-    local height = screenFrame.h / 2
-    local rect = hs.geometry.rect(screenFrame.x, screenFrame.y, width, height)
-
-    hs.window.focusedWindow():move(rect)
-end
-hs.hotkey.bind({"ctrl", "alt"}, "U", resizeWindowToTopLeftThird)
-
-
---[[
-resizeWindowToTopCenterThird
-]]
-function resizeWindowToTopCenterThird()
-    print("resizeWindowToTopCenterThird")
-
-    local screenFrame = hs.window.focusedWindow():screen():frame()
-    local windowFrame = hs.window.focusedWindow():frame()
-
-    local width = (screenFrame.w - SWITCHGLASS_OFFSET_X) / 3
-    local height = screenFrame.h / 2
-    local rect = hs.geometry.rect(screenFrame.x, screenFrame.y, width, height)
-
-    local rect = hs.geometry.rect(width, screenFrame.y, width, height)
-    hs.window.focusedWindow():move(rect)
-end
-hs.hotkey.bind({"ctrl", "alt"}, "I", resizeWindowToTopCenterThird)
-
-
---[[
-resizeWindowToTopRightThird
-]]
-function resizeWindowToTopRightThird()
-    print("resizeWindowToTopRightThird")
-
-    local screenFrame = hs.window.focusedWindow():screen():frame()
-    local windowFrame = hs.window.focusedWindow():frame()
-
-    local width = (screenFrame.w - SWITCHGLASS_OFFSET_X) / 3
-    local height = screenFrame.h / 2
-    local rect = hs.geometry.rect(screenFrame.x, screenFrame.y, width, height)
-
-    local rect = hs.geometry.rect(width * 2, screenFrame.y, width, height)
-    hs.window.focusedWindow():move(rect)
-end
-hs.hotkey.bind({"ctrl", "alt"}, "O", resizeWindowToTopRightThird)
-
-
---[[
-resizeWindowToBottomLeftThird
-]]
-function resizeWindowToBottomLeftThird()
-    print("resizeWindowToBottomLeftThird")
-
-    local screenFrame = hs.window.focusedWindow():screen():frame()
-    local windowFrame = hs.window.focusedWindow():frame()
-
-    local width = (screenFrame.w - SWITCHGLASS_OFFSET_X) / 3
-    local height = screenFrame.h / 2
-    local rect = hs.geometry.rect(screenFrame.x, screenFrame.y + height, width, height)
-
-    hs.window.focusedWindow():move(rect)
-end
-hs.hotkey.bind({"ctrl", "alt"}, "M", resizeWindowToBottomLeftThird)
-
-
---[[
-resizeWindowToBottomCenterThird
-]]
-function resizeWindowToBottomCenterThird()
-    print("moveWindowBottomCenterThird")
-
-    local screenFrame = hs.window.focusedWindow():screen():frame()
-    local windowFrame = hs.window.focusedWindow():frame()
-
-    local width = (screenFrame.w - SWITCHGLASS_OFFSET_X) / 3
-    local height = screenFrame.h / 2
-    local rect = hs.geometry.rect(width, screenFrame.y + height, width, height)
-
-    hs.window.focusedWindow():move(rect)
-end
-hs.hotkey.bind({"ctrl", "alt"}, ",", resizeWindowToBottomCenterThird)
-
-
---[[
-resizeWindowToBottomRightThird
-]]
-function resizeWindowToBottomRightThird()
-    print("resizeWindowToBottomRightThird")
-
-    local screenFrame = hs.window.focusedWindow():screen():frame()
-    local windowFrame = hs.window.focusedWindow():frame()
-
-    local width = (screenFrame.w - SWITCHGLASS_OFFSET_X) / 3
-    local height = screenFrame.h / 2
-    local rect = hs.geometry.rect(width * 2, screenFrame.y + height, width, height)
-
-    hs.window.focusedWindow():move(rect)
-end
-hs.hotkey.bind({"ctrl", "alt"}, ".", resizeWindowToBottomRightThird)
-
-
---[[
-moveWindowToOneScreenEast
-]]
-function moveWindowToOneScreenEast()
-    print("moveWindowToOneScreenEast")
-
-    local destScreenFrame = hs.screen.mainScreen():toEast():frame()
-    local windowFrame = hs.window.focusedWindow():frame()
-
-    print("destScreenFrame: " .. destScreenFrame.x, destScreenFrame.y, destScreenFrame.w, destScreenFrame.h)
-    print("windowFrame: " .. windowFrame.x, windowFrame.y, windowFrame.w, windowFrame.h)
-
-    local size = windowFrame.size
-    if windowFrame.w > destScreenFrame.w then
-        size.w = destScreenFrame.w - SWITCHGLASS_OFFSET_X
-    end
-
-    if windowFrame.h > destScreenFrame.h then
-        size.h = destScreenFrame.h
-    end
-    hs.window.focusedWindow():setSize(size)
-    hs.window.focusedWindow():moveOneScreenEast(true, true)
-
-    local appName = hs.application.frontmostApplication():name()
-    print("appName: " .. appName)
-
-    if appName == "iTerm2" then
-        local windowFrame = hs.window.focusedWindow():frame()
-        print("windowFrame: " .. windowFrame.x, windowFrame.y, windowFrame.w, windowFrame.h)
-
-        if windowFrame.w < ITERM2_WINDOW_WIDTH then
-            windowFrame.x = windowFrame.x - (ITERM2_WINDOW_WIDTH - windowFrame.w)
-            windowFrame.w = ITERM2_WINDOW_WIDTH
-            hs.window.focusedWindow():move(windowFrame)
-        end
-    end
-end
-hs.hotkey.bind({"cmd", "ctrl", "shift"}, "L", moveWindowToOneScreenEast)
-
-
---[[
-moveWindowToOneScreenWest
-]]
-function moveWindowToOneScreenWest()
-    print("moveWindowToOneScreenWest")
-
-    local destScreenFrame = hs.screen.mainScreen():toWest():frame()
-    local windowFrame = hs.window.focusedWindow():frame()
-
-    print("destScreenFrame: " .. destScreenFrame.x, destScreenFrame.y, destScreenFrame.w, destScreenFrame.h)
-    print("windowFrame: " .. windowFrame.x, windowFrame.y, windowFrame.w, windowFrame.h)
-
-    local size = windowFrame.size
-    if windowFrame.w > destScreenFrame.w then
-        size.w = destScreenFrame.w - SWITCHGLASS_OFFSET_X
-    end
-
-    if windowFrame.h > destScreenFrame.h then
-        size.h = destScreenFrame.h
-    end
-    hs.window.focusedWindow():setSize(size)
-    hs.window.focusedWindow():moveOneScreenWest(true, true)
-
-    local appName = hs.application.frontmostApplication():name()
-    print("appName: " .. appName)
-
-    if appName == "iTerm2" then
-        local windowFrame = hs.window.focusedWindow():frame()
-        print("windowFrame: " .. windowFrame.x, windowFrame.y, windowFrame.w, windowFrame.h)
-
-        if windowFrame.w < ITERM2_WINDOW_WIDTH then
-            windowFrame.x = windowFrame.x - (ITERM2_WINDOW_WIDTH - windowFrame.w)
-            windowFrame.w = ITERM2_WINDOW_WIDTH
-            hs.window.focusedWindow():move(windowFrame)
-        end
-    end
-end
-hs.hotkey.bind({"cmd", "ctrl", "shift"}, "J", moveWindowToOneScreenWest)
-
-function maximizeWindow()
-    local frame = hs.screen.mainScreen():frame()
-    local fullFrame = hs.screen.mainScreen():fullFrame()
-
-    print("Maximizing the current window ...")
-    print("frame: " .. frame.x, frame.y, frame.w, frame.h)
-    print("fullFrame: " .. fullFrame.x, fullFrame.y, fullFrame.w, fullFrame.h)
-
-    -- Ensure that the maximized window is not covered by the SwitchGlass application switcher
-    local rect = hs.geometry.rect(frame.x, frame.y, frame.w - SWITCHGLASS_OFFSET_X, frame.h)
-    hs.window.focusedWindow():move(rect)
-end
-hs.hotkey.bind({"cmd", "ctrl"}, "Z", maximizeWindow)
 
 -- Move Twitterrific windows to the top-right corner of the screen
 function foobar()
@@ -425,8 +39,6 @@ function foobar()
         end
     end
 end
-hs.hotkey.bind({"cmd", "ctrl"}, "T", foobar)
-
 
 function applicationWatcher(appName, eventType, appObject)
     print("Calling applicationWatcher ...")
@@ -474,7 +86,6 @@ function gather_windows()
         win:centerOnScreen()
     end
 end
--- hs.hotkey.bind({'cmd', 'alt', 'ctrl'}, 'g', gather_windows)
 
 -- Extend the height of the current window to the bottom of the screen
 function extend_window_vertically()
@@ -486,7 +97,6 @@ function extend_window_vertically()
     size.h = screenFrame.h
     win:setSize(size)
 end
-hs.hotkey.bind({"cmd", "alt", "ctrl"}, "v", extend_window_vertically)
 
 -- Cascade all windows of the current application
 function cascade_windows()
@@ -535,7 +145,6 @@ function cascade_windows()
         end
     end
 end
-hs.hotkey.bind({"cmd", "alt", "ctrl"}, "space", cascade_windows)
 
 function resize_browser_window_for_google()
     print("Resizing browser window for Google search page ...")
@@ -558,8 +167,6 @@ function resize_browser_window_for_google()
         win:move(frame)
     end
 end
-hs.hotkey.bind({"cmd", "alt", "ctrl"}, "g", resize_browser_window_for_google)
-
 
 function resize_browser_window_for_iterm()
     print("Resizing browser window for iTerm ...")
@@ -576,7 +183,6 @@ function resize_browser_window_for_iterm()
         win:move(frame)
     end
 end
--- hs.hotkey.bind({"cmd", "alt", "ctrl"}, "t", resize_browser_window_for_iterm)
 
 function test()
     local frame = hs.screen.mainScreen():frame()
@@ -585,6 +191,12 @@ function test()
     local rect = hs.geometry.rect(frame.x, frame.y, 1258.5, 707.5)
     hs.window.focusedWindow():move(rect)
 end
+
+
+hs.hotkey.bind({"cmd", "ctrl"}, "T", foobar)
+-- hs.hotkey.bind({'cmd', 'alt', 'ctrl'}, 'g', gather_windows)
+hs.hotkey.bind({"cmd", "alt", "ctrl"}, "v", extend_window_vertically)
+hs.hotkey.bind({"cmd", "alt", "ctrl"}, "space", cascade_windows)
+hs.hotkey.bind({"cmd", "alt", "ctrl"}, "g", resize_browser_window_for_google)
+-- hs.hotkey.bind({"cmd", "alt", "ctrl"}, "t", resize_browser_window_for_iterm)
 hs.hotkey.bind({"cmd", "ctrl"}, "R", test)
-
-
