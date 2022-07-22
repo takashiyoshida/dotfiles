@@ -641,7 +641,7 @@ hs.hotkey.bind({"ctrl", "alt"}, "Right", right_third)
 hs.hotkey.bind({"ctrl", "alt"}, "Up", up_third)
 hs.hotkey.bind({"ctrl", "alt"}, "Down", down_third)
 
-hs.hotkey.bind({"cmd", "ctrl", "alt"}, "F", hs.fnutils.partial(resizeWindow, "max"))
+-- hs.hotkey.bind({"cmd", "ctrl", "alt"}, "F", hs.fnutils.partial(resizeWindow, "max"))
 
 -- The rest are mine
 
@@ -678,6 +678,6 @@ hs.hotkey.bind({"ctrl", "alt"}, ".", resizeWindowToBottomRightThird)
 The following two functions move the front window to adjacent screen, if available.
 Nothing happens otherwise.
 ]]
-hs.hotkey.bind({"cmd", "ctrl", "shift"}, "L", moveWindowToOneScreenEast)
-hs.hotkey.bind({"cmd", "ctrl", "shift"}, "J", moveWindowToOneScreenWest)
+hs.hotkey.bind({"cmd", "ctrl", "shift"}, "Right", moveWindowToOneScreenEast)
+hs.hotkey.bind({"cmd", "ctrl", "shift"}, "Left", moveWindowToOneScreenWest)
 hs.hotkey.bind({"cmd", "ctrl"}, "Z", maximizeWindow)
