@@ -184,19 +184,7 @@ function resize_browser_window_for_iterm()
     end
 end
 
-function test()
-    local frame = hs.screen.mainScreen():frame()
-    local fullFrame = hs.screen.mainScreen():fullFrame()
-
-    local rect = hs.geometry.rect(frame.x, frame.y, 1258.5, 707.5)
-    hs.window.focusedWindow():move(rect)
-end
-
-
 hs.hotkey.bind({"cmd", "ctrl"}, "T", foobar)
--- hs.hotkey.bind({'cmd', 'alt', 'ctrl'}, 'g', gather_windows)
 hs.hotkey.bind({"cmd", "alt", "ctrl"}, "v", extend_window_vertically)
 hs.hotkey.bind({"cmd", "alt", "ctrl"}, "space", cascade_windows)
 hs.hotkey.bind({"cmd", "alt", "ctrl"}, "g", resize_browser_window_for_google)
--- hs.hotkey.bind({"cmd", "alt", "ctrl"}, "t", resize_browser_window_for_iterm)
-hs.hotkey.bind({"cmd", "ctrl"}, "R", test)
