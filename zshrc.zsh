@@ -86,7 +86,7 @@ alias rake="noglob rake"
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 if [[ "${OSTYPE}" =~ darwin* ]]; then
-    plugins=(autojump colored-man-pages docker gem golang macos python rake ruby tmux)
+    plugins=(autojump colored-man-pages docker fzf gem golang macos python rake ruby tmux)
 else
     plugins=(colored-man-pages docker gem golang python rake ruby ssh-agent svn tmux vagrant)
 fi
@@ -95,7 +95,8 @@ source $ZSH/oh-my-zsh.sh
 
 # Customize to your needs...
 # Load the rest of generic aliases and platform-specific aliases
-source "${DOTFILES}/scripts/peco.zsh"
+# source "${DOTFILES}/scripts/peco.zsh"
+# source "${DOTFILES}/scripts/fzf.zsh"
 source "${DOTFILES}/scripts/aliases.zsh"
 # This should be called only after sourcing the ${DOTFILES}/aliases.zsh file
 if [[ "${OSTYPE}" =~ darwin* ]]; then
