@@ -2,7 +2,7 @@
 
 if [[ "${OSTYPE}" =~ "linux-gnu"* ]]; then
 
-    function setup_nelarchiver
+    function setup-nelarchiver
     {
         NELARCHIVER_IP=$(grep "nelarchiver" /etc/hosts | awk '{ print $1 }')
         NELARCHIVER_PORT="80"
@@ -18,7 +18,7 @@ if [[ "${OSTYPE}" =~ "linux-gnu"* ]]; then
     }
 
     # Configure nelarchiver for this Linux machine
-    setup_nelarchiver
+    setup-nelarchiver
 
     function mkdev
     {
