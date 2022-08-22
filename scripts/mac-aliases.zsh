@@ -35,3 +35,12 @@ function stop-emacs-service
         brew services stop emacs-plus@27
     fi
 }
+
+function fix-macos-open-with-menu
+{
+    if [[ "${OSTYPE}" == "darwin"* ]]; then
+        /System/Library/Frameworks/CoreServices.framework/Frameworks/LaunchServices.framework/Support/lsregister -kill -r -domain local -domain system -domain user
+
+        echo "Now, run \`killall Finder to complete the fix."
+    fi
+}
