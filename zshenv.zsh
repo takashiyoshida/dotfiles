@@ -2,7 +2,7 @@
 
 export TERM=xterm-256color
 
-if [[ "${OSTYPE}" =~ darwin* ]]; then
+if [[ "${OSTYPE}" =~ "darwin"* ]]; then
     # Add Homebrew patch (/opt/homebrew/bin) to PATH
     eval "$(/opt/homebrew/bin/brew shellenv)"
 
@@ -22,7 +22,8 @@ if [[ "${OSTYPE}" =~ darwin* ]]; then
     LDFLAGS="${LDFLAGS} -L$(brew --prefix bzip2)/lib"
     CPPFLAGS="${CPPFLAGS} -I$(brew --prefix zlib)/include"
     LDFLAGS="${LDFLAGS} -L$(brew --prefix zlib)/lib"
-elif [[ "${OSTYPE}" =~ linux-gnu* ]]; then
+
+elif [[ "${OSTYPE}" =~ "linux-gnu"* ]]; then
     # Configure LD_LIBRARY_PATH for Pop!_OS
     export LD_LIBRARY_PATH="${LD_LIBRARY_PATH}:/usr/lib/x86_64-linux-gnu"
 

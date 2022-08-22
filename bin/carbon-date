@@ -8,7 +8,7 @@ timestamp="${filename##*.}"
 filename="${filename%.*}"
 
 # OS X specific aliases
-if [[ "${OSTYPE}" =~ darwin* ]]; then
+if [[ "${OSTYPE}" =~ "darwin"* ]]; then
     core_timestamp=`date -r ${timestamp}`
 else
     core_timestamp=`date -d "@${timestamp}"`

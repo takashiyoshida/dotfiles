@@ -12,7 +12,7 @@ if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]
   source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
 fi
 
-if [[ "${OSTYPE}" =~ linux-gnu* ]]; then
+if [[ "${OSTYPE}" =~ "linux-gnu"* ]]; then
     # Source .zprofile
     case $- in
         *i*) # interactive shell
@@ -85,9 +85,9 @@ alias rake="noglob rake"
 # Which plugins would you like to load? (plugins can be found in ~/.oh-my-zsh/plugins/*)
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
-if [[ "${OSTYPE}" =~ darwin* ]]; then
+if [[ "${OSTYPE}" =~ "darwin"* ]]; then
     plugins=(autojump colored-man-pages docker fzf gem golang macos python rake ruby tmux)
-else
+elif [[ "${OSTYPE}" =~ "linux-gnu"* ]]; then
     plugins=(colored-man-pages docker gem golang python rake ruby ssh-agent svn tmux vagrant)
 fi
 

@@ -55,7 +55,7 @@ for compfile in ${COMPFILES}; do
 
     SERVER=$(echo ${SERVER} | tr '[:upper:]' '[:lower:]')
 
-    if [[ "${OSTYPE}" =~ darwin* ]]; then
+    if [[ "${OSTYPE}" =~ "darwin"* ]]; then
         PREFIX=$(date -j -f "%d%b%Y" "${basedir:4:9}" "+%Y-%m-%d" 2> /dev/null)
     else
         PREFIX=$(date -d "${basedir:4:9}" "+%Y-%m-%d" 2> /dev/null)
