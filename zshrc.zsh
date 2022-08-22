@@ -95,8 +95,6 @@ source $ZSH/oh-my-zsh.sh
 
 # Customize to your needs...
 # Load the rest of generic aliases and platform-specific aliases
-# source "${DOTFILES}/scripts/peco.zsh"
-# source "${DOTFILES}/scripts/fzf.zsh"
 source "${DOTFILES}/scripts/aliases.zsh"
 # This should be called only after sourcing the ${DOTFILES}/aliases.zsh file
 if [[ "${OSTYPE}" =~ darwin* ]]; then
