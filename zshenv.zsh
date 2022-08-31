@@ -23,27 +23,41 @@ if [[ "${OSTYPE}" =~ "darwin"* ]]; then
     CPPFLAGS="${CPPFLAGS} -I$(brew --prefix zlib)/include"
     LDFLAGS="${LDFLAGS} -L$(brew --prefix zlib)/lib"
 
+    if which pyenv > /dev/null; then
+        export PYENV_ROOT="${HOME}/.pyenv"
+        export PATH="${PYENV_ROOT}/bin:${PATH}"
+        eval "$(pyenv init --path)"
+        eval "$(pyenv init -)"
+    fi
+
+    if which rbenv > /dev/null; then
+        export RBENV_ROOT="${HOME}/.rbenv"
+        export PATH="${RBENV_ROOT}/bin:${PATH}"
+        eval "$(rbenv init -)"
+    fi
+
 elif [[ "${OSTYPE}" =~ "linux-gnu"* ]]; then
     # Configure LD_LIBRARY_PATH for Pop!_OS
     export LD_LIBRARY_PATH="${LD_LIBRARY_PATH}:/usr/lib/x86_64-linux-gnu"
 
+    if [[ -x "${HOME}/.pyenv/bin/pyenv" ]]; then
+        export PYENV_ROOT="${HOME}/.pyenv"
+        export PATH="${PYENV_ROOT}/bin:${PATH}"
+        eval "$(pyenv init --path)"
+        eval "$(pyenv init -)"
+    fi
+
     # rbenv looks a bit old under Pop!_OS
     PATH="${PATH}:${HOME}/.gem/ruby/2.5.0/bin"
+
+    if [[ -x "${HOME}/.rbenv/bin/rbenv" ]]; then
+        export RBENV_ROOT="${HOME}/.rbenv"
+        export PATH="${RBENV_ROOT}/bin:${PATH}"
+        eval "$(rbenv init -)"
+    fi
+
 fi
 
-if [[ -x "${HOME}/.pyenv/bin/pyenv" ]]; then
-    export PYENV_ROOT="${HOME}/.pyenv"
-    export PATH="${PYENV_ROOT}/bin:${PATH}"
-    eval "$(pyenv init --path)"
-    eval "$(pyenv init -)"
-fi
-
-if [[ -x "${HOME}/.rbenv/bin/rbenv" ]]; then
-#if which rbenv > /dev/null; then
-    export RBENV_ROOT="${HOME}/.rbenv"
-    export PATH="${RBENV_ROOT}/bin:${PATH}"
-    eval "$(rbenv init -)"
-fi
 
 if which nodenv > /dev/null; then
     export PATH="${HOME}/.nodenv/bin:${PATH}"

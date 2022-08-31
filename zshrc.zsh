@@ -86,7 +86,7 @@ alias rake="noglob rake"
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 if [[ "${OSTYPE}" =~ "darwin"* ]]; then
-    plugins=(autojump colored-man-pages docker fzf gem golang macos python rake ruby tmux)
+    plugins=(autojump colored-man-pages docker fzf gem golang macos pyenv python rake ruby tmux)
 elif [[ "${OSTYPE}" =~ "linux-gnu"* ]]; then
     plugins=(colored-man-pages docker gem golang python rake ruby ssh-agent svn tmux vagrant)
 fi
