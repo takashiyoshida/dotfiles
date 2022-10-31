@@ -33,7 +33,13 @@ if [[ "${OSTYPE}" =~ "darwin"* ]]; then
     if which rbenv > /dev/null; then
         export RBENV_ROOT="${HOME}/.rbenv"
         export PATH="${RBENV_ROOT}/bin:${PATH}"
-        eval "$(rbenv init -)"
+        eval "$(${RBENV_ROOT}/bin/rbenv init - zsh)"
+    fi
+
+    if which nodenv > /dev/null; then
+	export NODENV_ROOT="${HOME}/.nodenv"
+	export PATH="${NODENV_ROOT}/bin:${PATH}"
+	eval "$(${NODENV_ROOT}/bin/nodenv init -)"
     fi
 
 elif [[ "${OSTYPE}" =~ "linux-gnu"* ]]; then
@@ -48,20 +54,19 @@ elif [[ "${OSTYPE}" =~ "linux-gnu"* ]]; then
     fi
 
     # rbenv looks a bit old under Pop!_OS
-    PATH="${PATH}:${HOME}/.gem/ruby/2.5.0/bin"
+    # PATH="${PATH}:${HOME}/.gem/ruby/2.5.0/bin"
 
     if [[ -x "${HOME}/.rbenv/bin/rbenv" ]]; then
         export RBENV_ROOT="${HOME}/.rbenv"
         export PATH="${RBENV_ROOT}/bin:${PATH}"
-        eval "$(rbenv init -)"
+        eval "$(rbenv init - zsh)"
     fi
 
-fi
-
-
-if which nodenv > /dev/null; then
-    export PATH="${HOME}/.nodenv/bin:${PATH}"
-    eval "$(nodenv init -)"
+    if [[ -x "${HOME}/.nodenv/bin/nodenv" ]]; then
+	export NODENV_ROOT="${HOME}/.nodenv"
+	export PATH="${NODENV_ROOT}/bin:${PATH}"
+	eval "$(nodenv init -)"
+    fi
 fi
 
 PATH="${PATH}:${HOME}/Projects/dotfiles/bin"

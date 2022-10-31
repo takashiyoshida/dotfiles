@@ -86,9 +86,9 @@ alias rake="noglob rake"
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 if [[ "${OSTYPE}" =~ "darwin"* ]]; then
-    plugins=(autojump colored-man-pages docker fzf gem golang macos pyenv python rake ruby tmux)
+    plugins=(autojump colored-man-pages docker fzf gem golang macos pyenv python rake rbenv ruby tmux)
 elif [[ "${OSTYPE}" =~ "linux-gnu"* ]]; then
-    plugins=(colored-man-pages docker gem golang python rake ruby ssh-agent svn tmux vagrant)
+    plugins=(colored-man-pages docker gem golang pyenv python rake rbenv ruby ssh-agent svn tmux vagrant)
 fi
 
 source $ZSH/oh-my-zsh.sh
@@ -109,9 +109,12 @@ if [[ "${OSTYPE}" =~ darwin* ]]; then
     add-ssh-private-keys
 fi
 
+# eval "$(${RBENV_ROOT}/bin/rbenv init - zsh)"
+
 source "${HOME}/.projects.zsh"
 source "${HOME}/.secrets.zsh"
 
 # Uncomment the following line to enable zsh startup time
 # zprof
 # Finally, run `time zsh -i -c exit`
+
