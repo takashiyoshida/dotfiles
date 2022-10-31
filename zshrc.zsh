@@ -88,7 +88,7 @@ alias rake="noglob rake"
 if [[ "${OSTYPE}" =~ "darwin"* ]]; then
     plugins=(autojump colored-man-pages docker fzf gem golang macos pyenv python rake rbenv ruby tmux)
 elif [[ "${OSTYPE}" =~ "linux-gnu"* ]]; then
-    plugins=(colored-man-pages docker gem golang pyenv python rake rbenv ruby ssh-agent svn tmux vagrant)
+    plugins=(colored-man-pages docker fzf gem golang pyenv python rake rbenv ruby ssh-agent svn tmux vagrant)
 fi
 
 source $ZSH/oh-my-zsh.sh
