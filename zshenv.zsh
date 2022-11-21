@@ -1,76 +1,10 @@
 # echo "zshenv.zsh"
 
+# For macOS, do not configure PATH here as /etc/zprofile will call
+# `/usr/libexec/path_helper -s` to configure PATH variable.
+# In Linux, /etc/zsh/zprofile file is empty and does not set PATH variable.
+
 export TERM=xterm-256color
-
-if [[ "${OSTYPE}" =~ "darwin"* ]]; then
-    # Add Homebrew patch (/opt/homebrew/bin) to PATH
-    eval "$(/opt/homebrew/bin/brew shellenv)"
-
-    # For some reason, my MacBook Pro 14" does not do tab-completion for
-    # Homebrew so this allows the tab-completion to work.
-    if type brew > /dev/null 2>&1; then
-        FPATH=$(brew --prefix)/completions/zsh:${FPATH}
-        autoload -Uz compinit
-        compinit
-    fi
-
-    # MacTex (brew install --cask mactex) is a Universal binary package
-    PATH="${PATH}:/usr/local/texlive/2022/bin/universal-darwin"
-
-    # Building Python via pyenv install...
-    CPPFLAGS="${CPPFLAGS} -I$(brew --prefix bzip2)/include"
-    LDFLAGS="${LDFLAGS} -L$(brew --prefix bzip2)/lib"
-    CPPFLAGS="${CPPFLAGS} -I$(brew --prefix zlib)/include"
-    LDFLAGS="${LDFLAGS} -L$(brew --prefix zlib)/lib"
-
-    if which pyenv > /dev/null; then
-        export PYENV_ROOT="${HOME}/.pyenv"
-        export PATH="${PYENV_ROOT}/bin:${PATH}"
-        eval "$(pyenv init --path)"
-        eval "$(pyenv init -)"
-    fi
-
-    if which rbenv > /dev/null; then
-        export RBENV_ROOT="${HOME}/.rbenv"
-        export PATH="${RBENV_ROOT}/bin:${PATH}"
-        eval "$(${RBENV_ROOT}/bin/rbenv init - zsh)"
-    fi
-
-    if which nodenv > /dev/null; then
-	export NODENV_ROOT="${HOME}/.nodenv"
-	export PATH="${NODENV_ROOT}/bin:${PATH}"
-	eval "$(${NODENV_ROOT}/bin/nodenv init -)"
-    fi
-
-elif [[ "${OSTYPE}" =~ "linux-gnu"* ]]; then
-    # Configure LD_LIBRARY_PATH for Pop!_OS
-    export LD_LIBRARY_PATH="${LD_LIBRARY_PATH}:/usr/lib/x86_64-linux-gnu"
-
-    if [[ -x "${HOME}/.pyenv/bin/pyenv" ]]; then
-        export PYENV_ROOT="${HOME}/.pyenv"
-        export PATH="${PYENV_ROOT}/bin:${PATH}"
-        eval "$(pyenv init --path)"
-        eval "$(pyenv init -)"
-    fi
-
-    # rbenv looks a bit old under Pop!_OS
-    # PATH="${PATH}:${HOME}/.gem/ruby/2.5.0/bin"
-
-    if [[ -x "${HOME}/.rbenv/bin/rbenv" ]]; then
-        export RBENV_ROOT="${HOME}/.rbenv"
-        export PATH="${RBENV_ROOT}/bin:${PATH}"
-        eval "$(rbenv init - zsh)"
-    fi
-
-    if [[ -x "${HOME}/.nodenv/bin/nodenv" ]]; then
-	export NODENV_ROOT="${HOME}/.nodenv"
-	export PATH="${NODENV_ROOT}/bin:${PATH}"
-	eval "$(nodenv init -)"
-    fi
-fi
-
-PATH="${PATH}:${HOME}/Projects/dotfiles/bin"
-PATH="${PATH}:${HOME}/bin"
 
 # EDITOR
 # CVS_EDITOR

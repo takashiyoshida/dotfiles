@@ -86,9 +86,11 @@ alias rake="noglob rake"
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 if [[ "${OSTYPE}" =~ "darwin"* ]]; then
-    plugins=(autojump colored-man-pages docker fzf gem golang macos pyenv python rake rbenv ruby tmux)
+    # Do not add pyenv and rbenv plugins here when manually configuring pyenv and rbenv
+    # (Refer to zprofile.zsh)
+    plugins=(autojump colored-man-pages docker fzf gem golang macos python rake ruby tmux)
 elif [[ "${OSTYPE}" =~ "linux-gnu"* ]]; then
-    plugins=(colored-man-pages docker fzf gem golang pyenv python rake rbenv ruby ssh-agent svn tmux vagrant)
+    plugins=(colored-man-pages docker fzf gem golang python rake ruby ssh-agent svn tmux vagrant)
 fi
 
 source $ZSH/oh-my-zsh.sh
@@ -96,6 +98,7 @@ source $ZSH/oh-my-zsh.sh
 # Customize to your needs...
 # Load the rest of generic aliases and platform-specific aliases
 source "${DOTFILES}/scripts/aliases.zsh"
+
 # This should be called only after sourcing the ${DOTFILES}/aliases.zsh file
 if [[ "${OSTYPE}" =~ darwin* ]]; then
     if [ -f /opt/homebrew/etc/profile.d/autojump.sh ]; then
@@ -117,4 +120,3 @@ source "${HOME}/.secrets.zsh"
 # Uncomment the following line to enable zsh startup time
 # zprof
 # Finally, run `time zsh -i -c exit`
-
