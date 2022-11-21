@@ -36,6 +36,10 @@ if [[ "${OSTYPE}" =~ "darwin"* ]]; then
     PATH="${PATH}:/usr/local/texlive/2022/bin/universal-darwin"
 
 elif [[ "${OSTYPE}" =~ "linux-gnu"* ]]; then
+    PATH="/usr/local/bin:/usr/local/sbin"
+    PATH="${PATH}:/usr/bin:/bin"
+    PATH="${PATH}:/usr/sbin:/sbin"
+
     # Configure LD_LIBRARY_PATH for Pop!_OS
     export LD_LIBRARY_PATH="${LD_LIBRARY_PATH}:/usr/lib/x86_64-linux-gnu"
 
