@@ -37,6 +37,7 @@ if [[ "${OSTYPE}" =~ "darwin"* ]]; then
 
 elif [[ "${OSTYPE}" =~ "linux-gnu"* ]]; then
     PATH="/usr/local/bin:/usr/local/sbin"
+    PATH="${PATH}:/usr/games"
     PATH="${PATH}:/usr/bin:/bin"
     PATH="${PATH}:/usr/sbin:/sbin"
 
