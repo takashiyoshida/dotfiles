@@ -1,6 +1,7 @@
 # Work-related configurations
 
-NIC="enp7s0"
+# network interface to be used for connecting to NELARCHIVER
+NELARCHIVER_NIC="enp7s0"
 
 if [[ "${OSTYPE}" =~ "linux-gnu"* ]]; then
 
@@ -12,7 +13,7 @@ if [[ "${OSTYPE}" =~ "linux-gnu"* ]]; then
         if [ -z "${NELARCHIVER_IP}" ]; then
             # When not working from office, I will run a Docker container as a nelarchiver
             # Depending on your OS, you will need to change the network interface below
-            NELARCHIVER_IP=$(ifconfig ${NIC} | grep --color=never "inet " | awk '{ print $2 }')
+            NELARCHIVER_IP=$(ifconfig ${NELARCHIVER_NIC} | grep --color=never "inet " | awk '{ print $2 }')
             NELARCHIVER_PORT="8080"
         fi
         export NELARCHIVER_IP

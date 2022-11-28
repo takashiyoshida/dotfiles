@@ -13,6 +13,7 @@ from time import time
 
 
 class Cookies:
+
     def __init__(self, filename='.cookies'):
         '''
         Initializes and loads cookies file
@@ -90,7 +91,7 @@ def uncompress_gzip(gzipfile, destination):
 
 def filter_nelrtu_logs(directory):
     '''
-    Returns a list of uncompressed NELRTU log (nelrtu.log*) in the 
+    Returns a list of uncompressed NELRTU log (nelrtu.log*) in the
     given directory
     '''
     result = -1
@@ -104,8 +105,8 @@ def filter_nelrtu_logs(directory):
                     gzipfile = '%s/%s' % (root, file)
                     result = uncompress_gzip(gzipfile, root)
                     if result != 0:
-                        logging.error(
-                            'Failed to expand %s successfully', gzipfile)
+                        logging.error('Failed to expand %s successfully',
+                                      gzipfile)
                         continue
                 else:
                     filename = file
@@ -113,8 +114,8 @@ def filter_nelrtu_logs(directory):
                 logging.info('Adding %s to a list for processing', logfile)
                 logfiles.append(logfile)
             else:
-                logging.warning(
-                    '%s does not match the expected filename', file)
+                logging.warning('%s does not match the expected filename',
+                                file)
     return logfiles
 
 
@@ -130,14 +131,16 @@ def convert_level_num_to_name(text):
     '''
     Returns a log level matching a given number (text)
     '''
-    levels = {0: 'emerg',
-              1: 'alert',
-              2: 'crit',
-              3: 'err',
-              4: 'warning',
-              5: 'notice',
-              6: 'info',
-              7: 'debug'}
+    levels = {
+        0: 'emerg',
+        1: 'alert',
+        2: 'crit',
+        3: 'err',
+        4: 'warning',
+        5: 'notice',
+        6: 'info',
+        7: 'debug'
+    }
     try:
         num = int(text)
         if 0 < num > 7:
@@ -159,8 +162,8 @@ MINUTE = r'[0-5]\d'
 SECOND = r'[0-5]\d'
 MSECOND = r'\d{3}'
 
-TIMESTAMP = r'(?P<timestamp>%s-%s-%s %s:%s:%s\.%s)' % (YEAR, MONTH, DAY, HOUR, MINUTE,
-                                                       SECOND, MSECOND)
+TIMESTAMP = r'(?P<timestamp>%s-%s-%s %s:%s:%s\.%s)' % (YEAR, MONTH, DAY, HOUR,
+                                                       MINUTE, SECOND, MSECOND)
 HOSTNAME = r'(?P<host>[a-z]{3}rt[su][12]) '
 LEVEL = r'(?P<level>[a-z0-9]+):'
 PROCESS = r'(?P<process>nelrtuapp_[a-z]{3})\[(?P<process_id>\d+)\]:'
@@ -196,15 +199,17 @@ def process_nelrtu_log(infile, hostname='unknown'):
 
             match = re.match(TIMESTAMP, line)
             if match:
-                event = {'timestamp': '',
-                         'host': hostname,  # use default hostname, first
-                         'level': '',
-                         'process': '',
-                         'process_id': '',
-                         'filename': '',
-                         'line': '',
-                         'user': '',
-                         'message': ''}
+                event = {
+                    'timestamp': '',
+                    'host': hostname,  # use default hostname, first
+                    'level': '',
+                    'process': '',
+                    'process_id': '',
+                    'filename': '',
+                    'line': '',
+                    'user': '',
+                    'message': ''
+                }
 
                 event['timestamp'] = match.group('timestamp')
                 line = line[match.end():].strip()
@@ -242,7 +247,8 @@ def process_nelrtu_log(infile, hostname='unknown'):
                                 if match:
                                     event['filename'] = match.group('filename')
                                     event['line'] = match.group('line')
-                                    event['message'] = line[match.end()                                                            :].strip()
+                                    event['message'] = line[match.end(
+                                    ):].strip()
                                 else:
                                     event['message'] = line.strip()
                     else:
@@ -251,12 +257,13 @@ def process_nelrtu_log(infile, hostname='unknown'):
                             event['user'] = match.group('user')
                             event['message'] = line[match.end():].strip()
                         else:
-                            logging.error('Unable to match process name and ID in %s at %d',
-                                          infile, count)
+                            logging.error(
+                                'Unable to match process name and ID in %s at %d',
+                                infile, count)
                             logging.error(line)
                 else:
-                    logging.error(
-                        'Unable to match log level in %s at %d', infile, count)
+                    logging.error('Unable to match log level in %s at %d',
+                                  infile, count)
                     logging.error(line)
 
                 if event['level'] == 'debug':
@@ -279,8 +286,8 @@ def process_nelrtu_log(infile, hostname='unknown'):
 
                 events.append(event)
             else:
-                logging.error(
-                    'Unable to match timestamp in %s at %d', infile, count)
+                logging.error('Unable to match timestamp in %s at %d', infile,
+                              count)
                 logging.error(line)
 
         t1 = time()
@@ -294,20 +301,24 @@ def write_events_to_csv(outfile, events):
     Writes a list of events to a CSV file
     '''
     with open(outfile, 'w') as csvfile:
-        fieldnames = ['timestamp', 'host', 'level', 'process', 'process_id',
-                      'filename', 'line', 'message']
+        fieldnames = [
+            'timestamp', 'host', 'level', 'process', 'process_id', 'filename',
+            'line', 'message'
+        ]
         writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
         writer.writeheader()
 
         for event in events:
-            writer.writerow({'timestamp': event['timestamp'],
-                             'host': event['host'],
-                             'level': event['level'],
-                             'process': event['process'],
-                             'process_id': event['process_id'],
-                             'filename': event['filename'],
-                             'line': event['line'],
-                             'message': event['message']})
+            writer.writerow({
+                'timestamp': event['timestamp'],
+                'host': event['host'],
+                'level': event['level'],
+                'process': event['process'],
+                'process_id': event['process_id'],
+                'filename': event['filename'],
+                'line': event['line'],
+                'message': event['message']
+            })
 
 
 def cleanup(directory):
@@ -363,10 +374,17 @@ def main():
     init_logging()
 
     parser = argparse.ArgumentParser(prog='manticore')
-    parser.add_argument('--directory', '-d', required=True,
-                        dest='directory', help='path to NELRTU log directory')
-    parser.add_argument('--keep', '-k', required=False, action='store_true',
-                        default=False, dest='keep',
+    parser.add_argument('--directory',
+                        '-d',
+                        required=True,
+                        dest='directory',
+                        help='path to NELRTU log directory')
+    parser.add_argument('--keep',
+                        '-k',
+                        required=False,
+                        action='store_true',
+                        default=False,
+                        dest='keep',
                         help='Keep temporary files for debugging purpose')
     args = parser.parse_args()
 
@@ -379,8 +397,8 @@ def main():
                 if result == 0:
                     cookies.save_cookie(file)
             else:
-                logging.info(
-                    '%s has been processed before, skipping ...', file)
+                logging.info('%s has been processed before, skipping ...',
+                             file)
 
 
 if __name__ == "__main__":

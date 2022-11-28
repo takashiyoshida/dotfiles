@@ -8,13 +8,18 @@ import subprocess
 def main():
     '''
     '''
-    parser = argparse.ArgumentParser(prog='svn-find-branch',
-                                     description='Find branches created from a given branch name',
-                                     epilog='Use svn log -r <begin:end> -v <SVN_URL> > svn_log.txt to create a log file')
-    parser.add_argument('--log', '-l', required=True, dest='logfile',
+    parser = argparse.ArgumentParser(
+        prog='svn-find-branch',
+        description='Find branches created from a given branch name',
+        epilog=
+        'Use svn log -r <begin:end> -v <SVN_URL> > svn_log.txt to create a log file'
+    )
+    parser.add_argument('--log',
+                        '-l',
+                        required=True,
+                        dest='logfile',
                         help='svn log file to parse')
-    parser.add_argument('--parent', '-p', dest='parent',
-                        help='parent branch')
+    parser.add_argument('--parent', '-p', dest='parent', help='parent branch')
 
     args = parser.parse_args()
 
@@ -31,7 +36,8 @@ def main():
 
     for m in matches:
         print('%s created from %s%s on %s by %s' %
-              (m.group('branch'), args.parent, m.group('brevision'), m.group('date'), m.group('author')))
+              (m.group('branch'), args.parent, m.group('brevision'),
+               m.group('date'), m.group('author')))
 
 
 if __name__ == '__main__':

@@ -50,26 +50,19 @@ METHODS_EVENTS = {
     0x1b: 'MONITOR_SUBSCRIBER',  # 27
     0x1c: 'FORCE_CALL_TERMINATION',  # 28
     0x1d: 'MONITOR_CALL',  # 29
-
     0x20: 'INCLUDE',  # 32
     0x21: 'AUTHORISE_CALL',  # 33
-
     0x23: 'GET_GROUP_DETAILS',  # 35
-
     0x26: 'CONVERT_TO_DBTIME',  # 38
     0x27: 'ATTACH_TO_GROUP',  # 39
     0x28: 'DETATCH_FROM_GROUP',  # 40
     0x29: 'SEND_CIRCUIT_DATA',  # 41
-
     0x30: 'TEXT_TO_REFERENCE',  # 48
-
     0x32: 'ATTACH_MONITOR_AUDIO',  # 50
     0x33: 'JOIN',  # 51
     0x34: 'DETACH_MONITOR_AUDIO',  # 52
     0x65: 'GET_ACTIVE_ALARM_LIST',  # 101
-
     0x8343: 'EVENT_SC_ACTIVE_ALARM',  # 33603
-
     0xa000: 'EVENT_SYSTEM_ERROR',  # 40960
     0xa001: 'EVENT_INCOMING_CALL',  # 40961
     0xa002: 'EVENT_INCOMING_SDS',  # 40962
@@ -77,10 +70,8 @@ METHODS_EVENTS = {
     0xa004: 'EVENT_SUBSCRIBER_ACTIVITY',  # 40964
     0xa005: 'EVENT_INCOMING_CIRCUIT_DATA',  # 40965
     0xa006: 'EVENT_CIRCUIT_DATA_CAPACITY',  # 40966
-
     0xa009: 'EVENT_REQUEST_AUTHORISE_CALL',  # 40969
     0xa00a: 'EVENT_GROUP_CALL_ACK',  # 40970
-
     0xa00e: 'EVENT_DGNA_CREATED',  # 40974
     0xa00f: 'EVENT_DGNA_DELETED',  # 40975
 }
@@ -96,7 +87,6 @@ COMMANDS = {
     0x8: 'command',  # 8
     0x9: 'Command Received',  # 9
     0xa: 'Frequency Change',  # 10
-
     0xb: 'PA Live Announcement',  # 11
     0xc: 'Pre-Recorded Announcement',  # 12
     0xd: 'DVA Announcement',  # 13
@@ -113,7 +103,6 @@ COMMANDS = {
     0x18: 'Train PA Message Completed',  # 24
     0x19: 'ATAS Cyclic Announcement',  # 25
     0x1a: 'Audio SW on Cab to Cab',  # 26
-
     0x1b: 'command',  # 27
     0x1c: 'command',  # 28
     0x1d: 'command',  # 29
@@ -133,13 +122,11 @@ COMMANDS = {
     0x2b: 'PIS Library Upgrade',  # 43
     0x2c: 'PIS Schedule Download',  # 44
     0x2d: 'PIS Schedule Upgrade',  # 45
-
     0x2e: 'command',  # 46
     0x2f: 'command',  # 47
     0x30: 'command',  # 48
     0x31: 'command',  # 49
     0x32: 'command',  # 50
-
     0x33: 'PEC Answer',  # 51
     0x34: 'PEC Reset',  # 52
     0x35: 'PEC Activated',  # 53
@@ -148,7 +135,6 @@ COMMANDS = {
     0x38: 'Ready for PEC Conversation',  # 56
     0x39: 'Request for PEC Reset',  # 57
     0x3a: 'PEC Continue',  # 58
-
     0x3b: 'command',  # 59
     0x3c: 'command',  # 60
     0x3d: 'Critical Alarm',  # 61
@@ -244,15 +230,9 @@ PIS_STATUS_5 = {
     10: 'Different Version No.'
 }
 
-PIS_STATUS_9 = {
-    1: 'Request',
-    2: 'Ready for Upload'
-}
+PIS_STATUS_9 = {1: 'Request', 2: 'Ready for Upload'}
 
-PIS_STATUS_10 = {
-    0: 'Successful',
-    1: 'Failed'
-}
+PIS_STATUS_10 = {0: 'Successful', 1: 'Failed'}
 
 
 def init_logging():
@@ -295,8 +275,8 @@ def parse_logfile(infile):
             line_num += 1
 
             if len(line) == 0:
-                logging.info(
-                    'Ignoring blank line at {} of {}'.format(line_num, infile))
+                logging.info('Ignoring blank line at {} of {}'.format(
+                    line_num, infile))
                 continue
 
             match = re.match(HEADER, line)
@@ -324,23 +304,25 @@ def parse_logfile(infile):
                     rad_data = ''
                     rad_text = ''
 
-                event = {'timestamp': match.group('timestamp'),  # time of the event
-                         # length of the message
-                         'length': int(match.group('length')),
-                         'session': int(match.group('session')),  # session ID
-                         # transmission ID
-                         'trans_id': int(match.group('trans_id')),
-                         'status': int(match.group('status')),  # status
-                         # method/event (in hexadecimal)
-                         'met_event': '0x{}'.format(met_event),
-                         'i_met_event': int(met_event, 16),  # internal data
-                         'description': '',  # description of the method/event
-                         'command': '',  # command in SDS message
-                         'atc_car': '',  # ATC car number in SDS message
-                         'origin': '',  # Origin in SDS message
-                         'sds_status': '',  # status returned in some SDS message
-                         'data': '',  # binary data
-                         'text': ''}  # ASCII representation of the binary data
+                event = {
+                    'timestamp': match.group('timestamp'),  # time of the event
+                    # length of the message
+                    'length': int(match.group('length')),
+                    'session': int(match.group('session')),  # session ID
+                    # transmission ID
+                    'trans_id': int(match.group('trans_id')),
+                    'status': int(match.group('status')),  # status
+                    # method/event (in hexadecimal)
+                    'met_event': '0x{}'.format(met_event),
+                    'i_met_event': int(met_event, 16),  # internal data
+                    'description': '',  # description of the method/event
+                    'command': '',  # command in SDS message
+                    'atc_car': '',  # ATC car number in SDS message
+                    'origin': '',  # Origin in SDS message
+                    'sds_status': '',  # status returned in some SDS message
+                    'data': '',  # binary data
+                    'text': ''
+                }  # ASCII representation of the binary data
 
                 continue
 
@@ -349,7 +331,8 @@ def parse_logfile(infile):
                 logging.debug('Line {} looks like data'.format(line_num))
                 if not has_header:
                     logging.warning(
-                        'Encountered radio data without a header at line {} of {}; Skipping...'.format(line_num, infile))
+                        'Encountered radio data without a header at line {} of {}; Skipping...'
+                        .format(line_num, infile))
                     continue
 
                 # Split the hexadecimal data and ASCII representation
@@ -368,7 +351,8 @@ def parse_logfile(infile):
                 logging.debug('rad_text: {}'.format(rad_text))
             else:
                 logging.warning(
-                    'Ignoring unexpected data at line {} of {}'.format(line_num, infile))
+                    'Ignoring unexpected data at line {} of {}'.format(
+                        line_num, infile))
                 has_header = False
                 rad_data = ''
                 rad_text = ''
@@ -379,8 +363,7 @@ def parse_logfile(infile):
         event['text'] = rad_text.strip()
         rad_events.append(event)
 
-    logging.info('Extracted {} data from {}'.format(
-        len(rad_events), infile))
+    logging.info('Extracted {} data from {}'.format(len(rad_events), infile))
 
     return rad_events
 
@@ -470,13 +453,13 @@ def decode_sds_message(event, raw_data):
     event['origin'] = origin
 
     if cmd_code >= 0x1f and cmd_code <= 0x2d:
-        [status_code, status_name] = decode_pis_command_status(
-            cmd_code, offset, raw_data)
+        [status_code,
+         status_name] = decode_pis_command_status(cmd_code, offset, raw_data)
         if status_name == None:
             event['sds_status'] = 'Undefined ({})'.format(status_code)
         elif len(status_name) > 0:
-            event['sds_status'] = '{} ({})'.format(
-                status_name, hex(status_code))
+            event['sds_status'] = '{} ({})'.format(status_name,
+                                                   hex(status_code))
 
 
 def decode_pis_command_status(command, offset, raw_data):
@@ -505,8 +488,11 @@ def write_events(events, outfile):
     Writes events to a file
     '''
     with open(outfile, 'wb') as csvfile:
-        fieldnames = ['timestamp', 'length', 'session',
-                      'trans_id', 'status', 'met_event', 'i_met_event', 'description', 'command', 'atc_car', 'origin', 'sds_status', 'data', 'text']
+        fieldnames = [
+            'timestamp', 'length', 'session', 'trans_id', 'status',
+            'met_event', 'i_met_event', 'description', 'command', 'atc_car',
+            'origin', 'sds_status', 'data', 'text'
+        ]
         writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
         writer.writeheader()
 
@@ -521,9 +507,15 @@ def main():
     init_logging()
 
     parser = argparse.ArgumentParser(prog='radiogaga')
-    parser.add_argument('--log', '-l', required=True, dest='logs',
+    parser.add_argument('--log',
+                        '-l',
+                        required=True,
+                        dest='logs',
                         help='path to rad_log files')
-    parser.add_argument('--output', '-o', required=True, dest='outfile',
+    parser.add_argument('--output',
+                        '-o',
+                        required=True,
+                        dest='outfile',
                         help='writes events from rad_log to a CSV file')
     args = parser.parse_args()
     print(args)
