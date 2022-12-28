@@ -6,6 +6,7 @@ source "${DOTFILES}/scripts/linux-aliases.zsh"
 alias lh="ls -lh"
 alias lah="ls -lah"
 alias lll="ll | less"
+alias llr="ll -r"
 
 # Set TERM to xterm-256color to avoid incorrect color from being used
 # in tmux session
