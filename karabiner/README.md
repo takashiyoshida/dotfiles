@@ -2,20 +2,24 @@
 
 ## Simple Modifications
 
-### Caps Lock
+### Built-in Keyboard
 
-- `Caps Lock` key is mapped to `Left Control` key
+#### Caps Lock
 
-### Escape
+- `caps_lock` key is mapped to `left_control` key
 
-- `Escape` key is mapped to `fn` key
+### All Devices
+
+#### Escape
+
+- `escape` key is mapped to `apple_vendor_keyboard_key_code function` key
 
 ## Complex Modifications
 
 ### Left Control
 
-- `Left Control` key posts `Escape` when it is pressed alone
-- `Left Control` key posts `Left Control` when it is pressed with other keys
+- `left_control` key posts `escape` when it is pressed alone. This is useful in canceling a dialog or in `Vim`.
+- `left_control` key posts `left_control` when it is held down with other keys. This is useful in `Emacs` and macOS Emacs key bindings.
 
 ### Craft
 
