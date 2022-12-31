@@ -16,3 +16,9 @@
 
 - `Left Control` key posts `Escape` when it is pressed alone
 - `Left Control` key posts `Left Control` when it is pressed with other keys
+
+### Craft
+
+- `Left Control` + `p` posts `up_arrow`
+- `Left Control` + `n` posts `down_arrow`
+- `Left Control` + `d` posts `delete_forward`
