@@ -61,14 +61,13 @@ function applicationWatcher(appName, eventType, appObject)
     end
 
     if (eventType == hs.application.watcher.activated) then
-        if (appName == "Finder") then
-            -- Bring all Finder windows to forward when one gets activated
-            print("Switching to Finder ...")
-            appObject:selectMenuItem({"Window", "Bring All to Front"})
-        elseif (appName == "Fantastical") then
+        if (appName == "Fantastical") then
             -- Switch to Fantastical 2 and open its window
             -- Without this, Fantastical becomes active with no window in
             -- a different space
+
+            -- Take note that this code maaay actually be irelevant
+            -- since I stopped using Spaces
             print("Switching to Fantastical ...")
             appObject:selectMenuItem({"Window", "Full Calendar Window"})
         end
