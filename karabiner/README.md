@@ -22,3 +22,8 @@
 - `Left Control` + `p` posts `up_arrow`
 - `Left Control` + `n` posts `down_arrow`
 - `Left Control` + `d` posts `delete_forward`
+
+### Microsoft Office
+
+- Add Emacs-like key bindings to Microsoft Office
+    - `Control` + `fbnpae` for cursor movement
