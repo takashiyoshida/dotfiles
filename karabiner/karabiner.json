@@ -43,6 +43,27 @@
                         ]
                     },
                     {
+                        "description": "Post fn key when escape key is tapped alone",
+                        "manipulators": [
+                            {
+                                "from": {
+                                    "key_code": "escape",
+                                    "modifiers": {
+                                        "optional": [
+                                            "any"
+                                        ]
+                                    }
+                                },
+                                "to": [
+                                    {
+                                        "apple_vendor_top_case_key_code": "keyboard_fn"
+                                    }
+                                ],
+                                "type": "basic"
+                            }
+                        ]
+                    },
+                    {
                         "description": "Post Hyper key when escape is held with another key, escape key if tapped alone",
                         "manipulators": [
                             {
