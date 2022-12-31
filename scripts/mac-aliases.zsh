@@ -3,7 +3,7 @@ if [[ "${OSTYPE}" =~ "darwin"* ]]; then
     alias ls="ls -CFG"
     alias top="top -ocpu -R -F -s 2"
     alias hub=git
-    alias vless="/opt/homebrew/share/vim/vim82/macros/less.sh"
+    alias vless="/opt/homebrew/share/vim/vim90/macros/less.sh"
 
     alias brout="brew update && brew outdated"
     alias brupg="brew upgrade"
