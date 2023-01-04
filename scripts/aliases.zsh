@@ -6,10 +6,6 @@ elif [[ "${OSTYPE}" =~ "linux-gnu"* ]]; then
 fi
 
 # Common set of aliases
-alias lh="ls -lh"
-alias lah="ls -lah"
-alias lll="ll | less"
-alias llr="ll -R"
 
 # Set TERM to xterm-256color to avoid incorrect color from being used
 # in tmux session

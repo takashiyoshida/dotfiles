@@ -1,4 +1,10 @@
-alias ls="ls -CFG"
+# alias ls="ls -CFG"
+alias ls="exa -F --icons"
+alias ll="exa -lF --icons"
+alias la="ll -a"
+alias lll="ll | less"
+alias llr="ll -R"
+
 alias top="top -ocpu -R -F -s 2"
 alias hub=git
 alias vless="/opt/homebrew/share/vim/vim90/macros/less.sh"

@@ -1,4 +1,9 @@
 alias ls="ls -CF --color=auto"
+alias lh="ls -lh"
+alias lah="ls -lah"
+alias lll="ll | less"
+alias llr="ll -R"
+
 alias apti="apt list --installed 2> /dev/null"
 
 alias vless="/usr/share/vim/vim82/macros/less.sh"
