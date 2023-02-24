@@ -9,8 +9,12 @@ import shutil
 import tarfile
 
 # A list of valid environment
+# NUP is specific to NELNUP project and does not exist in other projects (i.e. C755B)
 ENVIRONMENT = ['ATS', 'BGK', 'BNK', 'CMS', 'CNT', 'CQY', 'DBG', 'ECS', 'EMS', 'FRP', 'HBF',
-               'HGN', 'KVN', 'LTI', 'NED', 'OTP', 'PGC', 'PGL', 'PTP', 'SER', 'SKG', 'WLH']
+               'HGN', 'KVN', 'LTI', 'NED', 'NMS', 'OTP', 'PGC', 'PGL', 'PTP', 'SER', 'SKG', 'WLH']
+
+WINDOWS_LINE_ENDING = b'\r\n'
+UNIX_LINE_ENDING = b'\n'
 
 
 def init_logging():
@@ -89,6 +93,13 @@ def file_exists(infile):
 
     logging.info('The file %s does not exist', infile)
     return False
+
+
+def search_and_replace(infile, search, replace):
+    '''
+    '''
+    text = open(infile, 'rb').read().replace(search, replace)
+    open(infile, 'wb').write(text)
 
 
 def prerequisites_exists(database_path, environment):
@@ -206,19 +217,26 @@ def export_archives(database_path, environ):
         source_item = os.path.join(source_path, 'POWLIGHT.cfg')
         export_item = os.path.join(
             export_path, 'CMST_POWLIGHT', 'CMST_POWLIGHT.cfg')
+
         logging.info('Exporting %s to %s ...', source_item, export_item)
         shutil.copy2(source_item, export_item)
+        search_and_replace(export_item, 'POWLIGHT', 'CMST_POWLIGHT')
 
         source_item = os.path.join(source_path, 'POWMXD.cfg')
         export_item = os.path.join(
             export_path, 'CMST_POWMXD', 'CMST_POWMXD.cfg')
+            
         logging.info('Exporting %s to %s ...', source_item, export_item)
         shutil.copy2(source_item, export_item)
+        search_and_replace(export_item, 'POWMXD', 'CMST_POWMXD')
     elif environ == 'ECS':
         source_item = os.path.join(source_path, 'ECS.cfg')
         export_item = os.path.join(export_path, 'ECST_ECS', 'ECST_ECS.cfg')
+
         logging.info('Exporting %s to %s ...', source_item, export_item)
         shutil.copy2(source_item, export_item)
+        search_and_replace(export_item, 'ECS.cfg', 'ECST_ECS.cfg')
+        search_and_replace(export_item, '"ECS"', '"ECST_ECS"')
 
 
 def export_dac_files(database_path, environ):
@@ -261,14 +279,21 @@ def export_database_files(database_path, environ):
     shutil.copy2(source_item, export_item)
 
 
+def fix_file_line_ending(file_path):
+    with open(file_path, 'rb') as infile:
+        content = infile.read()
+
+    content = content.replace(WINDOWS_LINE_ENDING, UNIX_LINE_ENDING)
+    with open(file_path, 'wb') as outfile:
+        outfile.write(content)
+
 def main():
     '''
     main function
     '''
     init_logging()
 
-    parser = argparse.ArgumentParser(
-        prog='db-prepper', description='Generate a tarball from Configurator\'s output.')
+    parser = argparse.ArgumentParser(prog='db-prepper', description='Generate a tarball from Configurator\'s output.')
     # Path to database directory
     parser.add_argument('--database-path', '-d', required=True,
                         dest='database_path', help='path to database directory')
@@ -278,6 +303,8 @@ def main():
                         dest='environment', help='name of ISCS environment')
     parser.add_argument('--compress', '-z', required=False, dest='db_version',
                         help='creates a tarball from exported files')
+    parser.add_argument('--fix-line-ending', '-f', action='store_true', required=False, 
+                        dest='fix_line_ending', help='fix Windows line-ending')
 
     args = parser.parse_args()
 
@@ -318,6 +345,7 @@ def main():
         logging.info(
             'Prepping database files for %s environment complete ...', environ)
 
+
     if args.db_version != None:
         for environ in args.environment:
             if directory_exists(environ):
@@ -330,6 +358,21 @@ def main():
                 logging.info('OK')
             else:
                 logging.warn('%s does not exist. Skipping ...', environ)
+
+    if args.fix_line_ending:
+        for environ in args.environment:
+            # dbmuserconst_class_*.cfg files are at args.database_path
+            class_cfg = os.path.join(args.database_path, 'Database', 
+                                     'dbmuserconst_class_%s.cfg' % (environ))
+            classlist = os.path.join(args.database_path, 'Database', 
+                                     'classlist_%s.txt' % (environ))
+            if file_exists(class_cfg):
+                logging.info('Converting Windows line ending to UNIX line ending in %s...', class_cfg)
+                fix_file_line_ending(class_cfg)
+
+            if file_exists(classlist):
+                logging.info('Converting Windows line ending to UNIX line ending in %s...', class_cfg)
+                fix_file_line_ending(classlist)
 
 
 if __name__ == '__main__':
