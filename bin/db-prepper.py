@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
 import argparse
 import logging
@@ -98,7 +98,7 @@ def file_exists(infile):
 def search_and_replace(infile, search, replace):
     '''
     '''
-    text = open(infile, 'rb').read().replace(search, replace)
+    text = open(infile, 'rb').read().replace(bytes(search, 'utf-8'), bytes(replace, 'utf-8'))
     open(infile, 'wb').write(text)
 
 
