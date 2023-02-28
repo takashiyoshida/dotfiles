@@ -1,6 +1,6 @@
 # alias ls="ls -CFG"
-alias ls="exa -F --icons"
-alias ll="exa -lF --icons"
+alias ls="exa -F"
+alias ll="exa -lF"
 alias la="ll -a"
 alias lll="ll | less"
 alias llr="ll -R"
