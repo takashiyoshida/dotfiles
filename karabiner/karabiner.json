@@ -183,7 +183,8 @@
                                         "bundle_identifiers": [
                                             "^com\\.microsoft\\.Excel$",
                                             "^com\\.microsoft\\.Powerpoint$",
-                                            "^com\\.microsoft\\.Word$"
+                                            "^com\\.microsoft\\.Word$",
+                                            "^com\\.microsoft\\.teams$"
                                         ],
                                         "type": "frontmost_application_if"
                                     }
@@ -212,7 +213,8 @@
                                         "bundle_identifiers": [
                                             "^com\\.microsoft\\.Excel$",
                                             "^com\\.microsoft\\.Powerpoint$",
-                                            "^com\\.microsoft\\.Word$"
+                                            "^com\\.microsoft\\.Word$",
+                                            "^com\\.microsoft\\.teams$"
                                         ],
                                         "type": "frontmost_application_if"
                                     }
@@ -241,7 +243,8 @@
                                         "bundle_identifiers": [
                                             "^com\\.microsoft\\.Excel$",
                                             "^com\\.microsoft\\.Powerpoint$",
-                                            "^com\\.microsoft\\.Word$"
+                                            "^com\\.microsoft\\.Word$",
+                                            "^com\\.microsoft\\.teams$"
                                         ],
                                         "type": "frontmost_application_if"
                                     }
@@ -270,7 +273,8 @@
                                         "bundle_identifiers": [
                                             "^com\\.microsoft\\.Excel$",
                                             "^com\\.microsoft\\.Powerpoint$",
-                                            "^com\\.microsoft\\.Word$"
+                                            "^com\\.microsoft\\.Word$",
+                                            "^com\\.microsoft\\.teams$"
                                         ],
                                         "type": "frontmost_application_if"
                                     }
@@ -299,7 +303,8 @@
                                         "bundle_identifiers": [
                                             "^com\\.microsoft\\.Excel$",
                                             "^com\\.microsoft\\.Powerpoint$",
-                                            "^com\\.microsoft\\.Word$"
+                                            "^com\\.microsoft\\.Word$",
+                                            "^com\\.microsoft\\.teams$"
                                         ],
                                         "type": "frontmost_application_if"
                                     }
@@ -331,7 +336,8 @@
                                         "bundle_identifiers": [
                                             "^com\\.microsoft\\.Excel$",
                                             "^com\\.microsoft\\.Powerpoint$",
-                                            "^com\\.microsoft\\.Word$"
+                                            "^com\\.microsoft\\.Word$",
+                                            "^com\\.microsoft\\.teams$"
                                         ],
                                         "type": "frontmost_application_if"
                                     }
