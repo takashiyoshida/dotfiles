@@ -17,6 +17,7 @@ alias svnldiff="svndiff -r COMMITTED" # Show the last commit
 alias svninfo="svn info --show-item=url"
 # Ignore unversioned files from svn status
 alias svnst="svn status -q"
+alias svnstc="svnst | ag \"^C\""
 
 # For jekyll draft, post, publish, unpublish, page
 alias jkld="jekyll draft"
