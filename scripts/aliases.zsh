@@ -1,11 +1,11 @@
 # Set the OS specific aliases first, then string together other aliases the build on them
-source "${DOTFILES}/scripts/mac-aliases.zsh"
-source "${DOTFILES}/scripts/linux-aliases.zsh"
+if [[ "${OSTYPE}" =~ "darwin"* ]]; then
+    source "${DOTFILES}/scripts/mac-aliases.zsh"
+elif [[ "${OSTYPE}" =~ "linux-gnu"* ]]; then
+    source "${DOTFILES}/scripts/linux-aliases.zsh"
+fi
 
 # Common set of aliases
-alias lh="ls -lh"
-alias lah="ls -lah"
-alias lll="ll | less"
 
 # Set TERM to xterm-256color to avoid incorrect color from being used
 # in tmux session

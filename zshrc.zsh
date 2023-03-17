@@ -112,8 +112,6 @@ if [[ "${OSTYPE}" =~ darwin* ]]; then
     add-ssh-private-keys
 fi
 
-# eval "$(${RBENV_ROOT}/bin/rbenv init - zsh)"
-
 source "${HOME}/.projects.zsh"
 source "${HOME}/.secrets.zsh"
 

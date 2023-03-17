@@ -1,12 +1,15 @@
-if [[ "${OSTYPE}" =~ "linux-gnu"* ]]; then
-    alias ls="ls -CF --color=auto"
-    alias apti="apt list --installed 2> /dev/null"
+alias ls="ls -CF --color=auto"
+alias lh="ls -lh"
+alias lah="ls -lah"
+alias lll="ll | less"
+alias llr="ll -R"
 
-    alias vless="/usr/share/vim/vim82/macros/less.sh"
+alias apti="apt list --installed 2> /dev/null"
 
-    # Copy the Github API token from a hidden file
-    alias ghtoken="xclip -sel clip < ${HOME}/.github-tokens.txt"
+alias vless="/usr/share/vim/vim82/macros/less.sh"
 
-    # Simulate macOS' `open' command
-    alias open="xdg-open"
-fi
+# Copy the Github API token from a hidden file
+alias ghtoken="xclip -sel clip < ${HOME}/.github-tokens.txt"
+
+# Simulate macOS' `open' command
+alias open="xdg-open"

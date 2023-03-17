@@ -11,6 +11,7 @@ import feedparser
 import os
 import sys
 
+
 def eprint(*args, **kwargs):
     '''
     Print to stderr
@@ -20,13 +21,33 @@ def eprint(*args, **kwargs):
 
 def main():
     parser = argparse.ArgumentParser(prog='download-jira-issues-rss-feed')
-    parser.add_argument('--user', '-u', required=False, help='JIRA username', dest='username')
-    parser.add_argument('--pass', '-p', required=False, help='JIRA password', dest='password')
-    parser.add_argument('--filter-url', '-f', required=True, help='JIRA issue filter URL', dest='filter')
-    parser.add_argument('--show-tasks', '-t', required=False, action='store_true',
-                        help='A list of JIRA tasks found from a given filter', dest='tasks')
-    parser.add_argument('--quiet', '-q', required=False, action='store_true',
-                        help='Only print the number', dest='quiet')
+    parser.add_argument('--user',
+                        '-u',
+                        required=False,
+                        help='JIRA username',
+                        dest='username')
+    parser.add_argument('--pass',
+                        '-p',
+                        required=False,
+                        help='JIRA password',
+                        dest='password')
+    parser.add_argument('--filter-url',
+                        '-f',
+                        required=True,
+                        help='JIRA issue filter URL',
+                        dest='filter')
+    parser.add_argument('--show-tasks',
+                        '-t',
+                        required=False,
+                        action='store_true',
+                        help='A list of JIRA tasks found from a given filter',
+                        dest='tasks')
+    parser.add_argument('--quiet',
+                        '-q',
+                        required=False,
+                        action='store_true',
+                        help='Only print the number',
+                        dest='quiet')
 
     args = parser.parse_args()
     if not args.username:
@@ -34,7 +55,9 @@ def main():
             args.username = os.environ['JIRA_USER']
         else:
             eprint('Error: Missing JIRA username')
-            eprint('Export JIRA_USER variable or use `--user` parameter to pass your JIRA username')
+            eprint(
+                'Export JIRA_USER variable or use `--user` parameter to pass your JIRA username'
+            )
             sys.exit(1)
 
     if not args.password:
@@ -42,7 +65,9 @@ def main():
             args.password = os.environ['JIRA_PASS']
         else:
             eprint('Error: Missing JIRA password')
-            eprint('Export JIRA_PASS variable or use --user parameter to pass your JIRA password')
+            eprint(
+                'Export JIRA_PASS variable or use --user parameter to pass your JIRA password'
+            )
             sys.exit(1)
 
     credential = '%s:%s@' % (args.username, args.password)
@@ -59,6 +84,7 @@ def main():
     if args.tasks:
         for e in d.entries:
             print(e.title, e.link)
+
 
 if __name__ == "__main__":
     main()

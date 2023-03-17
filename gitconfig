@@ -2,8 +2,14 @@
 	name = GIT_USERNAME
 	email = GIT_EMAILADDR
 
-[hub]
-	protocol = https
+[alias]
+	cm = commit
+	co = checkout
+	ac = !git add -A && git commit
+	st = status -sb
+	tags = tag -l
+	branches = branch -a
+	remotes = remote -v
 
 [core]
 	editor = emacs
@@ -15,17 +21,14 @@
 	interactive = auto
 	status = auto
 
-[alias]
-	cm = commit
-	co = checkout
-	ac = !git add -A && git commit
-	st = status -sb
-	tags = tag -l
-	branches = branch -a
-	remotes = remote -v
-
 [http]
 	postBuffer = 2M
+
+[hub]
+	protocol = https
+
+[init]
+	defaultBranch = main
 
 [log]
 	date = iso8601
