@@ -33,7 +33,7 @@ if [[ "${OSTYPE}" =~ "darwin"* ]]; then
     fi
 
     # MacTex (brew install --cask mactex) is a Universal binary package
-    PATH="${PATH}:/usr/local/texlive/2022/bin/universal-darwin"
+    PATH="${PATH}:/usr/local/texlive/2023/bin/universal-darwin"
 
 elif [[ "${OSTYPE}" =~ "linux-gnu"* ]]; then
     PATH="/usr/local/bin:/usr/local/sbin"
