@@ -211,13 +211,13 @@ def main():
         dest="environ",
         help=f"valid environment is one of {ENVIRON_LIST}",
     )
-    parser.add_argument(
-        "--swc",
-        "-w",
-        required=True,
-        dest="swc",
-        help="SWC",
-    )
+    # parser.add_argument(
+    #     "--swc",
+    #     "-w",
+    #     required=True,
+    #     dest="swc",
+    #     help="SWC",
+    # )
     parser.add_argument(
         "--output-dir",
         "-o",
@@ -234,55 +234,58 @@ def main():
         logging.error(f"Valid environment is one of {ENVIRON_LIST}.")
         sys.exit(1)
 
-    if not validate_swc(args.swc):
-        logging.error(f"Invalid SWC, {args.swc}.")
-        sys.exit(1)
+    # if not validate_swc(args.swc):
+    #     logging.error(f"Invalid SWC, {args.swc}.")
+    #     sys.exit(1)
 
     if not validate_output_dir(args.output_dir):
         logging.error(f"{args.output_dir} does not exist.")
         sys.exit(1)
 
-    nodeName = get_swc_node(args.swc)
-    outfile = get_swc_outfile(args.environ, args.swc, args.output_dir)
-
     root = ET.parse(args.xmlFile)
 
-    prefix = ""
-    points = []
+    for swc in SWC_MAPPING.keys():
+        logging.info(f"SWC: {swc}")
 
-    result = root.findall(
-        f".//HierarchyItem[@name='{args.environ}']//HierarchyItem[@name='{nodeName}']//HierarchyItem"
-    )
+        nodeName = get_swc_node(swc)
+        outfile = get_swc_outfile(args.environ, swc, args.output_dir)
 
-    for item in result:
-        alias = item.get("alias")
-        name = item.get("name")
+        prefix = ""
+        points = []
 
-        if alias == f"{args.environ}_{name}":
-            prefix = alias
-            continue
-
-        if not ignore_name(name):
-            parent = root.findall(f".//HierarchyItem[@alias='{alias}']/..")
-            if len(parent) == 1:
-                prefix = parent[0].get("alias")
-                points.append(f"{prefix}:{name}")
-            else:
-                logging.warn(f"Unexpected number of parents for alias {alias}")
-
-    if len(points) > 0:
-        # To match the sorting behavior with `sort` in shell
-        locale.setlocale(locale.LC_ALL, ("en_US", "UTF-8"))
-        points.sort(key=cmp_to_key(locale.strcoll))
-
-        logging.info(
-            f"No. of discovered points for {args.environ}:{nodeName}: {len(points)}"
+        result = root.findall(
+            f".//HierarchyItem[@name='{args.environ}']//HierarchyItem[@name='{nodeName}']//HierarchyItem"
         )
-        write_ssr(args.environ, points, outfile)
-    else:
-        logging.error(
-            f"No database points were discovered for {args.environ}:{nodeName}"
-        )
+
+        for item in result:
+            alias = item.get("alias")
+            name = item.get("name")
+
+            if alias == f"{args.environ}_{name}":
+                prefix = alias
+                continue
+
+            if not ignore_name(name):
+                parent = root.findall(f".//HierarchyItem[@alias='{alias}']/..")
+                if len(parent) == 1:
+                    prefix = parent[0].get("alias")
+                    points.append(f"{prefix}:{name}")
+                else:
+                    logging.warn(f"Unexpected number of parents for alias {alias}")
+
+        if len(points) > 0:
+            # To match the sorting behavior with `sort` in shell
+            locale.setlocale(locale.LC_ALL, ("en_US", "UTF-8"))
+            points.sort(key=cmp_to_key(locale.strcoll))
+
+            logging.info(
+                f"No. of discovered points for {args.environ}:{nodeName}: {len(points)}"
+            )
+            write_ssr(args.environ, points, outfile)
+        else:
+            logging.error(
+                f"No database points were discovered for {args.environ}:{nodeName}"
+            )
 
 
 if __name__ == "__main__":
