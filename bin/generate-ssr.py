@@ -1,6 +1,8 @@
 #!/usr/bin/env python
 
 import argparse
+import locale
+from functools import cmp_to_key
 import logging
 import logging.handlers
 import os.path
@@ -34,14 +36,26 @@ ENVIRON_LIST = [
 
 SWC_MAPPING = {
     "BMF": {"node": "BMF", "filename": "BMF"},
+    "CCTV": {"node": "CCTS_0001", "filename": "COM-CCTV"},
+    "PAS": {"node": "PASS_0001", "filename": "COM-PAS"},
+    "PIS": {"node": "PISS_0001", "filename": "COM-PIS"},
     "DNG": {"node": "DNG__0001", "filename": "DNG"},
     "ECS": {"node": "ECS", "filename": "ECS"},
     "FPS": {"node": "FPS__0001", "filename": "FPS"},
+    "LNE": {"node": "LNE__0001", "filename": "LNE"},
+    "DC": {"node": "DC___0001", "filename": "POW-DC"},
+    "ETSB": {"node": "ETSB_0001", "filename": "POW-ETSB"},
+    "HV": {"node": "HV___0001", "filename": "POW-HV"},
+    "LIG": {"node": "LIG__0001", "filename": "POW-LIG"},
+    "LV": {"node": "LV___0001", "filename": "POW-LV"},
+    # TODO At terminus station, node is TRAT instead of TRAS
+    "SIG": {"node": "TRAS", "filename": "SIG"},
 }
 
 IGNORE_LIST = [
     "aac",
     "aal",
+    "aco",
     "afo",
     "aio",
     "dac",
@@ -51,7 +65,9 @@ IGNORE_LIST = [
     "dio",
     "dov",
     "sac",
+    "sco",
     "sfo",
+    "sii",
     "sio",
     "usr",
 ]
@@ -106,11 +122,9 @@ def ignore_name(name):
     """
     Returns True when a given name is a member of ignore_list
     """
-    for word in IGNORE_LIST:
-        match = name.startswith(word)
-        if match:
-            return True
-    return False
+    if len(name) < 3:
+        return True
+    return name[0:3] in IGNORE_LIST
 
 
 def get_swc_outfile(environ, swc, output_dir):
@@ -121,6 +135,43 @@ def get_swc_outfile(environ, swc, output_dir):
     return f"{output_dir}/{environ}-{data.get('filename')}.dat"
 
 
+def set_environment_name(environ):
+    """
+    Corrects the given three-letter environment name to six-letter environment name (e.g., BGK -> BGKSMS)
+    """
+    stations = [
+        "BGK",
+        "BNK",
+        "CNT",
+        "CQY",
+        "DBG",
+        "FRP",
+        "HBF",
+        "HGN",
+        "KVN",
+        "LTI",
+        "NED",
+        "OTP",
+        "PGC",
+        "PGL",
+        "PTP",
+        "SER",
+        "SKG",
+        "WLH",
+    ]
+
+    occ = [
+        "ATS",
+        "CMS",
+        "ECS",
+    ]
+
+    if environ in stations:
+        return f"{environ}SMS"
+    if environ in occ:
+        return f"OCC{environ}"
+
+
 def write_ssr(environ, points, filename):
     """
     Writes SSR for GWS
@@ -129,6 +180,7 @@ def write_ssr(environ, points, filename):
     with open(filename, "w") as outfile:
         # SSR file still needs comments at the top of the file
         # ENVIRONEMENT needs six-letter environment name (e.g., BNKSMS)
+        environ = set_environment_name(environ)
         outfile.write(f"ENVIRONEMENT={environ}\n")
         outfile.write("CONFIGURATION=\n")
 
@@ -177,8 +229,6 @@ def main():
     args = parser.parse_args()
     logging.debug(f"args: {args}")
 
-    swc = "BMF"
-
     if not validate_environment(args.environ):
         logging.error(f"Invalid environment, {args.environ}.")
         logging.error(f"Valid environment is one of {ENVIRON_LIST}.")
@@ -213,19 +263,22 @@ def main():
             continue
 
         if not ignore_name(name):
-            if prefix != "":
+            parent = root.findall(f".//HierarchyItem[@alias='{alias}']/..")
+            if len(parent) == 1:
+                prefix = parent[0].get("alias")
                 points.append(f"{prefix}:{name}")
             else:
-                logging.debug(f"Alias: {alias}, Name: {name}")
-                logging.debug(f"Length: {len(item)}")
+                logging.warn(f"Unexpected number of parents for alias {alias}")
 
     if len(points) > 0:
-        sorted_points = sorted(points)
+        # To match the sorting behavior with `sort` in shell
+        locale.setlocale(locale.LC_ALL, ("en_US", "UTF-8"))
+        points.sort(key=cmp_to_key(locale.strcoll))
 
         logging.info(
-            f"No. of discovered points for {args.environ}:{nodeName}: {len(sorted_points)}"
+            f"No. of discovered points for {args.environ}:{nodeName}: {len(points)}"
         )
-        write_ssr(args.environ, sorted_points, outfile)
+        write_ssr(args.environ, points, outfile)
     else:
         logging.error(
             f"No database points were discovered for {args.environ}:{nodeName}"
