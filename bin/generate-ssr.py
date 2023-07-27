@@ -9,32 +9,8 @@ import os.path
 import sys
 import xml.etree.ElementTree as ET
 
-ENVIRON_LIST = [
-    "BGK",
-    "BNK",
-    "CNT",
-    "CQY",
-    "DBG",
-    "FRP",
-    "HBF",
-    "HGN",
-    "KVN",
-    "LTI",
-    "NED",
-    "ATS",
-    "CMS",
-    "ECS",
-    "OTP",
-    "PGC",
-    "PGL",
-    "PTP",
-    "SER",
-    "SKG",
-    "WLH",
-]
 
-
-SWC_MAPPING = {
+sms_mapping = {
     "BMF": {"node": "BMF", "filename": "BMF"},
     "CCTV": {"node": "CCTS_0001", "filename": "COM-CCTV"},
     "PAS": {"node": "PASS_0001", "filename": "COM-PAS"},
@@ -50,6 +26,651 @@ SWC_MAPPING = {
     "LV": {"node": "LV___0001", "filename": "POW-LV"},
     # TODO At terminus station, node is TRAT instead of TRAS
     "SIG": {"node": "TRAS", "filename": "SIG"},
+}
+
+bgk_mapping = {
+    "BGK": [
+        {"node": "BMF", "filename": "BMF"},
+        {"node": "CCTS_0001", "filename": "COM-CCTV"},
+        {"node": "PASS_0001", "filename": "COM-PAS"},
+        {"node": "PISS_0001", "filename": "COM-PIS"},
+        {"node": "DNG__0001", "filename": "DNG"},
+        {"node": "ECS", "filename": "ECS"},
+        {"node": "FPS__0001", "filename": "FPS"},
+        {"node": "LNE__0001", "filename": "LNE"},
+        {"node": "DC___0001", "filename": "POW-DC"},
+        {"node": "ETSB_0001", "filename": "POW-ETSB"},
+        {"node": "HV___0001", "filename": "POW-HV"},
+        {"node": "LIG__0001", "filename": "POW-LIG"},
+        {"node": "LV___0001", "filename": "POW-LV"},
+        {"node": "TRAS", "filename": "SIG"},
+    ],
+}
+
+bnk_mapping = {
+    "BNK": [
+        {"node": "BMF", "filename": "BMF"},
+        {"node": "CCTS_0001", "filename": "COM-CCTV"},
+        {"node": "PASS_0001", "filename": "COM-PAS"},
+        {"node": "PISS_0001", "filename": "COM-PIS"},
+        {"node": "DNG__0001", "filename": "DNG"},
+        {"node": "ECS", "filename": "ECS"},
+        {"node": "FPS__0001", "filename": "FPS"},
+        {"node": "LNE__0001", "filename": "LNE"},
+        {"node": "DC___0001", "filename": "POW-DC"},
+        {"node": "ETSB_0001", "filename": "POW-ETSB"},
+        {"node": "HV___0001", "filename": "POW-HV"},
+        {"node": "LIG__0001", "filename": "POW-LIG"},
+        {"node": "LV___0001", "filename": "POW-LV"},
+        {"node": "TRAS", "filename": "SIG"},
+    ],
+}
+
+cnt_mapping = {
+    "CNT": [
+        {"node": "BMF", "filename": "BMF"},
+        {"node": "CCTS_0001", "filename": "COM-CCTV"},
+        {"node": "PASS_0001", "filename": "COM-PAS"},
+        {"node": "PISS_0001", "filename": "COM-PIS"},
+        {"node": "DNG__0001", "filename": "DNG"},
+        {"node": "ECS", "filename": "ECS"},
+        {"node": "FPS__0001", "filename": "FPS"},
+        {"node": "LNE__0001", "filename": "LNE"},
+        {"node": "DC___0001", "filename": "POW-DC"},
+        {"node": "ETSB_0001", "filename": "POW-ETSB"},
+        {"node": "HV___0001", "filename": "POW-HV"},
+        {"node": "LIG__0001", "filename": "POW-LIG"},
+        {"node": "LV___0001", "filename": "POW-LV"},
+        {"node": "TRAS", "filename": "SIG"},
+    ],
+}
+
+cqy_mapping = {
+    "CQY": [
+        {"node": "BMF", "filename": "BMF"},
+        {"node": "CCTS_0001", "filename": "COM-CCTV"},
+        {"node": "PASS_0001", "filename": "COM-PAS"},
+        {"node": "PISS_0001", "filename": "COM-PIS"},
+        {"node": "DNG__0001", "filename": "DNG"},
+        {"node": "ECS", "filename": "ECS"},
+        {"node": "FPS__0001", "filename": "FPS"},
+        {"node": "LNE__0001", "filename": "LNE"},
+        {"node": "DC___0001", "filename": "POW-DC"},
+        {"node": "ETSB_0001", "filename": "POW-ETSB"},
+        {"node": "HV___0001", "filename": "POW-HV"},
+        {"node": "LIG__0001", "filename": "POW-LIG"},
+        {"node": "LV___0001", "filename": "POW-LV"},
+        {"node": "TRAS", "filename": "SIG"},
+    ],
+}
+
+dbg_mapping = {
+    "DBG": [
+        {"node": "BMF", "filename": "BMF"},
+        {"node": "CCTS_0001", "filename": "COM-CCTV"},
+        {"node": "PASS_0001", "filename": "COM-PAS"},
+        {"node": "PISS_0001", "filename": "COM-PIS"},
+        {"node": "DNG__0001", "filename": "DNG"},
+        {"node": "ECS", "filename": "ECS"},
+        {"node": "FPS__0001", "filename": "FPS"},
+        {"node": "LNE__0001", "filename": "LNE"},
+        {"node": "DC___0001", "filename": "POW-DC"},
+        {"node": "ETSB_0001", "filename": "POW-ETSB"},
+        {"node": "HV___0001", "filename": "POW-HV"},
+        {"node": "LIG__0001", "filename": "POW-LIG"},
+        {"node": "LV___0001", "filename": "POW-LV"},
+        {"node": "TRAS", "filename": "SIG"},
+    ],
+}
+
+frp_mapping = {
+    "FRP": [
+        {"node": "BMF", "filename": "BMF"},
+        {"node": "CCTS_0001", "filename": "COM-CCTV"},
+        {"node": "PASS_0001", "filename": "COM-PAS"},
+        {"node": "PISS_0001", "filename": "COM-PIS"},
+        {"node": "DNG__0001", "filename": "DNG"},
+        {"node": "ECS", "filename": "ECS"},
+        {"node": "FPS__0001", "filename": "FPS"},
+        {"node": "LNE__0001", "filename": "LNE"},
+        {"node": "DC___0001", "filename": "POW-DC"},
+        {"node": "ETSB_0001", "filename": "POW-ETSB"},
+        {"node": "HV___0001", "filename": "POW-HV"},
+        {"node": "LIG__0001", "filename": "POW-LIG"},
+        {"node": "LV___0001", "filename": "POW-LV"},
+        {"node": "TRAS", "filename": "SIG"},
+    ],
+}
+
+hbf_mapping = {
+    "HBF": [
+        {"node": "BMF", "filename": "BMF"},
+        {"node": "CCTS_0001", "filename": "COM-CCTV"},
+        {"node": "PASS_0001", "filename": "COM-PAS"},
+        {"node": "PISS_0001", "filename": "COM-PIS"},
+        {"node": "DNG__0001", "filename": "DNG"},
+        {"node": "ECS", "filename": "ECS"},
+        {"node": "FPS__0001", "filename": "FPS"},
+        {"node": "LNE__0001", "filename": "LNE"},
+        {"node": "DC___0001", "filename": "POW-DC"},
+        {"node": "ETSB_0001", "filename": "POW-ETSB"},
+        {"node": "HV___0001", "filename": "POW-HV"},
+        {"node": "LIG__0001", "filename": "POW-LIG"},
+        {"node": "LV___0001", "filename": "POW-LV"},
+        {"node": "TRAT", "filename": "SIG"},
+    ],
+}
+
+hgn_mapping = {
+    "HGN": [
+        {"node": "BMF", "filename": "BMF"},
+        {"node": "CCTS_0001", "filename": "COM-CCTV"},
+        {"node": "PASS_0001", "filename": "COM-PAS"},
+        {"node": "PISS_0001", "filename": "COM-PIS"},
+        {"node": "DNG__0001", "filename": "DNG"},
+        {"node": "ECS", "filename": "ECS"},
+        {"node": "FPS__0001", "filename": "FPS"},
+        {"node": "LNE__0001", "filename": "LNE"},
+        {"node": "DC___0001", "filename": "POW-DC"},
+        {"node": "ETSB_0001", "filename": "POW-ETSB"},
+        {"node": "HV___0001", "filename": "POW-HV"},
+        {"node": "LIG__0001", "filename": "POW-LIG"},
+        {"node": "LV___0001", "filename": "POW-LV"},
+        {"node": "TRAS", "filename": "SIG"},
+    ],
+}
+
+kvn_mapping = {
+    "KVN": [
+        {"node": "BMF", "filename": "BMF"},
+        {"node": "CCTS_0001", "filename": "COM-CCTV"},
+        {"node": "PASS_0001", "filename": "COM-PAS"},
+        {"node": "PISS_0001", "filename": "COM-PIS"},
+        {"node": "DNG__0001", "filename": "DNG"},
+        {"node": "ECS", "filename": "ECS"},
+        {"node": "FPS__0001", "filename": "FPS"},
+        {"node": "LNE__0001", "filename": "LNE"},
+        {"node": "DC___0001", "filename": "POW-DC"},
+        {"node": "ETSB_0001", "filename": "POW-ETSB"},
+        {"node": "HV___0001", "filename": "POW-HV"},
+        {"node": "LIG__0001", "filename": "POW-LIG"},
+        {"node": "LV___0001", "filename": "POW-LV"},
+        {"node": "TRAS", "filename": "SIG"},
+    ],
+}
+
+lti_mapping = {
+    "LTI": [
+        {"node": "BMF", "filename": "BMF"},
+        {"node": "CCTS_0001", "filename": "COM-CCTV"},
+        {"node": "PASS_0001", "filename": "COM-PAS"},
+        {"node": "PISS_0001", "filename": "COM-PIS"},
+        {"node": "DNG__0001", "filename": "DNG"},
+        {"node": "ECS", "filename": "ECS"},
+        {"node": "FPS__0001", "filename": "FPS"},
+        {"node": "LNE__0001", "filename": "LNE"},
+        {"node": "DC___0001", "filename": "POW-DC"},
+        {"node": "ETSB_0001", "filename": "POW-ETSB"},
+        {"node": "HV___0001", "filename": "POW-HV"},
+        {"node": "LIG__0001", "filename": "POW-LIG"},
+        {"node": "LV___0001", "filename": "POW-LV"},
+        {"node": "TRAS", "filename": "SIG"},
+    ],
+}
+
+otp_mapping = {
+    "OTP": [
+        {"node": "BMF", "filename": "BMF"},
+        {"node": "CCTS_0001", "filename": "COM-CCTV"},
+        {"node": "PASS_0001", "filename": "COM-PAS"},
+        {"node": "PISS_0001", "filename": "COM-PIS"},
+        {"node": "DNG__0001", "filename": "DNG"},
+        {"node": "ECS", "filename": "ECS"},
+        {"node": "FPS__0001", "filename": "FPS"},
+        {"node": "LNE__0001", "filename": "LNE"},
+        {"node": "DC___0001", "filename": "POW-DC"},
+        {"node": "ETSB_0001", "filename": "POW-ETSB"},
+        {"node": "HV___0001", "filename": "POW-HV"},
+        {"node": "LIG__0001", "filename": "POW-LIG"},
+        {"node": "LV___0001", "filename": "POW-LV"},
+        {"node": "TRAS", "filename": "SIG"},
+    ],
+}
+
+pgc_mapping = {
+    "PGC": [
+        {"node": "BMF", "filename": "BMF"},
+        {"node": "CCTS_0001", "filename": "COM-CCTV"},
+        {"node": "PASS_0001", "filename": "COM-PAS"},
+        {"node": "PISS_0001", "filename": "COM-PIS"},
+        {"node": "DNG__0001", "filename": "DNG"},
+        {"node": "ECS", "filename": "ECS"},
+        {"node": "FPS__0001", "filename": "FPS"},
+        {"node": "LNE__0001", "filename": "LNE"},
+        {"node": "DC___0001", "filename": "POW-DC"},
+        {"node": "ETSB_0001", "filename": "POW-ETSB"},
+        {"node": "HV___0001", "filename": "POW-HV"},
+        {"node": "LIG__0001", "filename": "POW-LIG"},
+        {"node": "LV___0001", "filename": "POW-LV"},
+        {"node": "TRAT", "filename": "SIG"},
+    ],
+}
+
+pgl_mapping = {
+    "PGL": [
+        {"node": "BMF", "filename": "BMF"},
+        {"node": "CCTS_0001", "filename": "COM-CCTV"},
+        {"node": "PASS_0001", "filename": "COM-PAS"},
+        {"node": "PISS_0001", "filename": "COM-PIS"},
+        {"node": "DNG__0001", "filename": "DNG"},
+        {"node": "ECS", "filename": "ECS"},
+        {"node": "FPS__0001", "filename": "FPS"},
+        {"node": "LNE__0001", "filename": "LNE"},
+        {"node": "DC___0001", "filename": "POW-DC"},
+        {"node": "ETSB_0001", "filename": "POW-ETSB"},
+        {"node": "HV___0001", "filename": "POW-HV"},
+        {"node": "LIG__0001", "filename": "POW-LIG"},
+        {"node": "LV___0001", "filename": "POW-LV"},
+        {"node": "TRAS", "filename": "SIG"},
+    ],
+}
+
+ptp_mapping = {
+    "PTP": [
+        {"node": "BMF", "filename": "BMF"},
+        {"node": "CCTS_0001", "filename": "COM-CCTV"},
+        {"node": "PASS_0001", "filename": "COM-PAS"},
+        {"node": "PISS_0001", "filename": "COM-PIS"},
+        {"node": "DNG__0001", "filename": "DNG"},
+        {"node": "ECS", "filename": "ECS"},
+        {"node": "FPS__0001", "filename": "FPS"},
+        {"node": "LNE__0001", "filename": "LNE"},
+        {"node": "DC___0001", "filename": "POW-DC"},
+        {"node": "ETSB_0001", "filename": "POW-ETSB"},
+        {"node": "HV___0001", "filename": "POW-HV"},
+        {"node": "LIG__0001", "filename": "POW-LIG"},
+        {"node": "LV___0001", "filename": "POW-LV"},
+        {"node": "TRAS", "filename": "SIG"},
+    ],
+}
+
+ser_mapping = {
+    "SER": [
+        {"node": "BMF", "filename": "BMF"},
+        {"node": "CCTS_0001", "filename": "COM-CCTV"},
+        {"node": "PASS_0001", "filename": "COM-PAS"},
+        {"node": "PISS_0001", "filename": "COM-PIS"},
+        {"node": "DNG__0001", "filename": "DNG"},
+        {"node": "ECS", "filename": "ECS"},
+        {"node": "FPS__0001", "filename": "FPS"},
+        {"node": "LNE__0001", "filename": "LNE"},
+        {"node": "DC___0001", "filename": "POW-DC"},
+        {"node": "ETSB_0001", "filename": "POW-ETSB"},
+        {"node": "HV___0001", "filename": "POW-HV"},
+        {"node": "LIG__0001", "filename": "POW-LIG"},
+        {"node": "LV___0001", "filename": "POW-LV"},
+        {"node": "TRAS", "filename": "SIG"},
+    ],
+}
+
+skg_mapping = {
+    "SKG": [
+        {"node": "BMF", "filename": "BMF"},
+        {"node": "CCTS_0001", "filename": "COM-CCTV"},
+        {"node": "PASS_0001", "filename": "COM-PAS"},
+        {"node": "PISS_0001", "filename": "COM-PIS"},
+        {"node": "DNG__0001", "filename": "DNG"},
+        {"node": "ECS", "filename": "ECS"},
+        {"node": "FPS__0001", "filename": "FPS"},
+        {"node": "LNE__0001", "filename": "LNE"},
+        {"node": "DC___0001", "filename": "POW-DC"},
+        {"node": "ETSB_0001", "filename": "POW-ETSB"},
+        {"node": "HV___0001", "filename": "POW-HV"},
+        {"node": "LIG__0001", "filename": "POW-LIG"},
+        {"node": "LV___0001", "filename": "POW-LV"},
+        {"node": "TRAS", "filename": "SIG"},
+    ],
+}
+
+wlh_mapping = {
+    "WLH": [
+        {"node": "BMF", "filename": "BMF"},
+        {"node": "CCTS_0001", "filename": "COM-CCTV"},
+        {"node": "PASS_0001", "filename": "COM-PAS"},
+        {"node": "PISS_0001", "filename": "COM-PIS"},
+        {"node": "DNG__0001", "filename": "DNG"},
+        {"node": "ECS", "filename": "ECS"},
+        {"node": "FPS__0001", "filename": "FPS"},
+        {"node": "LNE__0001", "filename": "LNE"},
+        {"node": "DC___0001", "filename": "POW-DC"},
+        {"node": "ETSB_0001", "filename": "POW-ETSB"},
+        {"node": "HV___0001", "filename": "POW-HV"},
+        {"node": "LIG__0001", "filename": "POW-LIG"},
+        {"node": "LV___0001", "filename": "POW-LV"},
+        {"node": "TRAS", "filename": "SIG"},
+    ],
+}
+
+ned_mapping = {
+    "NED": [
+        {"node": "BMF", "filename": "BMF"},
+        {"node": "CCTS_0001", "filename": "COM-CCTV"},
+        {"node": "PASS_0001", "filename": "COM-PAS"},
+        {"node": "FPSD_0001", "filename": "FPS"},
+        {"node": "TRAD", "filename": "SIG"},
+        {"node": "AMS", "filename": "AMS"},
+    ],
+    # The following files do not require NED prefix in names
+    "NDI": [
+        {"node": "DC___0001", "filename": "POW-DC"},
+        {"node": "HV___0001", "filename": "POW-HV"},
+    ],
+    "NPS": [
+        {"node": "HV___0001", "filename": "POW-HV"},
+    ],
+    "NTS": [
+        {"node": "DC___0001", "filename": "POW-DC"},
+        {"node": "HV___0001", "filename": "POW-HV"},
+    ],
+}
+
+ats_mapping = {
+    "BGK": [
+        {"node": "TRAS", "filename": "SIG"},
+    ],
+    "BNK": [
+        {"node": "TRAS", "filename": "SIG"},
+    ],
+    "CNT": [
+        {"node": "TRAS", "filename": "SIG"},
+    ],
+    "CQY": [
+        {"node": "TRAS", "filename": "SIG"},
+    ],
+    "DBG": [
+        {"node": "TRAS", "filename": "SIG"},
+    ],
+    "FRP": [
+        {"node": "TRAS", "filename": "SIG"},
+    ],
+    "HBF": [
+        {"node": "TRAT", "filename": "SIG"},
+    ],
+    "HGN": [
+        {"node": "TRAS", "filename": "SIG"},
+    ],
+    "KVN": [
+        {"node": "TRAS", "filename": "SIG"},
+    ],
+    "LTI": [
+        {"node": "TRAS", "filename": "SIG"},
+    ],
+    "OTP": [
+        {"node": "TRAS", "filename": "SIG"},
+    ],
+    "PGC": [
+        {"node": "TRAT", "filename": "SIG"},
+    ],
+    "PGL": [
+        {"node": "TRAS", "filename": "SIG"},
+    ],
+    "PTP": [
+        {"node": "TRAS", "filename": "SIG"},
+    ],
+    "SER": [
+        {"node": "TRAS", "filename": "SIG"},
+    ],
+    "SKG": [
+        {"node": "TRAS", "filename": "SIG"},
+    ],
+    "WLH": [
+        {"node": "TRAS", "filename": "SIG"},
+    ],
+    # FIXME NED does not generate the _same_ set of data
+    "NED": [
+        {"node": "TRAD", "filename": "SIG"},
+    ],
+}
+
+cms_mapping = {
+    "BGK": [
+        {"node": "BMF", "filename": "BMF"},
+        {"node": "CCTS_0001", "filename": "COM-CCTV"},
+        {"node": "PASS_0001", "filename": "COM-PAS"},
+        {"node": "PISS_0001", "filename": "COM-PIS"},
+    ],
+    "BNK": [
+        {"node": "BMF", "filename": "BMF"},
+        {"node": "CCTS_0001", "filename": "COM-CCTV"},
+        {"node": "PASS_0001", "filename": "COM-PAS"},
+        {"node": "PISS_0001", "filename": "COM-PIS"},
+    ],
+    "CNT": [
+        {"node": "BMF", "filename": "BMF"},
+        {"node": "CCTS_0001", "filename": "COM-CCTV"},
+        {"node": "PASS_0001", "filename": "COM-PAS"},
+        {"node": "PISS_0001", "filename": "COM-PIS"},
+    ],
+    "CQY": [
+        {"node": "BMF", "filename": "BMF"},
+        {"node": "CCTS_0001", "filename": "COM-CCTV"},
+        {"node": "PASS_0001", "filename": "COM-PAS"},
+        {"node": "PISS_0001", "filename": "COM-PIS"},
+    ],
+    "DBG": [
+        {"node": "BMF", "filename": "BMF"},
+        {"node": "CCTS_0001", "filename": "COM-CCTV"},
+        {"node": "PASS_0001", "filename": "COM-PAS"},
+        {"node": "PISS_0001", "filename": "COM-PIS"},
+    ],
+    "FRP": [
+        {"node": "BMF", "filename": "BMF"},
+        {"node": "CCTS_0001", "filename": "COM-CCTV"},
+        {"node": "PASS_0001", "filename": "COM-PAS"},
+        {"node": "PISS_0001", "filename": "COM-PIS"},
+    ],
+    "HBF": [
+        {"node": "BMF", "filename": "BMF"},
+        {"node": "CCTS_0001", "filename": "COM-CCTV"},
+        {"node": "PASS_0001", "filename": "COM-PAS"},
+        {"node": "PISS_0001", "filename": "COM-PIS"},
+    ],
+    "HGN": [
+        {"node": "BMF", "filename": "BMF"},
+        {"node": "CCTS_0001", "filename": "COM-CCTV"},
+        {"node": "PASS_0001", "filename": "COM-PAS"},
+        {"node": "PISS_0001", "filename": "COM-PIS"},
+    ],
+    "KVN": [
+        {"node": "BMF", "filename": "BMF"},
+        {"node": "CCTS_0001", "filename": "COM-CCTV"},
+        {"node": "PASS_0001", "filename": "COM-PAS"},
+        {"node": "PISS_0001", "filename": "COM-PIS"},
+    ],
+    "LTI": [
+        {"node": "BMF", "filename": "BMF"},
+        {"node": "CCTS_0001", "filename": "COM-CCTV"},
+        {"node": "PASS_0001", "filename": "COM-PAS"},
+        {"node": "PISS_0001", "filename": "COM-PIS"},
+    ],
+    "NED": [
+        {"node": "BMF", "filename": "BMF"},
+        {"node": "CCTS_0001", "filename": "COM-CCTV"},
+        {"node": "PASS_0001", "filename": "COM-PAS"},
+    ],
+    "OTP": [
+        {"node": "BMF", "filename": "BMF"},
+        {"node": "CCTS_0001", "filename": "COM-CCTV"},
+        {"node": "PASS_0001", "filename": "COM-PAS"},
+        {"node": "PISS_0001", "filename": "COM-PIS"},
+    ],
+    "PGC": [
+        {"node": "BMF", "filename": "BMF"},
+        {"node": "CCTS_0001", "filename": "COM-CCTV"},
+        {"node": "PASS_0001", "filename": "COM-PAS"},
+        {"node": "PISS_0001", "filename": "COM-PIS"},
+    ],
+    "PGL": [
+        {"node": "BMF", "filename": "BMF"},
+        {"node": "CCTS_0001", "filename": "COM-CCTV"},
+        {"node": "PASS_0001", "filename": "COM-PAS"},
+        {"node": "PISS_0001", "filename": "COM-PIS"},
+    ],
+    "PTP": [
+        {"node": "BMF", "filename": "BMF"},
+        {"node": "CCTS_0001", "filename": "COM-CCTV"},
+        {"node": "PASS_0001", "filename": "COM-PAS"},
+        {"node": "PISS_0001", "filename": "COM-PIS"},
+    ],
+    "SER": [
+        {"node": "BMF", "filename": "BMF"},
+        {"node": "CCTS_0001", "filename": "COM-CCTV"},
+        {"node": "PASS_0001", "filename": "COM-PAS"},
+        {"node": "PISS_0001", "filename": "COM-PIS"},
+    ],
+    "SKG": [
+        {"node": "BMF", "filename": "BMF"},
+        {"node": "CCTS_0001", "filename": "COM-CCTV"},
+        {"node": "PASS_0001", "filename": "COM-PAS"},
+        {"node": "PISS_0001", "filename": "COM-PIS"},
+    ],
+    "WLH": [
+        {"node": "BMF", "filename": "BMF"},
+        {"node": "CCTS_0001", "filename": "COM-CCTV"},
+        {"node": "PASS_0001", "filename": "COM-PAS"},
+        {"node": "PISS_0001", "filename": "COM-PIS"},
+    ],
+    "OCC": [
+        {"node": "BMF", "filename": "BMF"},
+        {"node": "CCTS_0001", "filename": "COM-CCTV"},
+        {"node": "PASS_0001", "filename": "COM-PAS"},
+        {"node": "PISS_0001", "filename": "COM-PIS"},
+    ],
+    "NDI": [
+        {"node": "DC___0001", "filename": "POW-DC"},
+        {"node": "HV___0001", "filename": "POW-HV"},
+    ],
+    "NPS": [
+        {"node": "HV___0001", "filename": "POW-HV"},
+    ],
+    "NTS": [
+        {"node": "DC___0001", "filename": "POW-DC"},
+        {"node": "HV___0001", "filename": "POW-HV"},
+    ],
+}
+
+ecs_mapping = {
+    "BGK": [
+        {"node": "ECS", "filename": "ECS"},
+        {"node": "FPS__0001", "filename": "FPS"},
+        {"node": "LNE__0001", "filename": "LNE"},
+    ],
+    "BNK": [
+        {"node": "ECS", "filename": "ECS"},
+        {"node": "FPS__0001", "filename": "FPS"},
+        {"node": "LNE__0001", "filename": "LNE"},
+    ],
+    "CNT": [
+        {"node": "ECS", "filename": "ECS"},
+        {"node": "FPS__0001", "filename": "FPS"},
+        {"node": "LNE__0001", "filename": "LNE"},
+    ],
+    "CQY": [
+        {"node": "ECS", "filename": "ECS"},
+        {"node": "FPS__0001", "filename": "FPS"},
+        {"node": "LNE__0001", "filename": "LNE"},
+    ],
+    "DBG": [
+        {"node": "ECS", "filename": "ECS"},
+        {"node": "FPS__0001", "filename": "FPS"},
+        {"node": "LNE__0001", "filename": "LNE"},
+    ],
+    "FRP": [
+        {"node": "ECS", "filename": "ECS"},
+        {"node": "FPS__0001", "filename": "FPS"},
+        {"node": "LNE__0001", "filename": "LNE"},
+    ],
+    "HBF": [
+        {"node": "ECS", "filename": "ECS"},
+        {"node": "FPS__0001", "filename": "FPS"},
+        {"node": "LNE__0001", "filename": "LNE"},
+    ],
+    "HGN": [
+        {"node": "ECS", "filename": "ECS"},
+        {"node": "FPS__0001", "filename": "FPS"},
+        {"node": "LNE__0001", "filename": "LNE"},
+    ],
+    "KVN": [
+        {"node": "ECS", "filename": "ECS"},
+        {"node": "FPS__0001", "filename": "FPS"},
+        {"node": "LNE__0001", "filename": "LNE"},
+    ],
+    "LTI": [
+        {"node": "ECS", "filename": "ECS"},
+        {"node": "FPS__0001", "filename": "FPS"},
+        {"node": "LNE__0001", "filename": "LNE"},
+    ],
+    "OTP": [
+        {"node": "ECS", "filename": "ECS"},
+        {"node": "FPS__0001", "filename": "FPS"},
+        {"node": "LNE__0001", "filename": "LNE"},
+    ],
+    "PGC": [
+        {"node": "ECS", "filename": "ECS"},
+        {"node": "FPS__0001", "filename": "FPS"},
+        {"node": "LNE__0001", "filename": "LNE"},
+    ],
+    "PGL": [
+        {"node": "ECS", "filename": "ECS"},
+        {"node": "FPS__0001", "filename": "FPS"},
+        {"node": "LNE__0001", "filename": "LNE"},
+    ],
+    "PTP": [
+        {"node": "ECS", "filename": "ECS"},
+        {"node": "FPS__0001", "filename": "FPS"},
+        {"node": "LNE__0001", "filename": "LNE"},
+    ],
+    "SER": [
+        {"node": "ECS", "filename": "ECS"},
+        {"node": "FPS__0001", "filename": "FPS"},
+        {"node": "LNE__0001", "filename": "LNE"},
+    ],
+    "SKG": [
+        {"node": "ECS", "filename": "ECS"},
+        {"node": "FPS__0001", "filename": "FPS"},
+        {"node": "LNE__0001", "filename": "LNE"},
+    ],
+    "WLH": [
+        {"node": "ECS", "filename": "ECS"},
+        {"node": "FPS__0001", "filename": "FPS"},
+        {"node": "LNE__0001", "filename": "LNE"},
+    ],
+}
+
+database_list = {
+    "BGK": bgk_mapping,
+    "BNK": bnk_mapping,
+    "CNT": cnt_mapping,
+    "CQY": cqy_mapping,
+    "DBG": dbg_mapping,
+    "FRP": frp_mapping,
+    # HBF station is a terminus station and requires different SIG data
+    "HBF": hbf_mapping,
+    "HGN": hgn_mapping,
+    "KVN": kvn_mapping,
+    "LTI": lti_mapping,
+    "NED": ned_mapping,
+    "OTP": otp_mapping,
+    # PGC station is a terminus station and requires different SIG data
+    "PGC": pgc_mapping,
+    "PGL": pgl_mapping,
+    "PTP": ptp_mapping,
+    "SER": ser_mapping,
+    "SKG": skg_mapping,
+    "WLH": wlh_mapping,
+    "ATS": ats_mapping,
+    "CMS": cms_mapping,
+    "ECS": ecs_mapping,
 }
 
 IGNORE_LIST = [
@@ -69,6 +690,7 @@ IGNORE_LIST = [
     "sfo",
     "sii",
     "sio",
+    "trp",
     "usr",
 ]
 
@@ -89,25 +711,25 @@ def init_logging():
     return logger
 
 
-def validate_environment(environ):
+def validate_database(database):
     """
-    Returns True if a given environ is a member of environment list
+    Returns True if a given database is a member of database list
     """
-    return environ in ENVIRON_LIST
+    return database in database_list
 
 
 def validate_swc(swc):
     """
     Returns True if a given environment is a member of SWC mapping list
     """
-    return swc in SWC_MAPPING
+    return swc in sms_mapping
 
 
 def get_swc_node(swc):
     """
     Returns a node text to search for
     """
-    data = SWC_MAPPING.get(swc)
+    data = hbf_mapping.get(swc)
     return data.get("node")
 
 
@@ -127,12 +749,11 @@ def ignore_name(name):
     return name[0:3] in IGNORE_LIST
 
 
-def get_swc_outfile(environ, swc, output_dir):
+def get_swc_outfile(environ, filename, output_dir):
     """
     Returns an output filename, given an environment and a SWC (e.g., BNK-BMF.dat)
     """
-    data = SWC_MAPPING.get(swc)
-    return f"{output_dir}/{environ}-{data.get('filename')}.dat"
+    return f"{output_dir}/{environ}-{filename}.dat"
 
 
 def set_environment_name(environ):
@@ -159,7 +780,6 @@ def set_environment_name(environ):
         "SKG",
         "WLH",
     ]
-
     occ = [
         "ATS",
         "CMS",
@@ -172,22 +792,24 @@ def set_environment_name(environ):
         return f"OCC{environ}"
 
 
-def write_ssr(environ, points, filename):
+def write_ssr(database, points, filename):
     """
     Writes SSR for GWS
     """
-    logging.info(f"Writing database points to {filename} ...")
+    logging.info(f"  >> Writing database points to {os.path.basename(filename)} ...")
     with open(filename, "w") as outfile:
         # SSR file still needs comments at the top of the file
         # ENVIRONEMENT needs six-letter environment name (e.g., BNKSMS)
-        environ = set_environment_name(environ)
-        outfile.write(f"ENVIRONEMENT={environ}\n")
+        database = set_environment_name(database)
+        outfile.write(f"ENVIRONEMENT={database}\n")
         outfile.write("CONFIGURATION=\n")
 
         for p in points:
             logging.debug(f"POINT=<alias>{p}")
             outfile.write(f"POINT=<alias>{p}\n")
-        logging.info(f"No. of database points written to {filename}: {len(points)}")
+        logging.info(
+            f"  >> No. of database points written to {os.path.basename(filename)}: {len(points)}"
+        )
 
 
 def main():
@@ -205,19 +827,12 @@ def main():
         help="path to instancesHierarchy.xml",
     )
     parser.add_argument(
-        "--environ",
-        "-e",
+        "--database",
+        "-d",
         required=True,
-        dest="environ",
-        help=f"valid environment is one of {ENVIRON_LIST}",
+        dest="database",
+        help=f"valid database is one of {sorted(database_list)}",
     )
-    # parser.add_argument(
-    #     "--swc",
-    #     "-w",
-    #     required=True,
-    #     dest="swc",
-    #     help="SWC",
-    # )
     parser.add_argument(
         "--output-dir",
         "-o",
@@ -226,66 +841,62 @@ def main():
         help="path to output directory of SSR file",
     )
 
+    locale.setlocale(locale.LC_ALL, ("en_US", "UTF-8"))
+
     args = parser.parse_args()
-    logging.debug(f"args: {args}")
+    logging.debug(f"Given arguments: {args}")
 
-    if not validate_environment(args.environ):
-        logging.error(f"Invalid environment, {args.environ}.")
-        logging.error(f"Valid environment is one of {ENVIRON_LIST}.")
+    # args.database = args.database.upper()
+
+    if not validate_database(args.database):
+        logging.error(f"Invalid environment, {args.database}.")
+        logging.error(f"Valid environment is one of {sorted(database_list)}.")
         sys.exit(1)
-
-    # if not validate_swc(args.swc):
-    #     logging.error(f"Invalid SWC, {args.swc}.")
-    #     sys.exit(1)
 
     if not validate_output_dir(args.output_dir):
         logging.error(f"{args.output_dir} does not exist.")
         sys.exit(1)
 
     root = ET.parse(args.xmlFile)
+    dataset = database_list.get(f"{args.database}")
 
-    for swc in SWC_MAPPING.keys():
-        logging.info(f"SWC: {swc}")
+    for environ in dataset.keys():
+        logging.info(f"Extracting database points for {environ} ...")
+        for item in dataset.get(environ):
+            node = item.get("node")
+            filename = item.get("filename")
+            outfile = get_swc_outfile(environ, filename, args.output_dir)
+            logging.info(f"Searching for database points under {node} ...")
 
-        nodeName = get_swc_node(swc)
-        outfile = get_swc_outfile(args.environ, swc, args.output_dir)
+            prefix = ""
+            points = []
 
-        prefix = ""
-        points = []
-
-        result = root.findall(
-            f".//HierarchyItem[@name='{args.environ}']//HierarchyItem[@name='{nodeName}']//HierarchyItem"
-        )
-
-        for item in result:
-            alias = item.get("alias")
-            name = item.get("name")
-
-            if alias == f"{args.environ}_{name}":
-                prefix = alias
-                continue
-
-            if not ignore_name(name):
-                parent = root.findall(f".//HierarchyItem[@alias='{alias}']/..")
-                if len(parent) == 1:
-                    prefix = parent[0].get("alias")
-                    points.append(f"{prefix}:{name}")
-                else:
-                    logging.warn(f"Unexpected number of parents for alias {alias}")
-
-        if len(points) > 0:
-            # To match the sorting behavior with `sort` in shell
-            locale.setlocale(locale.LC_ALL, ("en_US", "UTF-8"))
-            points.sort(key=cmp_to_key(locale.strcoll))
-
-            logging.info(
-                f"No. of discovered points for {args.environ}:{nodeName}: {len(points)}"
+            result = root.findall(
+                f".//HierarchyItem[@name='{environ}']//HierarchyItem[@name='{node}']//HierarchyItem"
             )
-            write_ssr(args.environ, points, outfile)
-        else:
-            logging.error(
-                f"No database points were discovered for {args.environ}:{nodeName}"
-            )
+            for foo in result:
+                alias = foo.get("alias")
+                name = foo.get("name")
+
+                if alias == f"{environ}_{name}":
+                    continue
+
+                if not ignore_name(name):
+                    parent = root.findall(f".//HierarchyItem[@alias='{alias}']/..")
+                    if len(parent) == 1:
+                        prefix = parent[0].get("alias")
+                        points.append(f"{prefix}:{name}")
+                    else:
+                        logging.warn(f"Unexpected number of parents for alias {alias}")
+
+            if len(points) > 0:
+                points.sort(key=cmp_to_key(locale.strcoll))
+                write_ssr(environ, points, outfile)
+            else:
+                logging.error(
+                    f"No database points were discovered for {environ} {node}"
+                )
+            logging.info("")
 
 
 if __name__ == "__main__":
