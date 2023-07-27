@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 
 import argparse
+from datetime import datetime
 import locale
 from functools import cmp_to_key
 import logging
@@ -9,24 +10,6 @@ import os.path
 import sys
 import xml.etree.ElementTree as ET
 
-
-sms_mapping = {
-    "BMF": {"node": "BMF", "filename": "BMF"},
-    "CCTV": {"node": "CCTS_0001", "filename": "COM-CCTV"},
-    "PAS": {"node": "PASS_0001", "filename": "COM-PAS"},
-    "PIS": {"node": "PISS_0001", "filename": "COM-PIS"},
-    "DNG": {"node": "DNG__0001", "filename": "DNG"},
-    "ECS": {"node": "ECS", "filename": "ECS"},
-    "FPS": {"node": "FPS__0001", "filename": "FPS"},
-    "LNE": {"node": "LNE__0001", "filename": "LNE"},
-    "DC": {"node": "DC___0001", "filename": "POW-DC"},
-    "ETSB": {"node": "ETSB_0001", "filename": "POW-ETSB"},
-    "HV": {"node": "HV___0001", "filename": "POW-HV"},
-    "LIG": {"node": "LIG__0001", "filename": "POW-LIG"},
-    "LV": {"node": "LV___0001", "filename": "POW-LV"},
-    # TODO At terminus station, node is TRAT instead of TRAS
-    "SIG": {"node": "TRAS", "filename": "SIG"},
-}
 
 bgk_mapping = {
     "BGK": [
@@ -358,7 +341,7 @@ ned_mapping = {
         {"node": "PASS_0001", "filename": "COM-PAS"},
         {"node": "FPSD_0001", "filename": "FPS"},
         {"node": "TRAD", "filename": "SIG"},
-        {"node": "AMS", "filename": "AMS"},
+        {"node": "AMS__0001", "filename": "AMS"},
     ],
     # The following files do not require NED prefix in names
     "NDI": [
@@ -426,7 +409,6 @@ ats_mapping = {
     "WLH": [
         {"node": "TRAS", "filename": "SIG"},
     ],
-    # FIXME NED does not generate the _same_ set of data
     "NED": [
         {"node": "TRAD", "filename": "SIG"},
     ],
@@ -673,27 +655,6 @@ database_list = {
     "ECS": ecs_mapping,
 }
 
-IGNORE_LIST = [
-    "aac",
-    "aal",
-    "aco",
-    "afo",
-    "aio",
-    "dac",
-    "dal",
-    "dco",
-    "dfo",
-    "dio",
-    "dov",
-    "sac",
-    "sco",
-    "sfo",
-    "sii",
-    "sio",
-    "trp",
-    "usr",
-]
-
 
 def init_logging():
     """
@@ -718,21 +679,6 @@ def validate_database(database):
     return database in database_list
 
 
-def validate_swc(swc):
-    """
-    Returns True if a given environment is a member of SWC mapping list
-    """
-    return swc in sms_mapping
-
-
-def get_swc_node(swc):
-    """
-    Returns a node text to search for
-    """
-    data = hbf_mapping.get(swc)
-    return data.get("node")
-
-
 def validate_output_dir(output_dir):
     """
     Returns True when output_dir exists
@@ -740,13 +686,12 @@ def validate_output_dir(output_dir):
     return os.path.isdir(output_dir)
 
 
-def ignore_name(name):
+def is_input_point(name):
     """
-    Returns True when a given name is a member of ignore_list
+    Returns True when name is a database input point (aii, dii)
     """
-    if len(name) < 3:
-        return True
-    return name[0:3] in IGNORE_LIST
+    if len(name) > 3:
+        return name[0:3] in ["aii", "dii"]
 
 
 def get_swc_outfile(environ, filename, output_dir):
@@ -799,8 +744,15 @@ def write_ssr(database, points, filename):
     logging.info(f"  >> Writing database points to {os.path.basename(filename)} ...")
     with open(filename, "w") as outfile:
         # SSR file still needs comments at the top of the file
-        # ENVIRONEMENT needs six-letter environment name (e.g., BNKSMS)
         database = set_environment_name(database)
+        timestamp = datetime.now().strftime("%d/%m/%Y  %H:%M:%S")
+
+        comments = f"""###########################################################
+#  /home/dbs/SumReport/{database}/{os.path.basename(filename)}                 #
+#  Status Summary Report configuration file               #
+#  generated automatically on {timestamp}        #
+###########################################################"""
+        outfile.write(f"{comments}\n")
         outfile.write(f"ENVIRONEMENT={database}\n")
         outfile.write("CONFIGURATION=\n")
 
@@ -846,8 +798,6 @@ def main():
     args = parser.parse_args()
     logging.debug(f"Given arguments: {args}")
 
-    # args.database = args.database.upper()
-
     if not validate_database(args.database):
         logging.error(f"Invalid environment, {args.database}.")
         logging.error(f"Valid environment is one of {sorted(database_list)}.")
@@ -881,7 +831,8 @@ def main():
                 if alias == f"{environ}_{name}":
                     continue
 
-                if not ignore_name(name):
+                # if not ignore_name(name):
+                if is_input_point(name):
                     parent = root.findall(f".//HierarchyItem[@alias='{alias}']/..")
                     if len(parent) == 1:
                         prefix = parent[0].get("alias")
