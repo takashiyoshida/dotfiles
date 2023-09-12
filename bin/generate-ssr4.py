@@ -186,6 +186,26 @@ databases = [
         "output_dir": "occats",  # WLH-SIG.dat to be written to this directory
         "output": "WLH-SIG",
     },
+    # NED
+    {
+        # NED-SIG.dat file from OCCATS database
+        "database": "ATS",  # xml_DB_ATS
+        "environ": "OCCATS",  # data written to WLH-SIG.dat file
+        "location": "NED",
+        "system": "TRAD",  # search for TRAS in the xml file
+        "output_dir": "occats",  # WLH-SIG.dat to be written to this directory
+        "output": "NED-SIG",
+    },
+    # OCC
+    {
+        # OCC-SIG.dat file from OCCATS database
+        "database": "ATS",  # xml_DB_ATS
+        "environ": "OCCATS",  # data written to WLH-SIG.dat file
+        "location": "OCC",
+        "system": "BMF",  # search for TRAS in the xml file
+        "output_dir": "occats",  # WLH-SIG.dat to be written to this directory
+        "output": "OCC-BMF",
+    },
     #
     # CMS database
     #
@@ -894,7 +914,7 @@ databases = [
         "output_dir": "occcms",  # NTS-POW-HV.dat to be written to this directory
         "output": "NTS-POW-HV",
     },
-    # OCCCMS
+    # CMS
     {
         # OCC-BMF.dat file from OCCCMS database
         "database": "CMS",  # xml_DB_CMS
@@ -931,6 +951,509 @@ databases = [
         "output_dir": "occcms",  # OCC-COM-PIS.dat to be written to this directory
         "output": "OCC-COM-PIS",
     },
+    #
+    # ECS database
+    #
+    # BGK
+    {
+        # BGK-ECS.dat file from OCCECS database
+        "database": "ECS",  # xml_DB_ECS
+        "environ": "BGKSMS",  # data written to BGK-ECS.dat file
+        "location": "BGK",
+        "system": "ECS",  # search for ECS in the xml file
+        "output_dir": "occecs",  # BGK-ECS.dat to be written to this directory
+        "output": "BGK-ECS",
+    },
+    {
+        # BGK-FPS.dat file from OCCECS database
+        "database": "ECS",  # xml_DB_ECS
+        "environ": "BGKSMS",  # data written to BGK-FPS.dat file
+        "location": "BGK",
+        "system": "FPS__0001",  # search for FPS__0001 in the xml file
+        "output_dir": "occecs",  # BGK-FPS.dat to be written to this directory
+        "output": "BGK-FPS",
+    },
+    {
+        # BGK-LNE.dat file from OCCECS database
+        "database": "ECS",  # xml_DB_ECS
+        "environ": "BGKSMS",  # data written to BGK-ECS.dat file
+        "location": "BGK",
+        "system": "LNE__0001",  # search for LNE__0001 in the xml file
+        "output_dir": "occecs",  # BGK-LNE.dat to be written to this directory
+        "output": "BGK-LNE",
+    },
+    # BNK
+    {
+        # BNK-ECS.dat file from OCCECS database
+        "database": "ECS",  # xml_DB_ECS
+        "environ": "BNKSMS",  # data written to BNK-ECS.dat file
+        "location": "BNK",
+        "system": "ECS",  # search for ECS in the xml file
+        "output_dir": "occecs",  # BNK-ECS.dat to be written to this directory
+        "output": "BNK-ECS",
+    },
+    {
+        # BNK-FPS.dat file from OCCECS database
+        "database": "ECS",  # xml_DB_ECS
+        "environ": "BNKSMS",  # data written to BNK-FPS.dat file
+        "location": "BNK",
+        "system": "FPS__0001",  # search for FPS__0001 in the xml file
+        "output_dir": "occecs",  # BNK-FPS.dat to be written to this directory
+        "output": "BNK-FPS",
+    },
+    {
+        # BNK-LNE.dat file from OCCECS database
+        "database": "ECS",  # xml_DB_ECS
+        "environ": "BNKSMS",  # data written to BNK-ECS.dat file
+        "location": "BNK",
+        "system": "LNE__0001",  # search for LNE__0001 in the xml file
+        "output_dir": "occecs",  # BNK-LNE.dat to be written to this directory
+        "output": "BNK-LNE",
+    },
+    # CNT
+    {
+        # CNT-ECS.dat file from OCCECS database
+        "database": "ECS",  # xml_DB_ECS
+        "environ": "CNTSMS",  # data written to CNT-ECS.dat file
+        "location": "CNT",
+        "system": "ECS",  # search for ECS in the xml file
+        "output_dir": "occecs",  # CNT-ECS.dat to be written to this directory
+        "output": "CNT-ECS",
+    },
+    {
+        # CNT-FPS.dat file from OCCECS database
+        "database": "ECS",  # xml_DB_ECS
+        "environ": "CNTSMS",  # data written to CNT-FPS.dat file
+        "location": "CNT",
+        "system": "FPS__0001",  # search for FPS__0001 in the xml file
+        "output_dir": "occecs",  # CNT-FPS.dat to be written to this directory
+        "output": "CNT-FPS",
+    },
+    {
+        # CNT-LNE.dat file from OCCECS database
+        "database": "ECS",  # xml_DB_ECS
+        "environ": "CNTSMS",  # data written to CNT-ECS.dat file
+        "location": "CNT",
+        "system": "LNE__0001",  # search for LNE__0001 in the xml file
+        "output_dir": "occecs",  # CNT-LNE.dat to be written to this directory
+        "output": "CNT-LNE",
+    },
+    # CQY
+    {
+        # CQY-ECS.dat file from OCCECS database
+        "database": "ECS",  # xml_DB_ECS
+        "environ": "CQYSMS",  # data written to CQY-ECS.dat file
+        "location": "CQY",
+        "system": "ECS",  # search for ECS in the xml file
+        "output_dir": "occecs",  # CQY-ECS.dat to be written to this directory
+        "output": "CQY-ECS",
+    },
+    {
+        # CQY-FPS.dat file from OCCECS database
+        "database": "ECS",  # xml_DB_ECS
+        "environ": "CQYSMS",  # data written to CQY-FPS.dat file
+        "location": "CQY",
+        "system": "FPS__0001",  # search for FPS__0001 in the xml file
+        "output_dir": "occecs",  # CQY-FPS.dat to be written to this directory
+        "output": "CQY-FPS",
+    },
+    {
+        # CQY-LNE.dat file from OCCECS database
+        "database": "ECS",  # xml_DB_ECS
+        "environ": "CQYSMS",  # data written to CQY-ECS.dat file
+        "location": "CQY",
+        "system": "LNE__0001",  # search for LNE__0001 in the xml file
+        "output_dir": "occecs",  # CQY-LNE.dat to be written to this directory
+        "output": "CQY-LNE",
+    },
+    # DBG
+    {
+        # DBG-ECS.dat file from OCCECS database
+        "database": "ECS",  # xml_DB_ECS
+        "environ": "DBGSMS",  # data written to DBG-ECS.dat file
+        "location": "DBG",
+        "system": "ECS",  # search for ECS in the xml file
+        "output_dir": "occecs",  # DBG-ECS.dat to be written to this directory
+        "output": "DBG-ECS",
+    },
+    {
+        # DBG-FPS.dat file from OCCECS database
+        "database": "ECS",  # xml_DB_ECS
+        "environ": "DBGSMS",  # data written to DBG-FPS.dat file
+        "location": "DBG",
+        "system": "FPS__0001",  # search for FPS__0001 in the xml file
+        "output_dir": "occecs",  # DBG-FPS.dat to be written to this directory
+        "output": "DBG-FPS",
+    },
+    {
+        # DBG-LNE.dat file from OCCECS database
+        "database": "ECS",  # xml_DB_ECS
+        "environ": "DBGSMS",  # data written to DBG-ECS.dat file
+        "location": "DBG",
+        "system": "LNE__0001",  # search for LNE__0001 in the xml file
+        "output_dir": "occecs",  # DBG-LNE.dat to be written to this directory
+        "output": "DBG-LNE",
+    },
+    # FRP
+    {
+        # FRP-ECS.dat file from OCCECS database
+        "database": "ECS",  # xml_DB_ECS
+        "environ": "FRPSMS",  # data written to FRP-ECS.dat file
+        "location": "FRP",
+        "system": "ECS",  # search for ECS in the xml file
+        "output_dir": "occecs",  # FRP-ECS.dat to be written to this directory
+        "output": "FRP-ECS",
+    },
+    {
+        # FRP-FPS.dat file from OCCECS database
+        "database": "ECS",  # xml_DB_ECS
+        "environ": "FRPSMS",  # data written to FRP-FPS.dat file
+        "location": "FRP",
+        "system": "FPS__0001",  # search for FPS__0001 in the xml file
+        "output_dir": "occecs",  # FRP-FPS.dat to be written to this directory
+        "output": "FRP-FPS",
+    },
+    {
+        # FRP-LNE.dat file from OCCECS database
+        "database": "ECS",  # xml_DB_ECS
+        "environ": "FRPSMS",  # data written to FRP-ECS.dat file
+        "location": "FRP",
+        "system": "LNE__0001",  # search for LNE__0001 in the xml file
+        "output_dir": "occecs",  # FRP-LNE.dat to be written to this directory
+        "output": "FRP-LNE",
+    },
+    # HBF
+    {
+        # HBF-ECS.dat file from OCCECS database
+        "database": "ECS",  # xml_DB_ECS
+        "environ": "HBFSMS",  # data written to HBF-ECS.dat file
+        "location": "HBF",
+        "system": "ECS",  # search for ECS in the xml file
+        "output_dir": "occecs",  # HBF-ECS.dat to be written to this directory
+        "output": "HBF-ECS",
+    },
+    {
+        # HBF-FPS.dat file from OCCECS database
+        "database": "ECS",  # xml_DB_ECS
+        "environ": "HBFSMS",  # data written to HBF-FPS.dat file
+        "location": "HBF",
+        "system": "FPS__0001",  # search for FPS__0001 in the xml file
+        "output_dir": "occecs",  # HBF-FPS.dat to be written to this directory
+        "output": "HBF-FPS",
+    },
+    {
+        # HBF-LNE.dat file from OCCECS database
+        "database": "ECS",  # xml_DB_ECS
+        "environ": "HBFSMS",  # data written to HBF-ECS.dat file
+        "location": "HBF",
+        "system": "LNE__0001",  # search for LNE__0001 in the xml file
+        "output_dir": "occecs",  # HBF-LNE.dat to be written to this directory
+        "output": "HBF-LNE",
+    },
+    # HGN
+    {
+        # HGN-ECS.dat file from OCCECS database
+        "database": "ECS",  # xml_DB_ECS
+        "environ": "HGNSMS",  # data written to HGN-ECS.dat file
+        "location": "HGN",
+        "system": "ECS",  # search for ECS in the xml file
+        "output_dir": "occecs",  # HGN-ECS.dat to be written to this directory
+        "output": "HGN-ECS",
+    },
+    {
+        # HGN-FPS.dat file from OCCECS database
+        "database": "ECS",  # xml_DB_ECS
+        "environ": "HGNSMS",  # data written to HGN-FPS.dat file
+        "location": "HGN",
+        "system": "FPS__0001",  # search for FPS__0001 in the xml file
+        "output_dir": "occecs",  # HGN-FPS.dat to be written to this directory
+        "output": "HGN-FPS",
+    },
+    {
+        # HGN-LNE.dat file from OCCECS database
+        "database": "ECS",  # xml_DB_ECS
+        "environ": "HGNSMS",  # data written to HGN-ECS.dat file
+        "location": "HGN",
+        "system": "LNE__0001",  # search for LNE__0001 in the xml file
+        "output_dir": "occecs",  # HGN-LNE.dat to be written to this directory
+        "output": "HGN-LNE",
+    },
+    # KVN
+    {
+        # KVN-ECS.dat file from OCCECS database
+        "database": "ECS",  # xml_DB_ECS
+        "environ": "KVNSMS",  # data written to KVN-ECS.dat file
+        "location": "KVN",
+        "system": "ECS",  # search for ECS in the xml file
+        "output_dir": "occecs",  # KVN-ECS.dat to be written to this directory
+        "output": "KVN-ECS",
+    },
+    {
+        # KVN-FPS.dat file from OCCECS database
+        "database": "ECS",  # xml_DB_ECS
+        "environ": "KVNSMS",  # data written to KVN-FPS.dat file
+        "location": "KVN",
+        "system": "FPS__0001",  # search for FPS__0001 in the xml file
+        "output_dir": "occecs",  # KVN-FPS.dat to be written to this directory
+        "output": "KVN-FPS",
+    },
+    {
+        # KVN-LNE.dat file from OCCECS database
+        "database": "ECS",  # xml_DB_ECS
+        "environ": "KVNSMS",  # data written to KVN-ECS.dat file
+        "location": "KVN",
+        "system": "LNE__0001",  # search for LNE__0001 in the xml file
+        "output_dir": "occecs",  # KVN-LNE.dat to be written to this directory
+        "output": "KVN-LNE",
+    },
+    # LTI
+    {
+        # LTI-ECS.dat file from OCCECS database
+        "database": "ECS",  # xml_DB_ECS
+        "environ": "LTISMS",  # data written to LTI-ECS.dat file
+        "location": "LTI",
+        "system": "ECS",  # search for ECS in the xml file
+        "output_dir": "occecs",  # LTI-ECS.dat to be written to this directory
+        "output": "LTI-ECS",
+    },
+    {
+        # LTI-FPS.dat file from OCCECS database
+        "database": "ECS",  # xml_DB_ECS
+        "environ": "LTISMS",  # data written to LTI-FPS.dat file
+        "location": "LTI",
+        "system": "FPS__0001",  # search for FPS__0001 in the xml file
+        "output_dir": "occecs",  # LTI-FPS.dat to be written to this directory
+        "output": "LTI-FPS",
+    },
+    {
+        # LTI-LNE.dat file from OCCECS database
+        "database": "ECS",  # xml_DB_ECS
+        "environ": "LTISMS",  # data written to LTI-ECS.dat file
+        "location": "LTI",
+        "system": "LNE__0001",  # search for LNE__0001 in the xml file
+        "output_dir": "occecs",  # LTI-LNE.dat to be written to this directory
+        "output": "LTI-LNE",
+    },
+    # OTP
+    {
+        # OTP-ECS.dat file from OCCECS database
+        "database": "ECS",  # xml_DB_ECS
+        "environ": "OTPSMS",  # data written to OTP-ECS.dat file
+        "location": "OTP",
+        "system": "ECS",  # search for ECS in the xml file
+        "output_dir": "occecs",  # OTP-ECS.dat to be written to this directory
+        "output": "OTP-ECS",
+    },
+    {
+        # OTP-FPS.dat file from OCCECS database
+        "database": "ECS",  # xml_DB_ECS
+        "environ": "OTPSMS",  # data written to OTP-FPS.dat file
+        "location": "OTP",
+        "system": "FPS__0001",  # search for FPS__0001 in the xml file
+        "output_dir": "occecs",  # OTP-FPS.dat to be written to this directory
+        "output": "OTP-FPS",
+    },
+    {
+        # OTP-LNE.dat file from OCCECS database
+        "database": "ECS",  # xml_DB_ECS
+        "environ": "OTPSMS",  # data written to OTP-ECS.dat file
+        "location": "OTP",
+        "system": "LNE__0001",  # search for LNE__0001 in the xml file
+        "output_dir": "occecs",  # OTP-LNE.dat to be written to this directory
+        "output": "OTP-LNE",
+    },
+    # PGC
+    {
+        # PGC-ECS.dat file from OCCECS database
+        "database": "ECS",  # xml_DB_ECS
+        "environ": "PGCSMS",  # data written to PGC-ECS.dat file
+        "location": "PGC",
+        "system": "ECS",  # search for ECS in the xml file
+        "output_dir": "occecs",  # PGC-ECS.dat to be written to this directory
+        "output": "PGC-ECS",
+    },
+    {
+        # PGC-FPS.dat file from OCCECS database
+        "database": "ECS",  # xml_DB_ECS
+        "environ": "PGCSMS",  # data written to PGC-FPS.dat file
+        "location": "PGC",
+        "system": "FPS__0001",  # search for FPS__0001 in the xml file
+        "output_dir": "occecs",  # PGC-FPS.dat to be written to this directory
+        "output": "PGC-FPS",
+    },
+    {
+        # PGC-LNE.dat file from OCCECS database
+        "database": "ECS",  # xml_DB_ECS
+        "environ": "PGCSMS",  # data written to PGC-ECS.dat file
+        "location": "PGC",
+        "system": "LNE__0001",  # search for LNE__0001 in the xml file
+        "output_dir": "occecs",  # PGC-LNE.dat to be written to this directory
+        "output": "PGC-LNE",
+    },
+    # PGL
+    {
+        # PGL-ECS.dat file from OCCECS database
+        "database": "ECS",  # xml_DB_ECS
+        "environ": "PGLSMS",  # data written to PGL-ECS.dat file
+        "location": "PGL",
+        "system": "ECS",  # search for ECS in the xml file
+        "output_dir": "occecs",  # PGL-ECS.dat to be written to this directory
+        "output": "PGL-ECS",
+    },
+    {
+        # PGL-FPS.dat file from OCCECS database
+        "database": "ECS",  # xml_DB_ECS
+        "environ": "PGLSMS",  # data written to PGL-FPS.dat file
+        "location": "PGL",
+        "system": "FPS__0001",  # search for FPS__0001 in the xml file
+        "output_dir": "occecs",  # PGL-FPS.dat to be written to this directory
+        "output": "PGL-FPS",
+    },
+    {
+        # PGL-LNE.dat file from OCCECS database
+        "database": "ECS",  # xml_DB_ECS
+        "environ": "PGLSMS",  # data written to PGL-ECS.dat file
+        "location": "PGL",
+        "system": "LNE__0001",  # search for LNE__0001 in the xml file
+        "output_dir": "occecs",  # PGL-LNE.dat to be written to this directory
+        "output": "PGL-LNE",
+    },
+    # PTP
+    {
+        # PTP-ECS.dat file from OCCECS database
+        "database": "ECS",  # xml_DB_ECS
+        "environ": "PTPSMS",  # data written to PTP-ECS.dat file
+        "location": "PTP",
+        "system": "ECS",  # search for ECS in the xml file
+        "output_dir": "occecs",  # PTP-ECS.dat to be written to this directory
+        "output": "PTP-ECS",
+    },
+    {
+        # PTP-FPS.dat file from OCCECS database
+        "database": "ECS",  # xml_DB_ECS
+        "environ": "PTPSMS",  # data written to PTP-FPS.dat file
+        "location": "PTP",
+        "system": "FPS__0001",  # search for FPS__0001 in the xml file
+        "output_dir": "occecs",  # PTP-FPS.dat to be written to this directory
+        "output": "PTP-FPS",
+    },
+    {
+        # PTP-LNE.dat file from OCCECS database
+        "database": "ECS",  # xml_DB_ECS
+        "environ": "PTPSMS",  # data written to PTP-ECS.dat file
+        "location": "PTP",
+        "system": "LNE__0001",  # search for LNE__0001 in the xml file
+        "output_dir": "occecs",  # PTP-LNE.dat to be written to this directory
+        "output": "PTP-LNE",
+    },
+    # SER
+    {
+        # SER-ECS.dat file from OCCECS database
+        "database": "ECS",  # xml_DB_ECS
+        "environ": "SERSMS",  # data written to SER-ECS.dat file
+        "location": "SER",
+        "system": "ECS",  # search for ECS in the xml file
+        "output_dir": "occecs",  # SER-ECS.dat to be written to this directory
+        "output": "SER-ECS",
+    },
+    {
+        # SER-FPS.dat file from OCCECS database
+        "database": "ECS",  # xml_DB_ECS
+        "environ": "SERSMS",  # data written to SER-FPS.dat file
+        "location": "SER",
+        "system": "FPS__0001",  # search for FPS__0001 in the xml file
+        "output_dir": "occecs",  # SER-FPS.dat to be written to this directory
+        "output": "SER-FPS",
+    },
+    {
+        # SER-LNE.dat file from OCCECS database
+        "database": "ECS",  # xml_DB_ECS
+        "environ": "SERSMS",  # data written to SER-ECS.dat file
+        "location": "SER",
+        "system": "LNE__0001",  # search for LNE__0001 in the xml file
+        "output_dir": "occecs",  # SER-LNE.dat to be written to this directory
+        "output": "SER-LNE",
+    },
+    # SKG
+    {
+        # SKG-ECS.dat file from OCCECS database
+        "database": "ECS",  # xml_DB_ECS
+        "environ": "SKGSMS",  # data written to SKG-ECS.dat file
+        "location": "SKG",
+        "system": "ECS",  # search for ECS in the xml file
+        "output_dir": "occecs",  # SKG-ECS.dat to be written to this directory
+        "output": "SKG-ECS",
+    },
+    {
+        # SKG-FPS.dat file from OCCECS database
+        "database": "ECS",  # xml_DB_ECS
+        "environ": "SKGSMS",  # data written to SKG-FPS.dat file
+        "location": "SKG",
+        "system": "FPS__0001",  # search for FPS__0001 in the xml file
+        "output_dir": "occecs",  # SKG-FPS.dat to be written to this directory
+        "output": "SKG-FPS",
+    },
+    {
+        # SKG-LNE.dat file from OCCECS database
+        "database": "ECS",  # xml_DB_ECS
+        "environ": "SKGSMS",  # data written to SKG-ECS.dat file
+        "location": "SKG",
+        "system": "LNE__0001",  # search for LNE__0001 in the xml file
+        "output_dir": "occecs",  # SKG-LNE.dat to be written to this directory
+        "output": "SKG-LNE",
+    },
+    # WLH
+    {
+        # WLH-ECS.dat file from OCCECS database
+        "database": "ECS",  # xml_DB_ECS
+        "environ": "WLHSMS",  # data written to WLH-ECS.dat file
+        "location": "WLH",
+        "system": "ECS",  # search for ECS in the xml file
+        "output_dir": "occecs",  # WLH-ECS.dat to be written to this directory
+        "output": "WLH-ECS",
+    },
+    {
+        # WLH-FPS.dat file from OCCECS database
+        "database": "ECS",  # xml_DB_ECS
+        "environ": "WLHSMS",  # data written to WLH-FPS.dat file
+        "location": "WLH",
+        "system": "FPS__0001",  # search for FPS__0001 in the xml file
+        "output_dir": "occecs",  # WLH-FPS.dat to be written to this directory
+        "output": "WLH-FPS",
+    },
+    {
+        # WLH-LNE.dat file from OCCECS database
+        "database": "ECS",  # xml_DB_ECS
+        "environ": "WLHSMS",  # data written to WLH-ECS.dat file
+        "location": "WLH",
+        "system": "LNE__0001",  # search for LNE__0001 in the xml file
+        "output_dir": "occecs",  # WLH-LNE.dat to be written to this directory
+        "output": "WLH-LNE",
+    },
+]
+
+_environments = [
+    "BGK",
+    "BNK",
+    "CNT",
+    "CQY",
+    "DBG",
+    "FRP",
+    "HBF",
+    "HGN",
+    "KVN",
+    "LTI",
+    "OTP",
+    "PGC",
+    "PGL",
+    "PTP",
+    "SER",
+    "SKG",
+    "WLH",
+    "NED",
+    "ATS",
+    "CMS",
+    "ECS",
 ]
 
 
@@ -961,6 +1484,13 @@ def is_valid_dir(dir_name):
     Returns True when dir_name is a valid directory
     """
     return os.path.isdir(dir_name)
+
+
+def is_valid_environ(environ):
+    """
+    Returns True when a given environment is a valid environment
+    """
+    return environ.upper() in _environments
 
 
 def is_input_point(name):
@@ -1069,24 +1599,38 @@ def main():
         help="path to XML directories",
     )
     parser.add_argument(
-        "--output-dir",
-        "-o",
-        required=True,
-        dest="output_dir",
-        help="path to output directory",
-    )
-    parser.add_argument(
         "--pool",
         "-p",
         required=False,
         type=int,
         default=1,
         dest="pool",
-        help="Number of worker processes to be used",
+        help="number of worker processes to be used (default=1)",
+    )
+    parser.add_argument(
+        "--environment",
+        "-e",
+        required=False,
+        default="",
+        dest="environment",
+        help="specific environment to be processed (e.g., CMS)",
+    )
+    parser.add_argument(
+        "--output-dir",
+        "-o",
+        required=True,
+        dest="output_dir",
+        help="path to output directory",
     )
 
     args = parser.parse_args()
-    # logging.debug(f"args: {args}")
+
+    if args.environment != "":
+        if not is_valid_environ(args.environment):
+            logging.error(f"{args.environment} is not a valid environment")
+            return
+        tmp = [db for db in databases if db.get("database") == args.environment]
+        logging.debug(f"tmp: {tmp}")
 
     if not is_valid_dir(args.xml_dir):
         logging.error(f"{args.xml_dir} is not a valid directory")
@@ -1102,70 +1646,12 @@ def main():
 
     start = time.perf_counter()
 
+    # FIXME Under macOS, for some reasons, logger does not output anything while performing the jobs via pool
     pool = multiprocessing.Pool(args.pool)
-    for db in databases:
+    for db in tmp:  # databases:
         pool.apply_async(do_work, [args.xml_dir, args.output_dir, db])
     pool.close()
     pool.join()
-
-    # for db in databases:
-    #     db_points = []
-
-    #     source = db.get("database")  # xml_DB_XXX
-    #     location = db.get("location")  # e.g., BGK, BNK, NDI, NPS, NTS, etc
-    #     system = db.get("system")  # BMF, CCTS_0001, ..., SIG, etc
-
-    #     start_db = time.perf_counter()
-    #     logging.info(f"Processing {location}:{system} in {source} database ...")
-
-    #     # Create a path to xml_DB_XXX/instancesHierarchy.xml
-    #     xml_file = f"{args.xml_dir}/xml_DB_{source}/instancesHierarchy.xml"
-    #     logging.info(f"Parsing {xml_file} ...")
-    #     root = ET.parse(xml_file)
-
-    #     results = root.findall(
-    #         f".//HierarchyItem[@name='{location}']//HierarchyItem[@name='{system}']//HierarchyItem"
-    #     )
-    #     # logging.debug(f"No. of results: {len(results)}")
-
-    #     for item in results:
-    #         alias = item.get("alias")
-    #         name = item.get("name")
-
-    #         if alias == f"{location}_{name}":
-    #             continue
-    #         if not is_input_point(name):
-    #             continue
-
-    #         parent = root.findall(f".//HierarchyItem[@alias='{alias}']/..")
-    #         if len(parent) != 1:
-    #             logging.warning(
-    #                 f"Unexpected number of parents ({len(parent)}) for {alias}"
-    #             )
-    #             continue
-
-    #         prefix = parent[0].get("alias")
-    #         point = f"{prefix}:{name}"
-    #         db_points.append(point)
-
-    #     if len(db_points) > 0:
-    #         db_points.sort(key=cmp_to_key(locale.strcoll))
-    #         output_dir = f"{args.output_dir}/{db.get('output_dir')}"
-    #         if not is_valid_dir(output_dir):
-    #             try:
-    #                 logging.info(f"Creating directory: {output_dir}")
-    #                 os.mkdir(output_dir)
-    #             except OSError:
-    #                 logging.error(f"Creation of the directory {output_dir} failed")
-
-    #         ssr_dat = f"{output_dir}/{db.get('output')}.dat"
-    #         environ = db.get("environ")
-    #         write_ssr_file(db_points, environ, ssr_dat)
-
-    #     end_db = time.perf_counter()
-    #     logging.info(
-    #         f"Processing {location}:{system} in {source} database ... DONE ({end_db - start_db:0.4f}s)"
-    #     )
 
     end = time.perf_counter()
     logging.info(f"Total processing time: {end - start:0.4f} seconds")
