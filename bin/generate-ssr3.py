@@ -13,83 +13,123 @@ from functools import cmp_to_key
 
 
 _databases = {
+    # This script uses the key to load instancesHierarchy.xml file from xml_DB_BGK directory
     "BGK": {
-        # output for this database is written to 'output_dir' directory
+        # output for BGK database is written to 'bgksms' directory
         "output_dir": "bgksms",
         "environment": {
             # a dictionary with key as environment name and value as a list of sub-systems
             "BGK": [
                 {
-                    # name is used in the SSR file; see write_ssr_file()
+                    # name is written in the SSR file as ENVIRONEMENT; see write_ssr_file()
                     "name": "BGKSMS",
-                    # search for this node with in the database file, instancesHierarchy.xml
+                    # search for this node within the database file, instancesHierarchy.xml
                     "input": "BMF",
                     # output of this sub-system is written to `bgksms/BGK-BMF.dat`
                     "output": "BGK-BMF",
                 },
                 {
+                    # name is written in the SSR file as ENVIRONEMENT; see write_ssr_file()
                     "name": "BGKSMS",
+                    # search for this node within the database file, instancesHierarchy.xml
                     "input": "CCTS_0001",
+                    # output of this sub-system is written to 'bgksms/BGK-COM-CCTV.dat'
                     "output": "BGK-COM-CCTV",
                 },
                 {
+                    # name is written in the SSR file as ENVIRONEMENT; see write_ssr_file()
                     "name": "BGKSMS",
+                    # search for this node within the database file, instancesHierarchy.xml
                     "input": "PASS_0001",
+                    # output of this sub-system is written to 'bgksms/BGK-COM-PAS.dat'
                     "output": "BGK-COM-PAS",
                 },
                 {
+                    # name is written in the SSR file as ENVIRONEMENT; see write_ssr_file()
                     "name": "BGKSMS",
+                    # search for this node within the database file, instancesHierarchy.xml
                     "input": "PISS_0001",
+                    # output of this sub-system is written to 'bgksms/BGK-COM-PIS.dat'
                     "output": "BGK-COM-PIS",
                 },
                 {
+                    # name is written in the SSR file as ENVIRONEMENT; see write_ssr_file()
                     "name": "BGKSMS",
+                    # search for this node within the database file, instancesHierarchy.xml
                     "input": "DNG__0001",
+                    # output of this sub-system is written to 'bgksms/BGK-DNG.dat'
                     "output": "BGK-DNG",
                 },
                 {
+                    # name is written in the SSR file as ENVIRONEMENT; see write_ssr_file()
                     "name": "BGKSMS",
+                    # search for this node within the database file, instancesHierarchy.xml
                     "input": "ECS",
+                    # output of this sub-system is written to 'bgksms/BGK-ECS.dat'
                     "output": "BGK-ECS",
                 },
                 {
+                    # name is written in the SSR file as ENVIRONEMENT; see write_ssr_file()
                     "name": "BGKSMS",
+                    # search for this node within the database file, instancesHierarchy.xml
                     "input": "FPS__0001",
+                    # output of this sub-system is written to 'bgksms/BGK-FPS.dat'
                     "output": "BGK-FPS",
                 },
                 {
+                    # name is written in the SSR file as ENVIRONEMENT; see write_ssr_file()
                     "name": "BGKSMS",
+                    # search for this node within the database file, instancesHierarchy.xml
                     "input": "LNE__0001",
+                    # output of this sub-system is written to 'bgksms/BGK-LNE.dat'
                     "output": "BGK-LNE",
                 },
                 {
+                    # name is written in the SSR file as ENVIRONEMENT; see write_ssr_file()
                     "name": "BGKSMS",
+                    # search for this node within the database file, instancesHierarchy.xml
                     "input": "DC___0001",
+                    # output of this sub-system is written to 'bgksms/BGK-POW-DC.dat'
                     "output": "BGK-POW-DC",
                 },
                 {
+                    # name is written in the SSR file as ENVIRONEMENT; see write_ssr_file()
                     "name": "BGKSMS",
+                    # search for this node within the database file, instancesHierarchy.xml
                     "input": "ETSB_0001",
+                    # output of this sub-system is written to 'bgksms/BGK-POW-ETSB.dat'
                     "output": "BGK-POW-ETSB",
                 },
                 {
+                    # name is written in the SSR file as ENVIRONEMENT; see write_ssr_file()
                     "name": "BGKSMS",
+                    # search for this node within the database file, instancesHierarchy.xml
                     "input": "HV___0001",
+                    # output of this sub-system is written to 'bgksms/BGK-POW-HV.dat'
                     "output": "BGK-POW-HV",
                 },
                 {
+                    # name is written in the SSR file as ENVIRONEMENT; see write_ssr_file()
                     "name": "BGKSMS",
+                    # search for this node within the database file, instancesHierarchy.xml
                     "input": "LIG__0001",
+                    # output of this sub-system is written to 'bgksms/BGK-POW-LIG.dat'
                     "output": "BGK-POW-LIG",
                 },
                 {
+                    # name is written in the SSR file as ENVIRONEMENT; see write_ssr_file()
                     "name": "BGKSMS",
+                    # search for this node within the database file, instancesHierarchy.xml
                     "input": "LV___0001",
+                    # output of this sub-system is written to 'bgksms/BGK-POW-LV.dat'
                     "output": "BGK-POW-LV",
                 },
                 {
+                    # name is written in the SSR file as ENVIRONEMENT; see write_ssr_file()
                     "name": "BGKSMS",
+                    # search for this node within the database file, instancesHierarchy.xml
                     "input": "TRAS",
+                    # output of this sub-system is written to 'bgksms/BGK-SIG.dat'
                     "output": "BGK-SIG",
                 },
             ]
@@ -1532,16 +1572,20 @@ _databases = {
                 {
                     "name": "BGKSMS",
                     "input": "CCTS_0001",
+                    # FIXME The content of this file is the same as the one from 'bgksms/BGK-COM-CCTV.dat'
+                    # I am not sure whether this is always the case or not though.
                     "output": "BGK-COM-CCTV",
                 },
                 {
                     "name": "BGKSMS",
                     "input": "PASS_0001",
+                    # FIXME The content of this file is the same as the one from 'bgksms/BGK-COM-PAS.dat'
                     "output": "BGK-COM-PAS",
                 },
                 {
                     "name": "BGKSMS",
                     "input": "PISS_0001",
+                    # FIXME The content of this file is the same as the one from 'bgksms/BGK-COM-PIS.dat'
                     "output": "BGK-COM-PIS",
                 },
             ],
@@ -1865,6 +1909,8 @@ _databases = {
                     "output": "SKG-COM-CCTV",
                 },
                 {
+                    # FIXME For some reason, the existing SKG-COM-PAS.dat file sets ENVIRONEMENT to OCCCMS
+                    # even though other station files set it to XXXSMS. The content of the SKG-COM-PAS.dat is also different.
                     "name": "SKGSMS",
                     "input": "PASS_0001",
                     "output": "SKG-COM-PAS",
@@ -1918,11 +1964,13 @@ _databases = {
                 {
                     "name": "NEDSMS",
                     "input": "DC___0001",
+                    # NOTE The content of this file is the same as the one from 'nedsms/NDI-POW-DC.dat'
                     "output": "NDI-POW-DC",
                 },
                 {
                     "name": "NEDSMS",
                     "input": "HV___0001",
+                    # NOTE The content of this file is the same as the one from 'nedsms/NDI-POW-HV.dat'
                     "output": "NDI-POW-HV",
                 },
             ],
@@ -1930,6 +1978,7 @@ _databases = {
                 {
                     "name": "NEDSMS",
                     "input": "HV___0001",
+                    # NOTE The content of this file is the same as the one from 'nedsms/NDI-POW-HV.dat'
                     "output": "NPS-POW-HV",
                 },
             ],
@@ -1937,11 +1986,13 @@ _databases = {
                 {
                     "name": "NEDSMS",
                     "input": "DC___0001",
+                    # NOTE: Content of this file is different from 'nedsms/NTS-POW-DC.dat'
                     "output": "NTS-POW-DC",
                 },
                 {
                     "name": "NEDSMS",
                     "input": "HV___0001",
+                    # NOTE: Content of this file is the same as the one from 'nedsms/NTS-POW-HV.dat'
                     "output": "NTS-POW-HV",
                 },
             ],
@@ -2276,7 +2327,7 @@ def init_logger():
     c = logging.StreamHandler()
     c_formatter = logging.Formatter(fmt="%(message)s")
     c.setFormatter(c_formatter)
-    c.setLevel(logging.DEBUG)
+    c.setLevel(logging.INFO)
 
     f = logging.FileHandler("generate-ssr3.log")
     f_formatter = logging.Formatter(fmt="%(asctime)s %(levelname)s %(message)s")
@@ -2309,44 +2360,6 @@ def is_input_point(name):
     if len(name) >= 3:
         return name[0:3] in ["aii", "dii"]
     return False
-
-
-# def get_long_environ_name(database, environ):
-#     """
-#     Returns six-letter environment name from a three-letter database name
-#     """
-#     stations = [
-#         "BGK",
-#         "BNK",
-#         "CNT",
-#         "CQY",
-#         "DBG",
-#         "FRP",
-#         "HBF",
-#         "HGN",
-#         "KVN",
-#         "LTI",
-#         "NED",
-#         "OTP",
-#         "PGC",
-#         "PGL",
-#         "PTP",
-#         "SER",
-#         "SKG",
-#         "WLH",
-#     ]
-#     occ = [
-#         "ATS",
-#         "CMS",
-#         "ECS",
-#     ]
-
-#     if database in stations:
-#         return f"{database}SMS"
-#     if database in occ:
-#         if database == "ECS":
-#             return f"{environ}SMS"
-#         return f"OCC{database}"
 
 
 def write_ssr_file(db_points, environ, ssr_file):
