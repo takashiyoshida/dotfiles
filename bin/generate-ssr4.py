@@ -13,13 +13,190 @@ from datetime import datetime
 from functools import cmp_to_key
 
 databases = [
+    #
+    # ATS database
+    #
+    # BGK
+    {
+        # BGK-SIG.dat file from OCCATS database
+        "database": "ATS",  # xml_DB_ATS
+        "environ": "OCCATS",  # data written to BGK-SIG.dat file
+        "location": "BGK",
+        "system": "TRAS",  # search for TRAS in the xml file
+        "output_dir": "occats",  # BGK-SIG.dat to be written to this directory
+        "output": "BGK-SIG",
+    },
+    # BNK
+    {
+        # BNK-SIG.dat file from OCCATS database
+        "database": "ATS",  # xml_DB_ATS
+        "environ": "OCCATS",  # data written to BNK-SIG.dat file
+        "location": "BNK",
+        "system": "TRAS",  # search for TRAS in the xml file
+        "output_dir": "occats",  # BNK-SIG.dat to be written to this directory
+        "output": "BNK-SIG",
+    },
+    # CNT
+    {
+        # CNT-SIG.dat file from OCCATS database
+        "database": "ATS",  # xml_DB_ATS
+        "environ": "OCCATS",  # data written to CNT-SIG.dat file
+        "location": "CNT",
+        "system": "TRAS",  # search for TRAS in the xml file
+        "output_dir": "occats",  # CNT-SIG.dat to be written to this directory
+        "output": "CNT-SIG",
+    },
+    # CQY
+    {
+        # CQY-SIG.dat file from OCCATS database
+        "database": "ATS",  # xml_DB_ATS
+        "environ": "OCCATS",  # data written to CQY-SIG.dat file
+        "location": "CQY",
+        "system": "TRAS",  # search for TRAS in the xml file
+        "output_dir": "occats",  # CQY-SIG.dat to be written to this directory
+        "output": "CQY-SIG",
+    },
+    # DBG
+    {
+        # DBG-SIG.dat file from OCCATS database
+        "database": "ATS",  # xml_DB_ATS
+        "environ": "OCCATS",  # data written to DBG-SIG.dat file
+        "location": "DBG",
+        "system": "TRAS",  # search for TRAS in the xml file
+        "output_dir": "occats",  # DBG-SIG.dat to be written to this directory
+        "output": "DBG-SIG",
+    },
+    # FRP
+    {
+        # FRP-SIG.dat file from OCCATS database
+        "database": "ATS",  # xml_DB_ATS
+        "environ": "OCCATS",  # data written to FRP-SIG.dat file
+        "location": "FRP",
+        "system": "TRAS",  # search for TRAS in the xml file
+        "output_dir": "occats",  # FRP-SIG.dat to be written to this directory
+        "output": "FRP-SIG",
+    },
+    # HBF
+    {
+        # HBF-SIG.dat file from OCCATS database
+        "database": "ATS",  # xml_DB_ATS
+        "environ": "OCCATS",  # data written to HBF-SIG.dat file
+        "location": "HBF",
+        "system": "TRAT",  # search for TRAT in the xml file
+        "output_dir": "occats",  # HBF-SIG.dat to be written to this directory
+        "output": "HBF-SIG",
+    },
+    # HGN
+    {
+        # HGN-SIG.dat file from OCCATS database
+        "database": "ATS",  # xml_DB_ATS
+        "environ": "OCCATS",  # data written to HGN-SIG.dat file
+        "location": "HGN",
+        "system": "TRAS",  # search for TRAS in the xml file
+        "output_dir": "occats",  # HGN-SIG.dat to be written to this directory
+        "output": "HGN-SIG",
+    },
+    # KVN
+    {
+        # KVN-SIG.dat file from OCCATS database
+        "database": "ATS",  # xml_DB_ATS
+        "environ": "OCCATS",  # data written to KVN-SIG.dat file
+        "location": "KVN",
+        "system": "TRAS",  # search for TRAS in the xml file
+        "output_dir": "occats",  # KVN-SIG.dat to be written to this directory
+        "output": "KVN-SIG",
+    },
+    # LTI
+    {
+        # LTI-SIG.dat file from OCCATS database
+        "database": "ATS",  # xml_DB_ATS
+        "environ": "OCCATS",  # data written to LTI-SIG.dat file
+        "location": "LTI",
+        "system": "TRAS",  # search for TRAS in the xml file
+        "output_dir": "occats",  # LTI-SIG.dat to be written to this directory
+        "output": "LTI-SIG",
+    },
+    # OTP
+    {
+        # OTP-SIG.dat file from OCCATS database
+        "database": "ATS",  # xml_DB_ATS
+        "environ": "OCCATS",  # data written to OTP-SIG.dat file
+        "location": "OTP",
+        "system": "TRAS",  # search for TRAS in the xml file
+        "output_dir": "occats",  # OTP-SIG.dat to be written to this directory
+        "output": "OTP-SIG",
+    },
+    # PGC
+    {
+        # PGC-SIG.dat file from OCCATS database
+        "database": "ATS",  # xml_DB_ATS
+        "environ": "OCCATS",  # data written to PGC-SIG.dat file
+        "location": "PGC",
+        "system": "TRAT",  # search for TRAT in the xml file
+        "output_dir": "occats",  # PGC-SIG.dat to be written to this directory
+        "output": "PGC-SIG",
+    },
+    # PGL
+    {
+        # PGL-SIG.dat file from OCCATS database
+        "database": "ATS",  # xml_DB_ATS
+        "environ": "OCCATS",  # data written to PGL-SIG.dat file
+        "location": "PGL",
+        "system": "TRAS",  # search for TRAS in the xml file
+        "output_dir": "occats",  # PGL-SIG.dat to be written to this directory
+        "output": "PGL-SIG",
+    },
+    # PTP
+    {
+        # PTP-SIG.dat file from OCCATS database
+        "database": "ATS",  # xml_DB_ATS
+        "environ": "OCCATS",  # data written to PTP-SIG.dat file
+        "location": "PTP",
+        "system": "TRAS",  # search for TRAS in the xml file
+        "output_dir": "occats",  # PTP-SIG.dat to be written to this directory
+        "output": "PTP-SIG",
+    },
+    # SER
+    {
+        # SER-SIG.dat file from OCCATS database
+        "database": "ATS",  # xml_DB_ATS
+        "environ": "OCCATS",  # data written to SER-SIG.dat file
+        "location": "SER",
+        "system": "TRAS",  # search for TRAS in the xml file
+        "output_dir": "occats",  # SER-SIG.dat to be written to this directory
+        "output": "SER-SIG",
+    },
+    # SKG
+    {
+        # SKG-SIG.dat file from OCCATS database
+        "database": "ATS",  # xml_DB_ATS
+        "environ": "OCCATS",  # data written to SKG-SIG.dat file
+        "location": "SKG",
+        "system": "TRAS",  # search for TRAS in the xml file
+        "output_dir": "occats",  # SKG-SIG.dat to be written to this directory
+        "output": "SKG-SIG",
+    },
+    # WLH
+    {
+        # WLH-SIG.dat file from OCCATS database
+        "database": "ATS",  # xml_DB_ATS
+        "environ": "OCCATS",  # data written to WLH-SIG.dat file
+        "location": "WLH",
+        "system": "TRAS",  # search for TRAS in the xml file
+        "output_dir": "occats",  # WLH-SIG.dat to be written to this directory
+        "output": "WLH-SIG",
+    },
+    #
+    # CMS database
+    #
+    # BGK
     {
         # BGK-BMF.dat file from OCCCMS database
         "database": "CMS",  # xml_DB_CMS
         "environ": "OCCCMS",  # data written to BGK-BMF.dat file
         "location": "BGK",
         "system": "BMF",  # search for BMF in the xml file
-        "output_dir": "occcms",  # BGK-BMF.dat to be written to this directorybin/generate-ssr4.py
+        "output_dir": "occcms",  # BGK-BMF.dat to be written to this directory
         "output": "BGK-BMF",
     },
     {
@@ -49,7 +226,7 @@ databases = [
         "output_dir": "occcms",  # BGK-COM-PIS.dat to be written to this directory
         "output": "BGK-COM-PIS",
     },
-    #
+    # BNK
     {
         # BNK-BMF.dat file from OCCCMS database
         "database": "CMS",  # xml_DB_CMS
@@ -86,7 +263,7 @@ databases = [
         "output_dir": "occcms",  # BNK-COM-PIS.dat to be written to this directory
         "output": "BNK-COM-PIS",
     },
-    #
+    # CNT
     {
         # CNT-BMF.dat file from OCCCMS database
         "database": "CMS",  # xml_DB_CMS
@@ -123,7 +300,7 @@ databases = [
         "output_dir": "occcms",  # CNT-COM-PIS.dat to be written to this directory
         "output": "CNT-COM-PIS",
     },
-    #
+    # CQY
     {
         # CQY-BMF.dat file from OCCCMS database
         "database": "CMS",  # xml_DB_CMS
@@ -160,7 +337,7 @@ databases = [
         "output_dir": "occcms",  # CQY-COM-PIS.dat to be written to this directory
         "output": "CQY-COM-PIS",
     },
-    #
+    # DBG
     {
         # DBG-BMF.dat file from OCCCMS database
         "database": "CMS",  # xml_DB_CMS
@@ -197,7 +374,7 @@ databases = [
         "output_dir": "occcms",  # DBG-COM-PIS.dat to be written to this directory
         "output": "DBG-COM-PIS",
     },
-    #
+    # FRP
     {
         # FRP-BMF.dat file from OCCCMS database
         "database": "CMS",  # xml_DB_CMS
@@ -234,7 +411,7 @@ databases = [
         "output_dir": "occcms",  # FRP-COM-PIS.dat to be written to this directory
         "output": "FRP-COM-PIS",
     },
-    #
+    # HBF
     {
         # HBF-BMF.dat file from OCCCMS database
         "database": "CMS",  # xml_DB_CMS
@@ -271,7 +448,7 @@ databases = [
         "output_dir": "occcms",  # HBF-COM-PIS.dat to be written to this directory
         "output": "HBF-COM-PIS",
     },
-    #
+    # HGN
     {
         # HGN-BMF.dat file from OCCCMS database
         "database": "CMS",  # xml_DB_CMS
@@ -308,7 +485,7 @@ databases = [
         "output_dir": "occcms",  # HGN-COM-PIS.dat to be written to this directory
         "output": "HGN-COM-PIS",
     },
-    #
+    # KVN
     {
         # KVN-BMF.dat file from OCCCMS database
         "database": "CMS",  # xml_DB_CMS
@@ -345,7 +522,7 @@ databases = [
         "output_dir": "occcms",  # KVN-COM-PIS.dat to be written to this directory
         "output": "KVN-COM-PIS",
     },
-    #
+    # LTI
     {
         # LTI-BMF.dat file from OCCCMS database
         "database": "CMS",  # xml_DB_CMS
@@ -382,7 +559,7 @@ databases = [
         "output_dir": "occcms",  # LTI-COM-PIS.dat to be written to this directory
         "output": "LTI-COM-PIS",
     },
-    #
+    # OTP
     {
         # OTP-BMF.dat file from OCCCMS database
         "database": "CMS",  # xml_DB_CMS
@@ -419,7 +596,7 @@ databases = [
         "output_dir": "occcms",  # OTP-COM-PIS.dat to be written to this directory
         "output": "OTP-COM-PIS",
     },
-    #
+    # PGC
     {
         # PGC-BMF.dat file from OCCCMS database
         "database": "CMS",  # xml_DB_CMS
@@ -456,7 +633,7 @@ databases = [
         "output_dir": "occcms",  # PGC-COM-PIS.dat to be written to this directory
         "output": "PGC-COM-PIS",
     },
-    #
+    # PGL
     {
         # PGL-BMF.dat file from OCCCMS database
         "database": "CMS",  # xml_DB_CMS
@@ -493,7 +670,7 @@ databases = [
         "output_dir": "occcms",  # PGL-COM-PIS.dat to be written to this directory
         "output": "PGL-COM-PIS",
     },
-    #
+    # PTP
     {
         # PTP-BMF.dat file from OCCCMS database
         "database": "CMS",  # xml_DB_CMS
@@ -530,7 +707,7 @@ databases = [
         "output_dir": "occcms",  # PTP-COM-PIS.dat to be written to this directory
         "output": "PTP-COM-PIS",
     },
-    #
+    # SER
     {
         # SER-BMF.dat file from OCCCMS database
         "database": "CMS",  # xml_DB_CMS
@@ -567,7 +744,7 @@ databases = [
         "output_dir": "occcms",  # SER-COM-PIS.dat to be written to this directory
         "output": "SER-COM-PIS",
     },
-    #
+    # SKG
     {
         # SKG-BMF.dat file from OCCCMS database
         "database": "CMS",  # xml_DB_CMS
@@ -604,7 +781,7 @@ databases = [
         "output_dir": "occcms",  # SKG-COM-PIS.dat to be written to this directory
         "output": "SKG-COM-PIS",
     },
-    #
+    # WLH
     {
         # WLH-BMF.dat file from OCCCMS database
         "database": "CMS",  # xml_DB_CMS
@@ -641,7 +818,7 @@ databases = [
         "output_dir": "occcms",  # WLH-COM-PIS.dat to be written to this directory
         "output": "WLH-COM-PIS",
     },
-    #
+    # NEL Depot
     {
         # NED-BMF.dat file from OCCCMS database
         "database": "CMS",  # xml_DB_CMS
@@ -717,7 +894,7 @@ databases = [
         "output_dir": "occcms",  # NTS-POW-HV.dat to be written to this directory
         "output": "NTS-POW-HV",
     },
-    #
+    # OCCCMS
     {
         # OCC-BMF.dat file from OCCCMS database
         "database": "CMS",  # xml_DB_CMS
