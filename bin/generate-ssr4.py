@@ -1,5 +1,56 @@
 #!/usr/bin/env python
 
+#
+# README
+#
+# This Python script generates SSR files (e.g., BGK-BMF.dat) found in GWS under d:\nel-gws\DatSsr directory.
+# The original magic (process) of generating SSR files is lost and this script is written to produce
+# the same output as close as possible.
+#
+# IMPORTANT:
+# I have no knowledge of how the original process works.
+#
+# ALSO IMPOTANT:
+# This script should be executed whenever there are changes to realtime database, especially when:
+# - new equipment is added
+# - equipment is modified (new attributes added or removed)
+# - equipment is removed
+#
+# HOW TO USE:
+# 1. Download a compressed database file from Subversion repository (e.g., NELDB_MOCC_P22_P22.zip)
+# 2. Uncompress the compressed database file (e.g., NELDB_MOCC_P22_P22.zip => NELDB_MOCC_P22_P22)
+# 3. Go to Database directory under the uncompressed database directory (e.g., NELDB_MOCC_P22_P22/Database)
+#    cd NELDB_MOCC_P22_P22/Database
+# 4. Create an output directory
+#
+#    $ mkdir ssr-out
+#
+# 5. Run generate-ssr.py script
+#
+#    $ python generate-ssr.py --xml-dir . --output-dir ssr-out
+#
+#    You can get help by running the script with -h option.
+#    When the SSR file generation is complete, you will find the output under ssr-out directory.
+#
+# SSR generation can take a long time as it needs to generate 398 files (maybe more?). generate-ssr.py script
+# allows you to specify number of processes to run in parallel. For example, if you have four CPU cores,
+# you can specify `--pool 4` option to run four processes in parallel.
+#
+#    $ python generate-ssr.py --xml-dir . --pool 4 --output-dir ssr-out
+#
+# This will kick off four processes to generate SSR files in parallel. In a sample run, it took 40.54 minutes
+# (2432.2057 seconds) to generate entire SSR files using only one process.
+# With eight processes, it took 6.60 minutes (396.0357 seconds) to generate the same set of SSR files.
+#
+# --pool 1: 2432.2057 seconds (40.54 minutes)
+# --pool 8:  396.0357 seconds  (6.60 minutes)
+#
+# TROUBLESHOOTING:
+# In C755A time, SSR files were manually updated when database changed. However, the SSR files have not
+# been updated regularly/consistently and therefore you will encounter situations where GWS fails to
+# load the selected SSR files from Status Summary Report window.
+#
+
 import argparse
 import locale
 import logging
@@ -12,7 +63,8 @@ import xml.etree.ElementTree as ET
 from datetime import datetime
 from functools import cmp_to_key
 
-_databases = [
+# Configurations to extract data for SSR files from XML files
+databases = [
     #
     # BGK database
     #
@@ -3727,6 +3779,7 @@ _databases = [
     },
 ]
 
+# A list of valid environments; used to validate --environment argument
 _environments = [
     "BGK",
     "BNK",
@@ -3909,7 +3962,7 @@ def main():
         required=False,
         default="",
         dest="environment",
-        help="specific environment to be processed (e.g., CMS)",
+        help="specific environment to be processed (e.g., CMS); by default, all environments are processed",
     )
     parser.add_argument(
         "--output-dir",
@@ -3921,12 +3974,14 @@ def main():
 
     args = parser.parse_args()
 
-    databases = _databases
+    # By default, when --environment is not specified, all environments are processed
+    db_list = databases
+    # When --environment is specified, only the specified environment is processed
     if args.environment != "":
         if not is_valid_environ(args.environment):
             logging.error(f"{args.environment} is not a valid environment")
             return
-        databases = [db for db in _databases if db.get("database") == args.environment]
+        db_list = [db for db in databases if db.get("database") == args.environment]
 
     if not is_valid_dir(args.xml_dir):
         logging.error(f"{args.xml_dir} is not a valid directory")
@@ -3942,9 +3997,9 @@ def main():
 
     start = time.perf_counter()
 
-    # # FIXME Under macOS, for some reasons, logger does not output anything while performing the jobs via pool
+    # FIXME Under macOS, for some reasons, logger does not output anything while performing the jobs via pool
     pool = multiprocessing.Pool(args.pool)
-    [pool.apply_async(do_work, [args.xml_dir, args.output_dir, db]) for db in databases]
+    [pool.apply_async(do_work, [args.xml_dir, args.output_dir, db]) for db in db_list]
     pool.close()
     pool.join()
 
