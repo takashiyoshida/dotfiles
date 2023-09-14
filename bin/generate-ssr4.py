@@ -17,10 +17,12 @@
 # - equipment is removed
 #
 # HOW TO USE:
+#
 # 1. Download a compressed database file from Subversion repository (e.g., NELDB_MOCC_P22_P22.zip)
 # 2. Uncompress the compressed database file (e.g., NELDB_MOCC_P22_P22.zip => NELDB_MOCC_P22_P22)
 # 3. Go to Database directory under the uncompressed database directory (e.g., NELDB_MOCC_P22_P22/Database)
 #    cd NELDB_MOCC_P22_P22/Database
+#
 # 4. Create an output directory
 #
 #    $ mkdir ssr-out
@@ -29,27 +31,35 @@
 #
 #    $ python generate-ssr.py --xml-dir . --output-dir ssr-out
 #
-#    You can get help by running the script with -h option.
-#    When the SSR file generation is complete, you will find the output under ssr-out directory.
+#    When the script runs, it loads instancesHierarchy.xml file from each xml_DB directory
+#    for all environment.
 #
-# SSR generation can take a long time as it needs to generate 398 files (maybe more?). generate-ssr.py script
-# allows you to specify number of processes to run in parallel. For example, if you have four CPU cores,
-# you can specify `--pool 4` option to run four processes in parallel.
+#    Example:
+#    - For CMS, the script loads xml_DB_CMS/instancesHierarchy.xml
+#
+#    SSR generation can take a long time as it needs to generate 398 files (maybe more?).
+#    generate-ssr.py script allows you to specify number of processes to run in parallel.
+#    For example, if you have a CPU with four CPU cores, you can specify `--pool 4` option to
+#    run four processes in parallel.
 #
 #    $ python generate-ssr.py --xml-dir . --pool 4 --output-dir ssr-out
 #
-# This will kick off four processes to generate SSR files in parallel. In a sample run, it took 40.54 minutes
-# (2432.2057 seconds) to generate entire SSR files using only one process.
-# With eight processes, it took 6.60 minutes (396.0357 seconds) to generate the same set of SSR files.
+#    This will kick off four processes to generate SSR files in parallel. In a sample run, it took 40.54 minutes
+#    (2432.2057 seconds) to generate entire SSR files using only one process.
+#    With eight processes, it took 6.60 minutes (396.0357 seconds) to generate the same set of SSR files.
 #
-# --pool 1: 2432.2057 seconds (40.54 minutes)
-# --pool 8:  396.0357 seconds  (6.60 minutes)
+#    --pool 1: 3566.9374 seconds (59.45 minutes) Intel Core i9-10900
+#    --pool 1: 2432.2057 seconds (40.54 minutes) Apple M1 Max
+#    --pool 8:  693.4496 seconds (11.56 minutes; Intel Core i9-10900
+#    --pool 8:  396.0357 seconds  (6.60 minutes) Apple M1 Max
 #
-# TROUBLESHOOTING:
-# In C755A time, SSR files were manually updated when database changed. However, the SSR files have not
-# been updated regularly/consistently and therefore you will encounter situations where GWS fails to
-# load the selected SSR files from Status Summary Report window.
+#    You can get help by running the script with -h option.
+#    When the SSR file generation is complete, you will find the output under ssr-out directory.
 #
+# 6. Copy the newly generated SSR files to your local Subversion repository (hmi/Nel-gws/DatSsr)
+# 7. Commit your modifications to your remote Subversion repositsory for delivery
+#
+
 
 import argparse
 import locale
@@ -63,7 +73,37 @@ import xml.etree.ElementTree as ET
 from datetime import datetime
 from functools import cmp_to_key
 
+#
 # Configurations to extract data for SSR files from XML files
+# databases contain a list of dictionary objects that contain the following fields.
+#
+# - "database"
+#    - contains a three-letter environment name, such as "CMS", "HBF" and "NED"
+#      so that the script can locate the correct instancesHierarchy.xml file from
+#      xml_DB_XXX directory.
+#
+# - "environ"
+#    - contains a six-letter environment name, such as "OCCCMS", "HBFSMS" and "NEDSMS".
+#      This is only used for filling two details in the output.
+#
+# - "location"
+#    - contains a three-letter node name, such as "HBF", "NED", "NDI", "NPS" and so on.
+#      For stations, the location is the same as the database.
+#      For OCC and NED databases, location may point to a station or a substation
+#      within NEL Depot.
+#
+# - "system"
+#    - contains a name for sub-system, such as "BMF", "CCTS_0001" and so on.
+#      The script uses the 'system' to search and extract relevant input points.
+#
+# - "output_dir"
+#    - output of the script is written to this directory.
+#      For example, output for HBF database is written to 'hbfsms' directory.
+#
+# - "output"
+#    - output of the script is written to this file at the directory specified 
+#      in the "output_dir".
+#
 databases = [
     #
     # BGK database
