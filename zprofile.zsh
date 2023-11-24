@@ -4,7 +4,7 @@
 # Reference: https://zsh.sourceforge.io/Intro/intro_3.html
 
 if [[ "${OSTYPE}" =~ "darwin"* ]]; then
-	# Add Homebrew to macOS environment (this was added when I installed Homebrew)
+	# Add Homebrew to macOS ZSH environment
 	eval "$(/opt/homebrew/bin/brew shellenv)"
 	
 	# Add tab-completion to Homebrew command
@@ -13,6 +13,13 @@ if [[ "${OSTYPE}" =~ "darwin"* ]]; then
 		autoload -Uz compinit
 		compinit
 	fi
+	
+	# I used to need these variables defined in order to build
+	# and install Python via pyenv (before macOS Sonoma).
+	# CPPFLAGS="${CPPFLAGS} -I$(brew --prefix bzip2)/include"
+	# LDFLAGS="${LDFLAGS} -L$(brew --prefix bzip2)/lib"
+	# CPPFLAGS="${CPPFLAGS} -I$(brew --prefix zlib)/include"
+	# LDFLAGS="${LDFLAGS} -L$(brew --prefix zlib)/lib"
 
 	# Set up pyenv for shell environment
 	if which pyenv > /dev/null; then
