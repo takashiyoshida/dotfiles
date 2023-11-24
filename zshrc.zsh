@@ -132,6 +132,10 @@ source $ZSH/oh-my-zsh.sh
 
 source "${DOTFILES}/scripts/aliases.zsh"
 
+if [[ "${OSTYPE}" =~ "darwin"* ]]; then
+    test -e "${HOME}/.iterm2_shell_integration.zsh" && source "${HOME}/.iterm2_shell_integration.zsh"
+fi
+
 # Uncomment the following line to enable zsh startup time
 # zprof
 # Finally, run `time zsh -i -c exit`
