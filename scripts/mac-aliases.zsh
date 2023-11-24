@@ -1,16 +1,25 @@
-# alias ls="ls -CFG"
-alias ls="exa -F"
-alias ll="exa -lF"
+alias ls="eza --no-quotes"
+alias ll="ls -l"
 alias la="ll -a"
-alias lll="ll | less"
-alias llr="ll -R"
+alias lll="ll --color=always | less"
 
-alias top="top -ocpu -R -F -s 2"
+# I actually want to have commands like these, but these commands can
+# take very long time to execute.
+# So I would rather not make it convenient to execute these commands.
+# alias lsr="ls --tree"
+# alias llr="ll --tree"
+
+# Use btop instead
+# alias top="top -ocpu -R -F -s 2"
 alias hub=git
 alias vless="/opt/homebrew/share/vim/vim90/macros/less.sh"
 
 alias brout="brew update && brew outdated"
 alias brupg="brew upgrade"
+
+# For jekyll draft, post, publish, unpublish, page
+alias jkld="jekyll draft"
+
 
 function ql
 {
@@ -45,6 +54,5 @@ function stop-emacs-service
 function fix-macos-open-with-menu
 {
     /System/Library/Frameworks/CoreServices.framework/Frameworks/LaunchServices.framework/Support/lsregister -kill -r -domain local -domain system -domain user
-
     echo "Now, run \`killall Finder to complete the fix."
 }

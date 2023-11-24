@@ -6,21 +6,20 @@ elif [[ "${OSTYPE}" =~ "linux-gnu"* ]]; then
 fi
 
 # Common set of aliases
+alias mv="mv -i"
+alias cp="cp -i"
+alias rm="rm -i"
+
+alias ..="cd .."
+alias ...="cd ../.."
+alias ....="cd ../../.."
+
+alias rake="noglob rake"
 
 # Set TERM to xterm-256color to avoid incorrect color from being used
 # in tmux session
 alias tailf="tail -f"
 alias history="history -i"
-
-alias svndiff="svn diff --diff-cmd /usr/bin/diff -x -w"
-alias svnldiff="svndiff -r COMMITTED" # Show the last commit
-alias svninfo="svn info --show-item=url"
-# Ignore unversioned files from svn status
-alias svnst="svn status -q"
-alias svnstc="svnst | ag \"^C\""
-
-# For jekyll draft, post, publish, unpublish, page
-alias jkld="jekyll draft"
 
 alias cdpr="cd ${HOME}/Projects"
 alias env="env | sort"

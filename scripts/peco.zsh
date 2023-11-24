@@ -1,6 +1,5 @@
 function exists { which $1 &> /dev/null }
 
-
 function peco-src() {
     local src=$(ghq list --full-path | peco --query "$LBUFFER")
     if [ -n "${src}" ]; then

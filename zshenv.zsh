@@ -1,23 +1,13 @@
-# echo "zshenv.zsh"
+# .zshenv is sourced on all invocations of the shell, unless -f option is set.
+# It should contain commands to set the command search path, plus other
+# important environment variables.
+# 
+# .zshenv should not contain commands that produce output or assume the shell
+# is attached to a tty.
+# Reference: # echo "$(date) Sourcing .zlogin ..."
 
-# For macOS, do not configure PATH here as /etc/zprofile will call
-# `/usr/libexec/path_helper -s` to configure PATH variable.
-# In Linux, /etc/zsh/zprofile file is empty and does not set PATH variable.
-
-export TERM=xterm-256color
-
-# EDITOR
-# CVS_EDITOR
-# GIT_EDITOR
-# SVN_EDITOR
-export EDITOR="emacsclient -c -t"
-export CVS_EDITOR="emacsclient -c -t"
-export GIT_EDITOR="emacsclient -c -t"
-export SVN_EDITOR="emacsclient -c -t"
-
-export LC_ALL="en_US.UTF-8"
-export LC_CTYPE="UTF-8"
-export LANG="en_US.UTF-8"
-
-# Configure Golang environment
-export GOPATH="${HOME}/Projects"
+# 2023-11-24: I moved this from .zprofile to .zshenv but this somehow caused
+#             `brew doctor` command to report /usr/bin occurs before
+#             /opt/homebrew/bin in my PATH variable.
+# Don't run this in .zshenv file
+# eval "$(/opt/homebrew/bin/brew shellenv)"
