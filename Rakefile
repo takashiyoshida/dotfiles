@@ -40,6 +40,10 @@ task :shell do
   # /etc/zshrc
   # ~/.zshrc
   install_file("zshrc.zsh", File.join(Dir.home, ".zshrc"))
+  # ~/.zlogin
+  install_file("zlogin.zsh", File.join(Dir.home, ".zlogin"))
+  # ~/.zlogout
+  install_file("zlogout.zsh", File.join(Dir.home, ".zlogout"))
 
   # Install project-related file
   install_file("projects.zsh", File.join(Dir.home, ".projects.zsh"))

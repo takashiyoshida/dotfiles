@@ -1,19 +1,8 @@
-# Random fun stuff
-if [[ "${OSTYPE}" =~ "darwin"* ]]; then
-    # This is taken care of in zshenv.sh
-    # echo "HOMEBREW_PREFIX=${HOMEBREW_PREFIX}"
-    # Display an interesting login message
-    ${HOMEBREW_PREFIX}/bin/fortune | ${HOMEBREW_PREFIX}/bin/cowsay | ${HOMEBREW_PREFIX}/bin/lolcat --force
-else
-    /usr/games/fortune | /usr/games/cowsay | lolcat --force
-fi
-
 # Work-related configurations
 
-# network interface to be used for connecting to NELARCHIVER
-NELARCHIVER_NIC="enp7s0"
-
 if [[ "${OSTYPE}" =~ "linux-gnu"* ]]; then
+	# network interface to be used for connecting to NELARCHIVER
+	NELARCHIVER_NIC="enp7s0"
 
     function setup-nelarchiver
     {

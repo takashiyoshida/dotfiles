@@ -1,6 +1,6 @@
 alias ls="eza --no-quotes"
 alias ll="ls -l"
-alias la="ll -a"
+alias la="ls -a"
 alias lll="ll --color=always | less"
 
 # I actually want to have commands like these, but these commands can
