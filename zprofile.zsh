@@ -3,7 +3,6 @@
 # not intended to be used together, although this could certainly be done if desired.
 # Reference: https://zsh.sourceforge.io/Intro/intro_3.html
 
-# echo "OSTYPE = ${OSTYPE}"
 if [[ "${OSTYPE}" =~ "darwin"* ]]; then
 	# Add Homebrew to macOS environment (this was added when I installed Homebrew)
 	eval "$(/opt/homebrew/bin/brew shellenv)"
@@ -37,6 +36,33 @@ if [[ "${OSTYPE}" =~ "darwin"* ]]; then
 	# I found out in macOS Sonoma that pdflatex already exists at
 	# /Library/TeX/texbin/pdflatex.
 	# PATH="${PATH}:/usr/local/texlive/2023/bin/universal-darwin"
+
+elif [[ "${OSTYPE}" =~ "linux-gnu"* ]]; then
+	PATH="/usr/local/bin:/usr/local/sbin"
+	PATH="${PATH}:/usr/games"
+	PATH="${PATH}:/usr/bin:/bin"
+	PATH="${PATH}:/usr/sbin:/sbin"
+	
+	# Set up pyenv for shell environment
+	if [[ -x "${HOME}/.pyenv/bin/pyenv" ]]; then
+		export PYENV_ROOT="${HOME}/.pyenv"
+		export PATH="${PYENV_ROOT}/bin:${PATH}"
+		eval "$(pyenv init --path)"
+		eval "$(pyenv init -)"
+	fi
+	
+	# Set up rbenv for shell environment
+	if [[ -x "${HOME}/.rbenv/bin/rbenv" ]]; then
+		export RBENV_ROOT="${HOME}/.rbenv"
+		export PATH="${RBENV_ROOT}/bin:${PATH}"
+		eval "$(rbenv init -zsh)"
+	fi
+	
+	if [[ -x "${HOME}/.nodenv/bin/nodenv" ]]; then
+		export NODENV_ROOT="${HOME}/.nodenv"
+		export PATH="${NODENV_ROOT}/bin:${PATH}"
+		eval "$(nodenv init -)"
+	fi
 fi
 
 PATH="${PATH}:${HOME}/Projects/dotfiles/bin"
