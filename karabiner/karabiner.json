@@ -763,6 +763,36 @@
                         },
                         {
                             "from": {
+                                "key_code": "f7"
+                            },
+                            "to": [
+                                {
+                                    "key_code": "vk_none"
+                                }
+                            ]
+                        },
+                        {
+                            "from": {
+                                "key_code": "f8"
+                            },
+                            "to": [
+                                {
+                                    "key_code": "vk_none"
+                                }
+                            ]
+                        },
+                        {
+                            "from": {
+                                "key_code": "f9"
+                            },
+                            "to": [
+                                {
+                                    "key_code": "vk_none"
+                                }
+                            ]
+                        },
+                        {
+                            "from": {
                                 "key_code": "f10"
                             },
                             "to": [
