@@ -62,7 +62,7 @@ elif [[ "${OSTYPE}" =~ "linux-gnu"* ]]; then
 	if [[ -x "${HOME}/.rbenv/bin/rbenv" ]]; then
 		export RBENV_ROOT="${HOME}/.rbenv"
 		export PATH="${RBENV_ROOT}/bin:${PATH}"
-		eval "$(rbenv init -zsh)"
+		eval "$(rbenv init - zsh)"
 	fi
 	
 	if [[ -x "${HOME}/.nodenv/bin/nodenv" ]]; then
