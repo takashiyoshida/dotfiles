@@ -97,9 +97,9 @@ source "${DOTFILES}/powerlevel10k/powerlevel10k.zsh-theme"
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
 if [[ "${OSTYPE}" =~ "darwin"* ]]; then
-	plugins=(autojump colored-man-pages docker fzf gem golang macos python rake ruby tmux)
+	plugins=(autojump colored-man-pages docker fzf gem git golang macos python rake ruby tmux)
 else
-	plugins=(git)
+	plugins=(autojump docker fzf gem git golang python rake ruby tmux)
 fi
 
 source $ZSH/oh-my-zsh.sh
