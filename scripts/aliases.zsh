@@ -22,7 +22,7 @@ alias tailf="tail -f"
 alias history="history -i"
 
 alias cdpr="cd ${HOME}/Projects"
-alias env="env | sort"
+alias senv="env | sort"
 
 alias youtube-dl="youtube-dl --audio-quality 0 -o \"%(title)s-%(id)s.%(ext)s\""
 
