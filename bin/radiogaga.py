@@ -375,7 +375,10 @@ def describe_method_event(met_event):
     if met_event <= 0x65:  # Append METHOD_ to the description
         desc = 'METHOD_' + METHODS_EVENTS.get(met_event)
     elif met_event > 0x65 and met_event <= 0x8065:  # Append EVENTS_ to the description
-        desc = 'EVENT_' + METHODS_EVENTS.get(met_event % 0x8000)
+        if (met_event % 0x8000) in METHODS_EVENTS:
+            desc = 'EVENT_' + METHODS_EVENTS.get(met_event % 0x8000)
+        else:
+            desc = 'ERROR: Unknown event'
     else:
         desc = METHODS_EVENTS.get(met_event)
     logging.debug('{}: {}'.format(hex(met_event), desc))
