@@ -20,6 +20,8 @@ alias brupg="brew upgrade"
 # For jekyll draft, post, publish, unpublish, page
 alias jkld="jekyll draft"
 
+# Copied from https://www.youtube.com/shorts/K1FxGIG_lcA
+alias nv="fd --type f --hidden --exclude .git | fzf-tmux -p --reverse | xargs nvim"
 
 function ql
 {

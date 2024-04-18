@@ -20,3 +20,5 @@ alias ghtoken="xclip -sel clip < ${HOME}/.github-tokens.txt"
 # Simulate macOS' `open' command
 alias open="xdg-open"
 
+# Copied from https://www.youtube.com/shorts/K1FxGIG_lcA
+alias nv="fdfind --type f --hidden --exclude .git | fzf-tmux -p --reverse | xargs nvim"
