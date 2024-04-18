@@ -1,5 +1,9 @@
 #!/usr/bin/env sh
 
+# Convert existing AIFF files at Audio Hijack folder to FLAC format.
+# Once the conversion is complete, the original AIFF files are deleted
+# from disk.
+
 TMP_LOG="/Users/takashi/Library/Logs/Backup/preflight.log"
 
 SCRIPT=$0

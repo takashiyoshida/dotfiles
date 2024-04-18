@@ -1,5 +1,9 @@
 #!/usr/bin/env sh
 
+# After Carbon Copy Cloner performs backup of audio related files,
+# original files are removed from disk.
+# Namely, FLAC files and GarageBand project files are removed from disk.
+
 TMP_LOG="/Users/takashi/Library/Logs/Backup/postflight.log"
 
 SCRIPT=$0
