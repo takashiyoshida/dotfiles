@@ -12,7 +12,7 @@ alias lll="ll --color=always | less"
 # Use btop instead
 # alias top="top -ocpu -R -F -s 2"
 alias hub=git
-alias vless="/opt/homebrew/share/vim/vim90/macros/less.sh"
+alias vless="/opt/homebrew/share/vim/vim91/macros/less.sh"
 
 alias brout="brew update && brew outdated"
 alias brupg="brew upgrade"
