@@ -21,6 +21,17 @@
                         "description": "Post escape when left_control is tapped and left_control when held",
                         "manipulators": [
                             {
+                                "conditions": [
+                                    {
+                                        "identifiers": [
+                                            {
+                                                "product_id": 2064,
+                                                "vendor_id": 13364
+                                            }
+                                        ],
+                                        "type": "device_unless"
+                                    }
+                                ],
                                 "from": {
                                     "key_code": "left_control",
                                     "modifiers": {
@@ -1216,7 +1227,7 @@
                     "simple_modifications": [
                         {
                             "from": {
-                                "key_code": "escape"
+                                "key_code": "f13"
                             },
                             "to": [
                                 {
