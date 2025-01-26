@@ -247,7 +247,7 @@
             ]
           },
           {
-            "description" : "Use F4 in Keychron Q1 Max to act as Mission Control, Application Windows",
+            "description" : "Use F4 in Keychron Q1 Max and Keychron Q10 Max to act as Mission Control, Application Windows",
             "manipulators" : [
               {
                 "conditions" : [
@@ -255,6 +255,10 @@
                     "identifiers" : [
                       {
                         "product_id" : 2064,
+                        "vendor_id" : 13364
+                      },
+                      {
+                        "product_id" : 2208,
                         "vendor_id" : 13364
                       }
                     ],
