@@ -5,7 +5,7 @@
   "layers": [
     [
       "KC_MUTE",
-      "KC_ESC",
+      "KC_F24",
       "KC_BRID",
       "KC_BRIU",
       "CUSTOM(4)",
