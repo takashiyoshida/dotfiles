@@ -53,7 +53,7 @@
       "KC_BSLS",
       "KC_PGDN",
       "MACRO(3)",
-      "KC_CAPS",
+      "MT(MOD_LCTL,KC_ESC)",
       "KC_A",
       "KC_S",
       "KC_D",
