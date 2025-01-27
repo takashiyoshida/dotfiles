@@ -41,15 +41,15 @@ function add-ssh-private-keys
 
 function start-emacs-service
 {
-    if [[ "$(brew services list | grep 'emacs-plus@27' | awk '{ print $2 }')" != "started" ]]; then
-        brew services start emacs-plus@27
+    if [[ "$(brew services list | grep 'emacs-plus@29' | awk '{ print $2 }')" != "started" ]]; then
+        brew services start emacs-plus@29
     fi
 }
 
 function stop-emacs-service
 {
-    if [[ "$(brew services list | grep 'emacs-plus@27' | awk '{ print $2 }')" =~ started ]]; then
-        brew services stop emacs-plus@27
+    if [[ "$(brew services list | grep 'emacs-plus@29' | awk '{ print $2 }')" =~ started ]]; then
+        brew services stop emacs-plus@29
     fi
 }
 
@@ -58,3 +58,8 @@ function fix-macos-open-with-menu
     /System/Library/Frameworks/CoreServices.framework/Frameworks/LaunchServices.framework/Support/lsregister -kill -r -domain local -domain system -domain user
     echo "Now, run \`killall Finder to complete the fix."
 }
+
+function preman {
+   /usr/bin/mandoc -T pdf "$(/usr/bin/man -w $@)" | open -fa Preview
+}
+
