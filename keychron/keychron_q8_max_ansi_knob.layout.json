@@ -4,7 +4,7 @@
   "macros": ["", "", "", "", "", "", "", "", "", "", "", "", "", "", "", ""],
   "layers": [
     [
-      "KC_ESC",
+      "KC_GRV",
       "KC_1",
       "KC_2",
       "KC_3",
@@ -158,7 +158,7 @@
       "KC_RGHT"
     ],
     [
-      "KC_GRV",
+      "KC_TRNS",
       "KC_BRID",
       "KC_BRIU",
       "CUSTOM(4)",
@@ -391,7 +391,7 @@
   ],
   "encoders": [
     [
-      ["KC_VOLD", "KC_VOLU"],
+      ["KC_PGUP", "KC_PGDN"],
       ["KC_VOLD", "KC_VOLU"],
       ["RGB_VAD", "RGB_VAI"],
       ["RGB_VAD", "RGB_VAI"],
