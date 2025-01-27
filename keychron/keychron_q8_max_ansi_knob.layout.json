@@ -34,7 +34,7 @@
       "KC_RBRC",
       "KC_BSLS",
       "KC_DEL",
-      "KC_CAPS",
+      "MT(MOD_LCTL,KC_ESC)",
       "KC_A",
       "KC_S",
       "KC_D",
