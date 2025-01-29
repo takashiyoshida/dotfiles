@@ -62,7 +62,7 @@
       "KC_COMM",
       "KC_DOT",
       "KC_SLSH",
-      "KC_RSFT",
+      "MT(MOD_LSFT | MOD_RSFT,KC_F24)",
       "KC_UP",
       "MO(2)",
       "CUSTOM(0)",
