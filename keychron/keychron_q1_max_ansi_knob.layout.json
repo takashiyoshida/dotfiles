@@ -49,7 +49,7 @@
       "KC_RBRC",
       "KC_BSLS",
       "KC_PGDN",
-      "KC_CAPS",
+      "MT(MOD_LCTL,KC_ESC)",
       "KC_A",
       "KC_S",
       "KC_D",
@@ -90,7 +90,7 @@
       "KC_NO",
       "CUSTOM(3)",
       "MO(1)",
-      "KC_RCTL",
+      "CUSTOM(1)",
       "KC_LEFT",
       "KC_DOWN",
       "KC_RGHT"
